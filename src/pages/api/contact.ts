@@ -30,8 +30,9 @@ export const POST: APIRoute = async ({ request }) => {
   let data: Record<string, unknown>;
   try { data = await request.json(); } catch { return json(400, { ok: false, error: 'invalid_body' }); }
 
-  // Honeypot: real visitors never see this field. Pretend success so bots learn nothing.
-  if (clean(data.company_site)) return json(200, { ok: true });
+  // Honeypot: real visitors never see this field. Named so browser autofill and password managers leave it alone.
+  // Pretend success so bots learn nothing, but log it so a false positive is visible in Vercel logs.
+  if (clean(data.wv_hp)) { console.warn('Contact form: honeypot triggered, lead not sent', { email: clean(data.email, 200) }); return json(200, { ok: true }); }
 
   const lead: Record<string, string> = {};
   for (const key of Object.keys(LABELS)) {
@@ -64,7 +65,7 @@ export const POST: APIRoute = async ({ request }) => {
         text: rows.map(([k, v]) => `${k}: ${v}`).join('\n')
       })
     }).catch(() => null);
-    if (res?.ok) delivered = true;
+    if (res?.ok) { delivered = true; console.log('Contact form: email accepted by Resend', await res.text().catch(() => '')); }
     else console.error('Resend failed', res?.status, await res?.text().catch(() => ''));
   }
 
@@ -74,7 +75,7 @@ export const POST: APIRoute = async ({ request }) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: `*${subject}*\n${rows.map(([k, v]) => `*${k}:* ${v}`).join('\n')}` })
     }).catch(() => null);
-    if (res?.ok) delivered = true;
+    if (res?.ok) { delivered = true; console.log('Contact form: posted to Slack'); }
     else console.error('Slack failed', res?.status);
   }
 
