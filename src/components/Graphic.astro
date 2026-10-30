@@ -1,0 +1,183 @@
+---
+/* Explanatory diagrams, one per service. Illustrative: they show how a thing works, never a client's numbers. */
+import type { GraphicKind } from '../data/services';
+interface Props { kind: GraphicKind }
+const { kind } = Astro.props;
+const titles: Record<GraphicKind, string> = {
+  structure: 'Account structure', search: 'Shopping feed · margin-aware bidding', creative: 'Creative test matrix',
+  flow: 'Post-purchase flow', automation: 'Data flow', cro: 'Checkout funnel', systems: 'Weekly growth rhythm',
+  analytics: 'Attribution reality check', finance: 'From revenue to what you keep', dashboard: 'Live client dashboard', framework: 'The Structured Growth Framework'
+};
+---
+<figure class="graphic" aria-label={titles[kind]}>
+  <figcaption class="graphic__head"><span>{titles[kind]}</span><span>Illustrative</span></figcaption>
+  <div class="graphic__body">
+
+{kind === 'structure' && (<Fragment>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
+<div style="padding:22px;border-radius:6px;border:1px dashed rgba(250,248,244,0.22)">
+<p style="margin:0 0 16px;font-size:14px;color:#9A938A">Before · fragmented</p>
+<div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px">
+<div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div>
+<div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div>
+<div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div><div style="height:30px;border-radius:3px;border:1px solid rgba(250,248,244,0.22)"></div>
+</div>
+<p style="margin:16px 0 0;font-size:13px;line-height:1.5;color:#9A938A">Too little data per ad set for the algorithm to learn.</p>
+</div>
+<div style="padding:22px;border-radius:6px;border:1px solid rgba(250,248,244,0.22);display:flex;flex-direction:column;gap:10px">
+<p style="margin:0 0 6px;font-size:14px;color:#9A938A">After · consolidated</p>
+<div style="padding:14px;border-radius:6px;border:1.5px solid #F0421E"><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:600"><span>Prospecting</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9A938A">NEW CUSTOMERS</span></div><div style="display:flex;gap:6px;margin-top:10px"><div style="flex:1;height:22px;border-radius:3px;background:rgba(250,248,244,0.2)"></div><div style="flex:1;height:22px;border-radius:3px;background:rgba(250,248,244,0.2)"></div><div style="flex:1;height:22px;border-radius:3px;background:rgba(250,248,244,0.2)"></div><div style="flex:1;height:22px;border-radius:3px;background:rgba(250,248,244,0.2)"></div><div style="flex:1;height:22px;border-radius:3px;background:rgba(250,248,244,0.2)"></div></div></div>
+<div style="padding:14px;border-radius:6px;border:1px solid rgba(250,248,244,0.22)"><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:600"><span>Retargeting</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9A938A">CONSIDERING</span></div><div style="display:flex;gap:6px;margin-top:10px"><div style="flex:1;height:22px;border-radius:3px;background:rgba(250,248,244,0.12)"></div><div style="flex:1;height:22px;border-radius:3px;background:rgba(250,248,244,0.12)"></div><div style="flex:1;height:22px;border-radius:3px;background:rgba(250,248,244,0.12)"></div></div></div>
+<div style="padding:14px;border-radius:6px;border:1px solid rgba(250,248,244,0.22)"><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:600"><span>Existing customers</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9A938A">CAPPED SPEND</span></div><div style="display:flex;gap:6px;margin-top:10px"><div style="flex:1;height:22px;border-radius:3px;background:rgba(250,248,244,0.08)"></div><div style="flex:1;height:22px;border-radius:3px;background:rgba(250,248,244,0.08)"></div></div></div>
+</div>
+</div>
+</Fragment>)}
+
+{kind === 'search' && (<Fragment>
+<p style="margin:0 0 20px;font-family:'Newsreader',Georgia,serif;font-size:24px">Same click price. Very different profit.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px">
+<div style="padding:16px;border-radius:6px;background:rgba(250,248,244,0.05)"><div style="aspect-ratio:1/1;border-radius:4px;background:#EFE9DC;display:flex;align-items:center;justify-content:center"><div style="width:46%;height:46%;border-radius:50%;background:#57544E"></div></div><p style="margin:14px 0 0;font-size:14px;font-weight:600">Product A</p><span style="display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;border:1px solid #F0421E;font-size:12px">High margin</span><p style="margin:14px 0 6px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#9A938A">BID WEIGHT</p><div style="height:8px;border-radius:4px;background:rgba(250,248,244,0.1)"><div style="width:92%;height:8px;border-radius:4px;background:#F0421E"></div></div></div>
+<div style="padding:16px;border-radius:6px;background:rgba(250,248,244,0.05)"><div style="aspect-ratio:1/1;border-radius:4px;background:#EFE9DC;display:flex;align-items:center;justify-content:center"><div style="width:52%;height:36%;border-radius:4px;background:#57544E"></div></div><p style="margin:14px 0 0;font-size:14px;font-weight:600">Product B</p><span style="display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;border:1px solid rgba(250,248,244,0.3);font-size:12px">Mid margin</span><p style="margin:14px 0 6px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#9A938A">BID WEIGHT</p><div style="height:8px;border-radius:4px;background:rgba(250,248,244,0.1)"><div style="width:58%;height:8px;border-radius:4px;background:#FAF8F4"></div></div></div>
+<div style="padding:16px;border-radius:6px;background:rgba(250,248,244,0.05)"><div style="aspect-ratio:1/1;border-radius:4px;background:#EFE9DC;display:flex;align-items:center;justify-content:center"><div style="width:30%;height:56%;border-radius:20px;background:#57544E"></div></div><p style="margin:14px 0 0;font-size:14px;font-weight:600">Product C</p><span style="display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;border:1px solid rgba(250,248,244,0.3);font-size:12px">Low margin</span><p style="margin:14px 0 6px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#9A938A">BID WEIGHT</p><div style="height:8px;border-radius:4px;background:rgba(250,248,244,0.1)"><div style="width:22%;height:8px;border-radius:4px;background:#FAF8F4"></div></div></div>
+<div style="padding:16px;border-radius:6px;background:rgba(250,248,244,0.05)"><div style="aspect-ratio:1/1;border-radius:4px;background:#EFE9DC;display:flex;align-items:center;justify-content:center"><div style="width:48%;height:48%;border-radius:4px;transform:rotate(45deg);background:#57544E"></div></div><p style="margin:14px 0 0;font-size:14px;font-weight:600">Product D</p><span style="display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;border:1px solid rgba(250,248,244,0.3);font-size:12px">Mid margin</span><p style="margin:14px 0 6px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#9A938A">BID WEIGHT</p><div style="height:8px;border-radius:4px;background:rgba(250,248,244,0.1)"><div style="width:61%;height:8px;border-radius:4px;background:#FAF8F4"></div></div></div>
+</div>
+</Fragment>)}
+
+{kind === 'creative' && (<Fragment>
+<div style="overflow-x:auto"><div style="min-width:520px;display:grid;grid-template-columns:120px repeat(3,minmax(0,1fr));gap:8px">
+<div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.14em;color:#9A938A;padding:6px 0">STATIC</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.14em;color:#9A938A;padding:6px 0">UGC</div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.14em;color:#9A938A;padding:6px 0">VIDEO</div>
+<div style="display:flex;align-items:center;font-size:14px;font-weight:600">Problem hook</div>
+<div style="height:84px;padding:12px;border-radius:6px;background:rgba(250,248,244,0.06);box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end"><div style="height:6px;width:40%;border-radius:3px;background:rgba(250,248,244,0.4)"></div></div>
+<div style="height:84px;padding:12px;border-radius:6px;background:#F0421E;color:#141414;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between"><span style="font-size:13px;font-weight:600">Winner · scale</span><div style="height:6px;width:88%;border-radius:3px;background:#141414"></div></div>
+<div style="height:84px;padding:12px;border-radius:6px;background:rgba(250,248,244,0.06);box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end"><div style="height:6px;width:62%;border-radius:3px;background:rgba(250,248,244,0.4)"></div></div>
+<div style="display:flex;align-items:center;font-size:14px;font-weight:600">Proof hook</div>
+<div style="height:84px;padding:12px;border-radius:6px;background:rgba(250,248,244,0.06);box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end"><div style="height:6px;width:55%;border-radius:3px;background:rgba(250,248,244,0.4)"></div></div>
+<div style="height:84px;padding:12px;border-radius:6px;background:rgba(250,248,244,0.06);box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end"><div style="height:6px;width:70%;border-radius:3px;background:rgba(250,248,244,0.4)"></div></div>
+<div style="height:84px;padding:12px;border-radius:6px;border:1px dashed rgba(250,248,244,0.22);box-sizing:border-box;display:flex;align-items:center;font-size:12px;color:#9A938A">Next test</div>
+<div style="display:flex;align-items:center;font-size:14px;font-weight:600">Founder hook</div>
+<div style="height:84px;padding:12px;border-radius:6px;background:rgba(250,248,244,0.06);box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end"><div style="height:6px;width:28%;border-radius:3px;background:rgba(250,248,244,0.4)"></div></div>
+<div style="height:84px;padding:12px;border-radius:6px;border:1px dashed rgba(250,248,244,0.22);box-sizing:border-box;display:flex;align-items:center;font-size:12px;color:#9A938A">Next test</div>
+<div style="height:84px;padding:12px;border-radius:6px;background:rgba(250,248,244,0.06);box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end"><div style="height:6px;width:46%;border-radius:3px;background:rgba(250,248,244,0.4)"></div></div>
+</div></div>
+<p style="margin:18px 0 0;font-size:13px;color:#9A938A">Every cell is a hypothesis. Every result goes in the learnings log.</p>
+</Fragment>)}
+
+{kind === 'flow' && (<Fragment>
+<div style="display:flex;flex-direction:column;align-items:center;gap:0">
+<div style="padding:14px 22px;border-radius:999px;border:1.5px solid #FAF8F4;font-size:14px;font-weight:600">Trigger · First order placed</div>
+<div style="width:1px;height:22px;background:rgba(250,248,244,0.3)"></div>
+<div style="padding:8px 14px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;color:#9A938A;border:1px solid rgba(250,248,244,0.14)">WAIT 3 DAYS</div>
+<div style="width:1px;height:22px;background:rgba(250,248,244,0.3)"></div>
+<div style="display:flex;gap:12px;align-items:center;width:min(380px,100%);padding:14px 18px;border-radius:6px;background:rgba(250,248,244,0.08);box-sizing:border-box"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FAF8F4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg><span style="font-size:14px">How to get the most from it</span></div>
+<div style="width:1px;height:22px;background:rgba(250,248,244,0.3)"></div>
+<div style="padding:12px 18px;border-radius:6px;border:1px solid rgba(250,248,244,0.3);font-size:14px">Ordered again?</div>
+<div style="width:62%;max-width:420px;height:22px;border:1px solid rgba(250,248,244,0.3);border-bottom:0;border-radius:6px 6px 0 0"></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;width:100%;max-width:560px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9A938A">YES</span><div style="padding:12px 16px;border-radius:6px;background:rgba(250,248,244,0.08);font-size:14px;text-align:center">Move to loyal segment</div></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9A938A">NO</span><div style="padding:8px 14px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;color:#9A938A;border:1px solid rgba(250,248,244,0.14)">WAIT 14 DAYS</div><div style="padding:12px 16px;border-radius:6px;border:1.5px solid #F0421E;font-size:14px;text-align:center">Replenish reminder</div></div>
+</div>
+</div>
+</Fragment>)}
+
+{kind === 'automation' && (<Fragment>
+<div style="position:relative;max-width:640px;margin:0 auto">
+<svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%"><g stroke="rgba(250,248,244,0.28)" stroke-width="1" fill="none"><path d="M50 50 L16.7 16.7" vector-effect="non-scaling-stroke"></path><path d="M50 50 L83.3 16.7" vector-effect="non-scaling-stroke"></path><path d="M50 50 L16.7 83.3" vector-effect="non-scaling-stroke"></path><path d="M50 50 L83.3 83.3" vector-effect="non-scaling-stroke"></path><path d="M50 50 L50 16.7" vector-effect="non-scaling-stroke"></path><path d="M50 50 L50 83.3" vector-effect="non-scaling-stroke"></path></g></svg>
+<div style="position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(3,110px);align-items:center;justify-items:center">
+<div style="padding:12px 16px;border-radius:6px;background:#2A2A2A;font-size:14px">Shopify</div>
+<div style="padding:12px 16px;border-radius:6px;background:#2A2A2A;font-size:14px">Klaviyo</div>
+<div style="padding:12px 16px;border-radius:6px;background:#2A2A2A;font-size:14px">Meta audiences</div>
+<div></div>
+<div style="padding:18px 22px;border-radius:999px;background:#FAF8F4;color:#141414;font-size:15px;font-weight:600;text-align:center">Customer profile</div>
+<div></div>
+<div style="padding:12px 16px;border-radius:6px;background:#2A2A2A;font-size:14px">Google audiences</div>
+<div style="padding:12px 16px;border-radius:6px;border:1.5px solid #F0421E;background:#1C1C1C;font-size:14px">Reporting</div>
+<div style="padding:12px 16px;border-radius:6px;background:#2A2A2A;font-size:14px">Reviews &amp; support</div>
+</div>
+</div>
+<p style="margin:12px 0 0;text-align:center;font-size:13px;color:#9A938A">One profile, synced everywhere. Nobody copies a CSV by hand.</p>
+</Fragment>)}
+
+{kind === 'cro' && (<Fragment>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="display:grid;grid-template-columns:140px 1fr;gap:16px;align-items:center"><span style="font-size:14px">Sessions</span><div style="height:36px;width:100%;border-radius:4px;background:rgba(250,248,244,0.22)"></div></div>
+<div style="display:grid;grid-template-columns:140px 1fr;gap:16px;align-items:center"><span style="font-size:14px">Product view</span><div style="height:36px;width:64%;border-radius:4px;background:rgba(250,248,244,0.22)"></div></div>
+<div style="display:grid;grid-template-columns:140px 1fr;gap:16px;align-items:center"><span style="font-size:14px">Add to cart</span><div style="height:36px;width:22%;border-radius:4px;background:rgba(250,248,244,0.22)"></div></div>
+<div style="display:grid;grid-template-columns:140px 1fr;gap:16px;align-items:center"><span style="font-size:14px">Checkout</span><div style="display:flex;align-items:center;gap:12px"><div style="height:36px;width:11%;border-radius:4px;background:rgba(250,248,244,0.22)"></div><span style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;border:1.5px solid #F0421E;font-size:12px;white-space:nowrap">Biggest leak · fix first</span></div></div>
+<div style="display:grid;grid-template-columns:140px 1fr;gap:16px;align-items:center"><span style="font-size:14px">Order</span><div style="height:36px;width:6%;border-radius:4px;background:#FAF8F4"></div></div>
+</div>
+<p style="margin:20px 0 0;font-size:13px;color:#9A938A">We test where the drop is steepest, not where the opinion is loudest.</p>
+</Fragment>)}
+
+{kind === 'systems' && (<Fragment>
+<div style="overflow-x:auto"><div style="min-width:560px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px">
+<div style="padding:16px;border-radius:6px;background:rgba(250,248,244,0.06);min-height:170px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9A938A">MON</span><span style="font-family:'Newsreader',Georgia,serif;font-size:20px;line-height:1.15">Numbers review</span><span style="font-size:12px;color:#9A938A">Wavi + you</span></div>
+<div style="padding:16px;border-radius:6px;background:rgba(250,248,244,0.06);min-height:170px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9A938A">TUE</span><span style="font-family:'Newsreader',Georgia,serif;font-size:20px;line-height:1.15">Creative briefs</span><span style="font-size:12px;color:#9A938A">Wavi</span></div>
+<div style="padding:16px;border-radius:6px;background:rgba(250,248,244,0.06);min-height:170px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9A938A">WED</span><span style="font-family:'Newsreader',Georgia,serif;font-size:20px;line-height:1.15">Tests go live</span><span style="font-size:12px;color:#9A938A">Wavi</span></div>
+<div style="padding:16px;border-radius:6px;background:rgba(250,248,244,0.06);min-height:170px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9A938A">THU</span><span style="font-family:'Newsreader',Georgia,serif;font-size:20px;line-height:1.15">Retention sends</span><span style="font-size:12px;color:#9A938A">Your team</span></div>
+<div style="padding:16px;border-radius:6px;border:1.5px solid #F0421E;min-height:170px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9A938A">FRI</span><span style="font-family:'Newsreader',Georgia,serif;font-size:20px;line-height:1.15">One-page report</span><span style="font-size:12px;color:#9A938A">To the board</span></div>
+</div></div>
+<p style="margin:18px 0 0;font-size:13px;color:#9A938A">A rhythm anyone can run. Written down, not stuck in one head.</p>
+</Fragment>)}
+
+{kind === 'analytics' && (<Fragment>
+<p style="margin:0 0 22px;font-family:'Newsreader',Georgia,serif;font-size:24px">Every platform claims the same order.</p>
+<div style="position:relative;display:flex;flex-direction:column;gap:14px">
+<div style="position:absolute;top:-8px;bottom:-8px;left:calc(150px + 16px + (100% - 166px) * 0.833);border-left:1px dashed #FAF8F4"></div>
+<div style="display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center"><span style="font-size:14px">Meta reports</span><div style="height:32px;width:52%;border-radius:4px;background:rgba(250,248,244,0.22)"></div></div>
+<div style="display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center"><span style="font-size:14px">Google reports</span><div style="height:32px;width:46%;border-radius:4px;background:rgba(250,248,244,0.22)"></div></div>
+<div style="display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center"><span style="font-size:14px">Platforms added up</span><div style="height:32px;width:98%;border-radius:4px;background:rgba(250,248,244,0.4)"></div></div>
+<div style="display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center"><span style="font-size:14px;font-weight:600">Orders in your store</span><div style="height:32px;width:83.3%;border-radius:4px;background:#F0421E"></div></div>
+</div>
+<p style="margin:22px 0 0;font-size:13px;color:#9A938A">Dashed line: what actually happened. We report against the store, not the platforms.</p>
+</Fragment>)}
+
+{kind === 'finance' && (<Fragment>
+<div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;height:260px;border-bottom:1px solid rgba(250,248,244,0.3)">
+<div style="position:relative"><div style="position:absolute;left:0;right:0;top:0%;height:100%;border-radius:3px 3px 0 0;background:#FAF8F4"></div></div>
+<div style="position:relative"><div style="position:absolute;left:0;right:0;top:0%;height:12%;border-radius:3px;background:rgba(250,248,244,0.28)"></div></div>
+<div style="position:relative"><div style="position:absolute;left:0;right:0;top:12%;height:34%;border-radius:3px;background:rgba(250,248,244,0.28)"></div></div>
+<div style="position:relative"><div style="position:absolute;left:0;right:0;top:46%;height:9%;border-radius:3px;background:rgba(250,248,244,0.28)"></div></div>
+<div style="position:relative"><div style="position:absolute;left:0;right:0;top:55%;height:26%;border-radius:3px;background:rgba(250,248,244,0.28)"></div></div>
+<div style="position:relative"><div style="position:absolute;left:0;right:0;top:81%;height:19%;border-radius:3px 3px 0 0;background:#F0421E"></div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:12px;font-size:12px;line-height:1.35;color:#9A938A">
+<span style="color:#FAF8F4">Revenue</span><span>Returns</span><span>Product</span><span>Shipping</span><span>Marketing</span><span style="color:#FAF8F4;font-weight:600">What you keep</span>
+</div>
+</Fragment>)}
+
+{kind === 'dashboard' && (<Fragment>
+<div style="display:flex;gap:20px;min-height:340px">
+<div style="flex:none;width:130px;display:flex;flex-direction:column;gap:12px;padding-right:20px;border-right:1px solid rgba(250,248,244,0.1)">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><svg aria-hidden="true" viewBox="0 0 120 48" style="width:22px;height:9px"><path d="M8 34 C 20 10, 42 8, 64 30 C 78 44, 92 46, 112 16" fill="none" stroke="#F0421E" stroke-width="12" stroke-linecap="round"></path></svg><span style="font-family:'Newsreader',Georgia,serif;font-size:16px">Wavi</span></div>
+<div style="height:8px;width:80%;border-radius:4px;background:#FAF8F4"></div><div style="height:8px;width:64%;border-radius:4px;background:rgba(250,248,244,0.2)"></div><div style="height:8px;width:72%;border-radius:4px;background:rgba(250,248,244,0.2)"></div><div style="height:8px;width:56%;border-radius:4px;background:rgba(250,248,244,0.2)"></div><div style="height:8px;width:68%;border-radius:4px;background:rgba(250,248,244,0.2)"></div>
+</div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px">
+<div style="padding:12px;border-radius:6px;background:rgba(250,248,244,0.06)"><p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#9A938A">CONTRIBUTION</p><div style="margin-top:12px;height:14px;width:70%;border-radius:3px;background:rgba(250,248,244,0.5)"></div></div>
+<div style="padding:12px;border-radius:6px;background:rgba(250,248,244,0.06)"><p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#9A938A">NEW CUSTOMERS</p><div style="margin-top:12px;height:14px;width:50%;border-radius:3px;background:rgba(250,248,244,0.5)"></div></div>
+<div style="padding:12px;border-radius:6px;background:rgba(250,248,244,0.06)"><p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#9A938A">PAYBACK</p><div style="margin-top:12px;height:14px;width:40%;border-radius:3px;background:rgba(250,248,244,0.5)"></div></div>
+</div>
+<div style="flex:1;min-height:200px;padding:14px;border-radius:6px;background:rgba(250,248,244,0.04);display:flex;flex-direction:column">
+<div style="display:flex;gap:16px;font-size:12px;color:#9A938A"><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:14px;height:2px;background:#9A938A"></span>Revenue</span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:14px;height:2px;background:#F0421E"></span>Contribution after ads</span></div>
+<svg aria-hidden="true" viewBox="0 0 300 120" preserveAspectRatio="none" style="flex:1;width:100%;margin-top:10px"><g stroke="rgba(250,248,244,0.08)" stroke-width="1"><path d="M0 30H300M0 60H300M0 90H300" vector-effect="non-scaling-stroke"></path></g><path d="M0 70 C 40 60, 70 72, 100 55 S 160 40, 200 38 S 260 20, 300 14" fill="none" stroke="#9A938A" stroke-width="2" vector-effect="non-scaling-stroke"></path><path d="M0 108 C 40 106, 70 104, 100 98 S 160 84, 200 76 S 260 58, 300 48" fill="none" stroke="#F0421E" stroke-width="2.5" vector-effect="non-scaling-stroke"></path></svg>
+</div>
+</div>
+</div>
+</Fragment>)}
+
+{kind === 'framework' && (<Fragment>
+<div style="display:grid;grid-template-columns:160px 1fr;gap:16px;align-items:stretch">
+<div style="display:flex;flex-direction:column;justify-content:space-around;font-size:14px;padding:6px 0"><span>01 Unit economics</span><span>02 Lifetime value</span><span>03 Resilience</span></div>
+<svg aria-hidden="true" viewBox="0 0 600 220" preserveAspectRatio="none" style="width:100%;height:240px"><g fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M0 40 C 80 20, 140 60, 220 40 S 340 40, 420 120" stroke="rgba(250,248,244,0.5)" vector-effect="non-scaling-stroke"></path><path d="M0 110 C 80 90, 140 130, 220 110 S 340 110, 420 120" stroke="rgba(250,248,244,0.5)" vector-effect="non-scaling-stroke"></path><path d="M0 180 C 80 160, 140 200, 220 180 S 340 170, 420 120" stroke="rgba(250,248,244,0.5)" vector-effect="non-scaling-stroke"></path><path d="M420 120 C 480 110, 530 70, 596 14" stroke="#F0421E" stroke-width="5" vector-effect="non-scaling-stroke"></path></g></svg>
+</div>
+<p style="margin:12px 0 0;text-align:right;font-family:'Newsreader',Georgia,serif;font-size:22px;font-style:italic">Growth that compounds.</p>
+</Fragment>)}
+
+  </div>
+</figure>
+
+<style>
+  .graphic { margin: 0; width: 100%; color: var(--paper); background: var(--card-ink); border: 1px solid rgba(250, 248, 244, 0.1); border-radius: 10px; padding: clamp(20px, 3vw, 36px); overflow: hidden; font-family: var(--sans); }
+  .graphic__head { display: flex; justify-content: space-between; gap: 16px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone); }
+  .graphic__body { margin-top: 28px; }
+</style>

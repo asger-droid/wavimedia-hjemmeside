@@ -1,0 +1,63 @@
+---
+/* Case cover as a data portrait: drawn from the client's real, published number. */
+import type { CoverData } from '../data/cases';
+import Wave from './Wave.astro';
+interface Props extends CoverData { brand: string; cat: string; ratio?: string; size?: 's' | 'm' | 'l'; square?: boolean }
+const { brand, cat, motif, tone, letter, v1 = 100, v2 = 300, v1Label = '', v2Label = '', l1 = '', l2 = '', n = 1, ratio = '4/3', size = 'm', square = false } = Astro.props;
+const T = {
+  ink: { bg: 'var(--ink)', fg: 'var(--paper)', ghost: 'rgba(250,248,244,0.06)', sub: 'var(--stone)', bar: 'rgba(250,248,244,0.22)', accent: 'var(--coral)', mark: 'var(--coral)', edge: 'none' },
+  sand: { bg: 'var(--sand)', fg: 'var(--ink)', ghost: 'rgba(20,20,20,0.06)', sub: 'var(--slate)', bar: 'rgba(20,20,20,0.16)', accent: 'var(--ink)', mark: 'var(--coral)', edge: 'none' },
+  slate: { bg: 'var(--slate)', fg: 'var(--paper)', ghost: 'rgba(250,248,244,0.08)', sub: '#E3DED3', bar: 'rgba(250,248,244,0.25)', accent: 'var(--paper)', mark: 'var(--paper)', edge: 'none' },
+  paper: { bg: 'var(--paper)', fg: 'var(--ink)', ghost: 'rgba(20,20,20,0.05)', sub: 'var(--slate)', bar: 'rgba(20,20,20,0.14)', accent: 'var(--ink)', mark: 'var(--coral)', edge: 'inset 0 0 0 1px rgba(20,20,20,0.12)' }
+}[tone];
+const S = { s: ['clamp(180px,24vw,300px)', '24px'], m: ['clamp(240px,32vw,440px)', 'clamp(26px,2.6vw,34px)'], l: ['clamp(320px,46vw,760px)', 'clamp(36px,4.6vw,68px)'] }[size];
+const mx = Math.max(v1, v2) || 1;
+const h1 = Math.round((v1 / mx) * 70) + '%', h2 = Math.round((v2 / mx) * 70) + '%';
+const cols = n <= 3 ? n : n <= 6 ? 3 : 4;
+const vars = `--bg:${T.bg};--fg:${T.fg};--ghost:${T.ghost};--sub:${T.sub};--bar:${T.bar};--accent:${T.accent};--edge:${T.edge};--ratio:${ratio};--radius:${square ? '0' : '8px'};--letter:${S[0]};--brand:${S[1]}`;
+---
+<div class="cover" style={vars} role="img" aria-label={`${brand}${l2 ? ', ' + l2 : ''}`}>
+  <span class="cover__letter" aria-hidden="true">{letter}</span>
+  {motif === 'bars' && (
+    <div class="cover__bars" aria-hidden="true">
+      <div class="cover__col"><span>{v1Label}</span><div style={`height:${h1};background:var(--bar)`}></div><span class="up">{l1}</span></div>
+      <div class="cover__col"><span class="strong">{v2Label}</span><div style={`height:${h2};background:var(--accent)`}></div><span class="up">{l2}</span></div>
+    </div>
+  )}
+  {motif === 'dots' && (
+    <Fragment>
+      <div class="cover__dots" style={`grid-template-columns:repeat(${cols},minmax(0,1fr));gap:${n <= 3 ? '18%' : '10%'}`} aria-hidden="true">{Array.from({ length: n }).map(() => <i></i>)}</div>
+      <span class="cover__note up" aria-hidden="true">{l2}</span>
+    </Fragment>
+  )}
+  {motif === 'arrow' && (
+    <Fragment>
+      <svg class="cover__arrow" viewBox="0 0 200 120" aria-hidden="true"><g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M10 100 C 60 96, 100 80, 130 52 S 170 18, 186 12" stroke="var(--accent)" stroke-width="5"/><path d="M168 8 L188 11 L182 30" stroke="var(--accent)" stroke-width="5"/><path d="M10 110 H190" stroke="var(--sub)" stroke-width="1" stroke-dasharray="3 5"/></g></svg>
+      <span class="cover__note up" aria-hidden="true">{l2}</span>
+    </Fragment>
+  )}
+  {motif === 'mark' && <Wave class="cover__mark" width="30%" height="16%" weight={5} stroke="var(--accent)" />}
+  <div class="cover__meta">
+    <span class="cover__cat"><span>{cat}</span><Wave width={28} height={11} weight={12} stroke={T.mark} /></span>
+    {brand && <span class="cover__brand">{brand}</span>}
+  </div>
+</div>
+
+<style>
+  .cover { position: relative; overflow: hidden; width: 100%; aspect-ratio: var(--ratio); border-radius: var(--radius); background: var(--bg); color: var(--fg); box-shadow: var(--edge); font-family: var(--sans); }
+  .cover__letter { position: absolute; left: -2%; bottom: -30%; font-family: var(--serif); font-style: italic; font-size: var(--letter); line-height: 1; letter-spacing: -0.05em; color: var(--ghost); pointer-events: none; }
+  .cover__bars { position: absolute; right: 7%; bottom: 14%; top: 16%; width: 38%; display: flex; align-items: flex-end; gap: 10%; }
+  .cover__col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; height: 100%; gap: 10px; }
+  .cover__col > div { border-radius: 3px; }
+  .cover span { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--sub); }
+  .cover .strong { color: var(--fg); }
+  .cover .up { text-transform: uppercase; }
+  .cover__dots { position: absolute; right: 7%; top: 18%; width: 40%; display: grid; }
+  .cover__dots i { aspect-ratio: 1; border-radius: 999px; background: var(--accent); }
+  .cover__note { position: absolute; right: 7%; bottom: 14%; }
+  .cover__arrow { position: absolute; right: 6%; top: 16%; width: 42%; height: 58%; }
+  :global(.cover__mark) { position: absolute; right: 7%; top: 40%; }
+  .cover__meta { position: absolute; inset: 0; padding: clamp(18px, 2.4vw, 30px); display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; }
+  .cover__cat { display: flex; justify-content: space-between; gap: 12px; text-transform: uppercase; letter-spacing: 0.16em !important; }
+  .cover .cover__brand { max-width: 52%; font-family: var(--serif); font-weight: 500; font-size: var(--brand); line-height: 1; letter-spacing: -0.015em; color: var(--fg); }
+</style>
