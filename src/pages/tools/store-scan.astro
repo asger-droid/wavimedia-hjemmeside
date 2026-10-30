@@ -2,30 +2,22 @@
 import Base from '../../layouts/Base.astro';
 import ToolHero from '../../components/ToolHero.astro';
 const checks = [
-  ['Meta Pixel', 'Is the browser pixel firing the right events on the right pages?'],
-  ['Meta Conversions API', 'Server-side events that survive ad blockers and consent banners.'],
-  ['Google tag and enhanced conversions', 'Is Google seeing the purchases, with the data it needs to match them?'],
-  ['Consent Mode', 'Are tags waiting for consent, and modelling what they cannot see?'],
-  ['Klaviyo onsite tracking', 'Viewed product and added to cart events for your flows.'],
-  ['Mobile page speed', 'Every second of load time is a tax on your ad spend.']
-];
-// TODO: replace EXAMPLE with a call to the scanner API on Vercel (store-scan backend). Keep the same row shape.
-const EXAMPLE = [
-  ['Meta Pixel', 'Firing on product, cart and purchase.', 'Found', 'ok'],
-  ['Meta Conversions API', 'No server-side events detected.', 'Missing', 'bad'],
-  ['Google tag and enhanced conversions', 'Tag present, enhanced conversions not set up.', 'Needs attention', 'warn'],
-  ['Consent Mode', 'Consent Mode active.', 'Found', 'ok'],
-  ['Klaviyo onsite tracking', 'Viewed product and added to cart events found.', 'Found', 'ok'],
-  ['Mobile page speed', 'Largest content takes about 3.8 seconds to appear.', 'Needs attention', 'warn']
+  ['Meta Pixel', 'Is the browser pixel on the store, directly, through Tag Manager or through Shopify\u2019s Meta app?'],
+  ['Meta Conversions API', 'Server-side events can\u2019t be seen from outside. We say so, rather than guess.'],
+  ['Google tag', 'GA4, Google Ads conversion tag and Tag Manager, including what loads inside the container.'],
+  ['Consent banner & Consent Mode', 'Is there a consent banner, and are Google\u2019s tags told what was consented to?'],
+  ['Klaviyo and TikTok', 'Onsite tracking for your flows, and the TikTok Pixel if you advertise there.'],
+  ['Mobile page speed', 'Google\u2019s own mobile measurement. Every second of load time is a tax on your ad spend.']
 ];
 ---
 <Base title="Store scan: is your store leaking data?" description="Tracking, pixels, consent and speed, checked on your live store.">
   <ToolHero current="store-scan" eyebrow="Free tool · Store scan">
     <h1 class="h1" style="max-width:1100px">Is your store leaking data before it leaks <em class="accent">money?</em></h1>
     <p class="lead" style="margin-top:36px">Tracking, pixels, consent and speed, checked on your live store. If the data is wrong, every decision built on it is too.</p>
-    <form class="scan" data-scan>
-      <label>Your store URL<input name="url" type="text" inputmode="url" placeholder="yourbrand.com" autocomplete="url" /></label>
-      <button type="submit" class="btn btn--light">Scan store</button>
+    <form class="scan" data-scan novalidate>
+      <label>Your store URL<input name="url" type="text" inputmode="url" placeholder="yourbrand.com" autocomplete="url" required /></label>
+      <button type="submit" class="btn btn--light" data-go>Scan store</button>
+      <p class="scan__error" data-error hidden role="alert"></p>
     </form>
   </ToolHero>
 
@@ -34,39 +26,73 @@ const EXAMPLE = [
       <p class="eyebrow">What the scan checks</p>
       <h2 class="h2" style="max-width:900px">Six things that quietly break reporting.</h2>
       <ol class="checks">{checks.map(([n, w], i) => <li><p class="label">0{i + 1}</p><h3 class="serif">{n}</h3><p class="body">{w}</p></li>)}</ol>
+      <p class="body" style="margin-top:28px;font-size:14px">The scan reads your homepage, the Tag Manager containers it loads, and Google PageSpeed Insights. It reports only what it can see. Nothing is stored.</p>
     </div>
   </section>
 
   <section class="s-sand section" data-report hidden>
     <div class="container">
-      <div role="note" class="proto"><span class="label" style="color:var(--ink)">Prototype</span>Example report to show the layout. The live scan reads your store in real time.</div>
-      <div class="report">
+      <div class="report" aria-live="polite">
         <div class="row-between report__head">
-          <div><p class="label">Scan report</p><p class="serif report__domain" data-domain>yourbrand.com</p></div>
-          <div class="report__sum"><span><b>3</b> found</span><span><b>2</b> need attention</span><span><b class="accent" style="font-style:normal">1</b> missing</span></div>
+          <div><p class="label" data-kicker>Scan report</p><p class="serif report__domain" data-domain></p></div>
+          <div class="report__sum" data-sum hidden>
+            <span><b data-n="ok">0</b> found</span><span><b data-n="warn">0</b> need attention</span><span><b data-n="bad" class="accent" style="font-style:normal">0</b> missing</span>
+          </div>
         </div>
-        <ul class="report__rows">
-          {EXAMPLE.map(([n, note, status, k]) => <li><span class="serif">{n}</span><span class="note">{note}</span><span class={`chip ${k}`}>{status}</span></li>)}
-        </ul>
+        <div class="loading" data-loading>
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <p>Reading the store, its Tag Manager and Google’s mobile speed test. This takes 10 to 40 seconds.</p>
+        </div>
+        <ul class="report__rows" data-rows></ul>
       </div>
       <div class="row-between card card--paper" style="margin-top:20px;align-items:center">
-        <p class="serif" style="margin:0;max-width:680px;font-size:26px;line-height:1.25">A scan shows what is broken. A partner tells you what it is costing, and what to fix first.</p>
+        <p class="serif" style="margin:0;max-width:680px;font-size:26px;line-height:1.25">A scan shows what is visible from outside. A partner tells you what it is costing, and what to fix first.</p>
         <a href="/contact" class="btn btn--dark">Request a senior audit</a>
       </div>
     </div>
   </section>
 </Base>
 <script>
-  const form = document.querySelector<HTMLFormElement>('[data-scan]')!;
-  form.addEventListener('submit', (e) => {
+  type Check = { id: string; name: string; status: 'ok' | 'warn' | 'bad' | 'info'; note: string };
+  const LABEL = { ok: 'Found', warn: 'Needs attention', bad: 'Missing', info: 'Not detected' } as const;
+  const INFO_LABEL: Record<string, string> = { 'meta-capi': 'Not visible', speed: 'Not measured' };
+  const $ = <T extends HTMLElement>(s: string) => document.querySelector<T>(s)!;
+  const form = $<HTMLFormElement>('[data-scan]'), input = form.querySelector('input')!, go = $<HTMLButtonElement>('[data-go]');
+  const err = $('[data-error]'), report = $('[data-report]'), rows = $('[data-rows]'), loading = $('[data-loading]'), sum = $('[data-sum]');
+
+  const reset = () => { go.disabled = false; go.textContent = 'Scan store'; };
+  const showError = (msg: string) => { err.textContent = msg; err.hidden = false; report.hidden = true; $('[data-idle]').hidden = false; reset(); };
+
+  function row(c: Check) {
+    const li = document.createElement('li');
+    const n = document.createElement('span'); n.className = 'serif'; n.textContent = c.name;
+    const note = document.createElement('span'); note.className = 'note'; note.textContent = c.note;
+    const chip = document.createElement('span'); chip.className = `chip ${c.status}`; chip.textContent = c.status === 'info' ? (INFO_LABEL[c.id] ?? LABEL.info) : LABEL[c.status];
+    li.append(n, note, chip); return li;
+  }
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const raw = String(new FormData(form).get('url') || '').trim();
-    const domain = raw.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0] || 'yourbrand.com';
-    document.querySelector('[data-domain]')!.textContent = domain;
-    document.querySelector<HTMLElement>('[data-idle]')!.hidden = true;
-    const report = document.querySelector<HTMLElement>('[data-report]')!;
-    report.hidden = false;
-    report.scrollIntoView({ behavior: 'smooth' });
+    const raw = input.value.trim();
+    if (!raw) { showError('Enter your store address, like yourbrand.com.'); input.focus(); return; }
+    err.hidden = true; go.disabled = true; go.textContent = 'Scanning…';
+    $('[data-domain]').textContent = raw.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
+    $('[data-kicker]').textContent = 'Scanning';
+    rows.replaceChildren(); sum.hidden = true; loading.hidden = false;
+    $('[data-idle]').hidden = true; report.hidden = false;
+    report.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    try {
+      const res = await fetch(`/api/scan?url=${encodeURIComponent(raw)}`);
+      const d = await res.json().catch(() => null);
+      if (!res.ok || !d?.ok) return showError(d?.message ?? 'The scan didn’t finish. Try again in a minute.');
+      $('[data-domain]').textContent = d.domain;
+      $('[data-kicker]').textContent = d.platform ? `Scan report · ${d.platform} store` : 'Scan report';
+      (['ok', 'warn', 'bad'] as const).forEach((k) => ($(`[data-n="${k}"]`).textContent = String(d.summary[k])));
+      rows.replaceChildren(...(d.checks as Check[]).map(row));
+      loading.hidden = true; sum.hidden = false; reset();
+    } catch {
+      showError('The scan didn’t finish. Check your connection and try again.');
+    }
   });
 </script>
 <style>
@@ -74,25 +100,35 @@ const EXAMPLE = [
   .scan label { flex: 1 1 320px; display: flex; flex-direction: column; gap: 8px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); }
   .scan input { height: 60px; padding: 0 20px; border-radius: 999px; border: 1px solid rgba(250, 248, 244, 0.3); background: transparent; color: var(--paper); font-family: var(--sans); font-size: 18px; letter-spacing: 0; text-transform: none; }
   .scan .btn { align-self: flex-end; min-height: 60px; }
-  section[hidden] { display: none; }
+  .scan .btn[disabled] { opacity: 0.7; cursor: wait; }
+  .scan__error { flex-basis: 100%; margin: 4px 0 0; color: var(--paper); font-size: 15px; }
+  .scan__error::before { content: ''; display: inline-block; width: 8px; height: 8px; margin-right: 10px; border-radius: 50%; background: var(--coral); vertical-align: 1px; }
+  section[hidden], [data-sum][hidden], .loading[hidden] { display: none; }
   .checks { list-style: none; margin: 64px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
   .checks li { padding: 36px; background: var(--paper); }
   .checks h3 { margin: 24px 0 0; font-size: 28px; font-weight: 500; }
   .checks .body { margin-top: 10px; }
-  .proto { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 8px; border: 1px dashed rgba(20, 20, 20, 0.35); font-size: 14px; color: var(--slate); }
-  .report { margin-top: 28px; padding: clamp(28px, 4vw, 48px); border-radius: 10px; background: var(--ink); color: var(--paper); }
+  .report { padding: clamp(28px, 4vw, 48px); border-radius: 10px; background: var(--ink); color: var(--paper); }
   .report .label { color: var(--stone); }
   .report__head { padding-bottom: 28px; border-bottom: 1px solid var(--line-inv); }
-  .report__domain { margin: 12px 0 0; font-size: clamp(36px, 4vw, 56px); font-weight: 500; letter-spacing: -0.02em; line-height: 1; }
+  .report__domain { margin: 12px 0 0; font-size: clamp(36px, 4vw, 56px); font-weight: 500; letter-spacing: -0.02em; line-height: 1; overflow-wrap: anywhere; }
   .report__sum { display: flex; flex-wrap: wrap; gap: 28px; font-size: 15px; }
   .report__sum b { font-family: var(--serif); font-size: 40px; font-weight: 400; }
+  .loading { display: flex; align-items: center; gap: 18px; padding: 40px 0 16px; color: rgba(250, 248, 244, 0.7); font-size: 15px; }
+  .loading p { margin: 0; }
+  .dots { display: inline-flex; gap: 6px; }
+  .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--paper); opacity: 0.3; animation: pulse 1.2s infinite ease-in-out; }
+  .dots i:nth-child(2) { animation-delay: 0.2s; } .dots i:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes pulse { 50% { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .dots i { animation: none; opacity: 0.7; } }
   .report__rows { list-style: none; margin: 0; padding: 0; }
-  .report__rows li { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr) minmax(130px, 2fr); gap: 16px 32px; align-items: center; padding: 24px 0; border-bottom: 1px solid rgba(250, 248, 244, 0.1); }
-  .report__rows .serif { font-size: 24px; }
-  .note { font-size: 15px; line-height: 1.5; color: rgba(250, 248, 244, 0.7); }
-  .chip { justify-self: end; display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border-radius: 999px; font-size: 13px; white-space: nowrap; }
-  .chip.ok { border: 1px solid rgba(250, 248, 244, 0.3); }
-  .chip.warn { background: var(--sand); color: var(--ink); }
-  .chip.bad { border: 1.5px solid var(--coral); }
-  @media (max-width: 700px) { .report__rows li { grid-template-columns: 1fr auto; } .note { grid-column: 1 / -1; grid-row: 2; } .chip { grid-row: 1; grid-column: 2; } }
+  .report__rows :global(li) { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr) minmax(140px, 2fr); gap: 16px 32px; align-items: center; padding: 24px 0; border-bottom: 1px solid rgba(250, 248, 244, 0.1); }
+  .report__rows :global(.serif) { font-size: 24px; }
+  .report__rows :global(.note) { font-size: 15px; line-height: 1.5; color: rgba(250, 248, 244, 0.7); overflow-wrap: anywhere; }
+  .report__rows :global(.chip) { justify-self: end; display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border-radius: 999px; font-size: 13px; white-space: nowrap; }
+  .report__rows :global(.chip.ok) { border: 1px solid rgba(250, 248, 244, 0.3); }
+  .report__rows :global(.chip.warn) { background: var(--sand); color: var(--ink); }
+  .report__rows :global(.chip.bad) { border: 1.5px solid var(--coral); }
+  .report__rows :global(.chip.info) { border: 1px dashed rgba(250, 248, 244, 0.35); color: rgba(250, 248, 244, 0.7); }
+  @media (max-width: 700px) { .report__rows :global(li) { grid-template-columns: 1fr auto; } .report__rows :global(.note) { grid-column: 1 / -1; grid-row: 2; } .report__rows :global(.chip) { grid-row: 1; grid-column: 2; } }
 </style>
