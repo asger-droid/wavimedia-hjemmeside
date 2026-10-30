@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Cover from '../components/Cover.astro';
 import { site } from '../data/site';
-// Team as listed on the Framer site (/team). TODO: replace monogram tiles with portraits from the Cyprus shoot.
+// Team as listed on the Framer site (/team). TODO: replace monogram tiles with team portraits.
 const tones = ['ink', 'slate', 'paper', 'sand'] as const;
 const team = [
   ['Asger Olsson', 'CEO & Founder'],
@@ -40,7 +40,7 @@ const audience = [
 
   <section class="s-paper section" style="border-top:1px solid var(--line)">
     <div class="container split" style="align-items:center">
-      <div class="narrow" style="flex-basis:380px"><Cover brand="Asger Olsson" cat="Founder · portrait to come" motif="none" tone="ink" letter="A" ratio="4/5" /></div>
+      <div class="narrow" style="flex-basis:380px"><img class="founder" src="/images/asger-founder.webp" width="1200" height="1500" alt="Asger Olsson, founder of Wavi Media" loading="lazy" decoding="async" /></div>
       <div class="wide">
         <p class="eyebrow">A note from the founder</p>
         <p class="serif" style="margin:0;font-size:clamp(28px,3vw,40px);line-height:1.2">“Most brands don't have a media problem. They have a control problem.”</p>
@@ -92,4 +92,5 @@ const audience = [
   .logos { list-style: none; margin: 64px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
   .logos li { display: flex; align-items: center; justify-content: center; min-height: 140px; margin: 0 -1px -1px 0; padding: 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
   .logos img { max-width: 100%; height: auto; }
+  .founder { display: block; width: 100%; height: auto; border-radius: var(--radius); background: var(--ink); }
 </style>
