@@ -1,0 +1,45 @@
+---
+import { testimonials } from '../data/site';
+const quotes = Object.values(testimonials);
+---
+<section class="s-ink section" aria-label="Testimonials" data-quotes>
+  <div class="container">
+    <div class="row-between" style="align-items:center">
+      <p class="eyebrow" style="margin:0">In their own words · <span data-pos>01</span> / 0{quotes.length}</p>
+      <div class="q__nav">
+        <button type="button" aria-label="Previous testimonial" data-dir="-1">←</button>
+        <button type="button" aria-label="Next testimonial" data-dir="1" class="q__next">→</button>
+      </div>
+    </div>
+    <div aria-live="polite">
+      {quotes.map((q, i) => (
+        <figure class="q" hidden={i !== 0}>
+          <blockquote>“{q.text}”</blockquote>
+          <figcaption><span class="serif">{q.name}</span><span class="label">{q.role}</span></figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-quotes]').forEach((root) => {
+    const items = [...root.querySelectorAll<HTMLElement>('figure')];
+    let i = 0;
+    root.querySelectorAll<HTMLButtonElement>('[data-dir]').forEach((b) => b.addEventListener('click', () => {
+      i = (i + Number(b.dataset.dir) + items.length) % items.length;
+      items.forEach((f, j) => { f.hidden = j !== i; });
+      root.querySelector('[data-pos]')!.textContent = '0' + (i + 1);
+    }));
+  });
+</script>
+
+<style>
+  .q__nav { display: flex; gap: 10px; }
+  .q__nav button { width: 52px; height: 52px; border-radius: 999px; border: 1px solid rgba(250, 248, 244, 0.3); background: none; color: var(--paper); font-size: 20px; cursor: pointer; }
+  .q__nav .q__next { background: var(--paper); color: var(--ink); border: 0; }
+  .q { margin: 72px 0 0; min-height: 300px; display: flex; flex-direction: column; justify-content: space-between; }
+  .q[hidden] { display: none; }
+  .q blockquote { margin: 0; max-width: 1180px; font-family: var(--serif); font-weight: 500; font-size: clamp(34px, 4.8vw, 72px); line-height: 1.08; letter-spacing: -0.025em; }
+  .q figcaption { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line-inv); font-size: 26px; }
+</style>

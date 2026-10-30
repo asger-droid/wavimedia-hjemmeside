@@ -1,0 +1,75 @@
+---
+/* The homepage signature: what the dashboard shows vs what the business keeps. Uses only the visitor's own inputs. */
+---
+<section id="instrument" class="s-sand section" data-instrument>
+  <div class="container">
+    <p class="eyebrow">The number you're shown vs. the number you keep</p>
+    <h2 class="h2 inst__h">Ads Manager says <span data-o="roas">3.20</span>×. Your P&amp;L says <em class="accent" data-o="verdictShort">€11.00.</em></h2>
+    <div class="grid inst__grid" style="--min:340px;--gap:24px">
+      <div class="card card--paper">
+        <p class="label">Your three numbers</p>
+        <label class="field"><span class="field__top"><span>Average order value</span><output data-o="aov">€80.00</output></span><input type="range" min="20" max="300" step="1" value="80" data-i="aov" /><span class="field__hint">What a customer pays per order.</span></label>
+        <label class="field"><span class="field__top"><span>Margin after product, shipping &amp; returns</span><output data-o="margin">45%</output></span><input type="range" min="10" max="90" step="1" value="45" data-i="margin" /><span class="field__hint">What is left of each order before ads.</span></label>
+        <label class="field"><span class="field__top"><span>Ad cost per order</span><output data-o="cpa">€25.00</output></span><input type="range" min="2" max="150" step="1" value="25" data-i="cpa" /><span class="field__hint">Ad spend divided by orders.</span></label>
+      </div>
+      <div class="inst__out">
+        <div class="grid" style="--min:160px;--gap:24px">
+          <div class="card card--line"><p class="label">The dashboard</p><p class="num inst__big"><span data-o="roas2">3.20</span>×</p><p class="body">ROAS. Looks healthy.</p></div>
+          <div class="card card--ink on-ink"><p class="label">The business</p><p class="num inst__big" data-o="profit">€11.00</p><p class="body">Kept per order.</p></div>
+        </div>
+        <div class="card card--paper">
+          <div class="row-between label"><span>Where <span data-o="aov2">€80.00</span> goes</span><span>Break-even ROAS <span data-o="be">2.22</span>×</span></div>
+          <div class="bar" role="img" data-o="barLabel" aria-label="Of €80.00: €44.00 costs, €25.00 ads, €11.00 profit">
+            <i style="width:55%;background:var(--slate)" data-o="wCost"></i><i style="width:31.3%;background:var(--stone)" data-o="wAds"></i><i style="width:13.8%;background:var(--coral)" data-o="wProfit"></i>
+          </div>
+          <div class="legend"><span><b style="background:var(--slate)"></b>Product, shipping, returns <span data-o="cost">€44.00</span></span><span><b style="background:var(--stone)"></b>Ads <span data-o="cpa2">€25.00</span></span><span><b style="background:var(--coral)"></b>Profit <span data-o="profit2">€11.00</span></span></div>
+          <p class="inst__verdict" data-o="verdict">There is room here. The real question is how far spend scales before cost per order climbs.</p>
+        </div>
+        <div class="row-between" style="align-items:center"><span class="field__hint">Your inputs, your maths. Nothing is stored.</span><a href="/tools/profit-check" class="link">Full profit check, with returns and shipping split out <span class="arrow">→</span></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-instrument]');
+  if (root) {
+    const eur = (n: number) => (n < 0 ? '-€' : '€') + Math.abs(n).toFixed(2);
+    const out = (k: string) => root.querySelector<HTMLElement>(`[data-o="${k}"]`)!;
+    const val = (k: string) => Number(root.querySelector<HTMLInputElement>(`[data-i="${k}"]`)!.value);
+    const update = () => {
+      const aov = val('aov'), m = val('margin'), cpa = val('cpa');
+      const kept = aov * m / 100, cost = aov - kept, profit = kept - cpa;
+      const costPct = cost / aov * 100, adsPct = Math.min(cpa / aov * 100, 100 - costPct), profitPct = Math.max(0, 100 - costPct - adsPct);
+      let short: string, verdict: string;
+      if (profit < 0) { short = 'you lose ' + eur(-profit) + '.'; verdict = 'Every first order loses money at this ad cost. Scaling spend would scale the loss.'; }
+      else if (profit / aov < 0.1) { short = eur(profit) + '.'; verdict = 'Barely positive. One price change or a bad month erases it. Fix the maths before adding spend.'; }
+      else { short = eur(profit) + '.'; verdict = 'There is room here. The real question is how far spend scales before cost per order climbs.'; }
+      const roas = (aov / cpa).toFixed(2);
+      const text: Record<string, string> = { aov: eur(aov), aov2: eur(aov), margin: m + '%', cpa: eur(cpa), cpa2: eur(cpa), roas, roas2: roas, verdictShort: short, profit: eur(profit), profit2: eur(profit), cost: eur(cost), be: (100 / m).toFixed(2), verdict };
+      Object.entries(text).forEach(([k, v]) => { out(k).textContent = v; });
+      out('wCost').style.width = costPct.toFixed(1) + '%'; out('wAds').style.width = adsPct.toFixed(1) + '%'; out('wProfit').style.width = profitPct.toFixed(1) + '%';
+      out('barLabel').setAttribute('aria-label', `Of ${eur(aov)}: ${eur(cost)} costs, ${eur(cpa)} ads, ${eur(profit)} profit`);
+    };
+    root.addEventListener('input', update);
+  }
+</script>
+
+<style>
+  .inst__h { max-width: 1180px; }
+  .inst__grid { margin-top: 72px; }
+  .inst__out { display: flex; flex-direction: column; gap: 24px; }
+  .inst__big { margin: 18px 0 12px; font-size: clamp(44px, 5vw, 64px); }
+  .field { display: flex; flex-direction: column; gap: 12px; padding: 22px 0; border-top: 1px solid rgba(20, 20, 20, 0.12); }
+  .field:first-of-type { margin-top: 8px; }
+  .field__top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; font-size: 17px; font-weight: 500; }
+  .field__top output { font-family: var(--serif); font-size: 34px; }
+  .field__hint { font-size: 14px; color: var(--slate); }
+  .field input { width: 100%; height: 28px; margin: 0; accent-color: var(--ink); }
+  .bar { display: flex; height: 56px; margin-top: 20px; border-radius: 4px; overflow: hidden; background: var(--sand); }
+  .bar i { transition: width .35s cubic-bezier(.2, .7, .2, 1); }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px 28px; margin-top: 16px; font-size: 14px; color: var(--slate); }
+  .legend > span { display: inline-flex; align-items: center; gap: 8px; }
+  .legend b { width: 12px; height: 12px; border-radius: 2px; }
+  .inst__verdict { margin: 28px 0 0; font-family: var(--serif); font-size: 24px; line-height: 1.3; }
+</style>
