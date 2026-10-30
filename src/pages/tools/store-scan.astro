@@ -41,7 +41,7 @@ const checks = [
         </div>
         <div class="loading" data-loading>
           <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
-          <p>Reading the store, its Tag Manager and Google’s mobile speed test. This takes 10 to 40 seconds.</p>
+          <p>Reading the store and the Tag Manager containers it loads. A few seconds.</p>
         </div>
         <ul class="report__rows" data-rows></ul>
       </div>
@@ -59,40 +59,68 @@ const checks = [
   const $ = <T extends HTMLElement>(s: string) => document.querySelector<T>(s)!;
   const form = $<HTMLFormElement>('[data-scan]'), input = form.querySelector('input')!, go = $<HTMLButtonElement>('[data-go]');
   const err = $('[data-error]'), report = $('[data-report]'), rows = $('[data-rows]'), loading = $('[data-loading]'), sum = $('[data-sum]');
+  let checks: Check[] = [];
+  let run = 0;
 
   const reset = () => { go.disabled = false; go.textContent = 'Scan store'; };
   const showError = (msg: string) => { err.textContent = msg; err.hidden = false; report.hidden = true; $('[data-idle]').hidden = false; reset(); };
 
   function row(c: Check) {
-    const li = document.createElement('li');
+    const li = document.createElement('li'); li.dataset.id = c.id;
     const n = document.createElement('span'); n.className = 'serif'; n.textContent = c.name;
     const note = document.createElement('span'); note.className = 'note'; note.textContent = c.note;
     const chip = document.createElement('span'); chip.className = `chip ${c.status}`; chip.textContent = c.status === 'info' ? (INFO_LABEL[c.id] ?? LABEL.info) : LABEL[c.status];
     li.append(n, note, chip); return li;
+  }
+  function pendingSpeedRow() {
+    const li = document.createElement('li'); li.dataset.id = 'speed';
+    const n = document.createElement('span'); n.className = 'serif'; n.textContent = 'Mobile page speed';
+    const note = document.createElement('span'); note.className = 'note'; note.textContent = 'Google is loading your homepage on a simulated phone. This can take up to a minute.';
+    const chip = document.createElement('span'); chip.className = 'chip pending'; chip.innerHTML = '<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>Measuring';
+    li.append(n, note, chip); return li;
+  }
+  function updateSummary() {
+    (['ok', 'warn', 'bad'] as const).forEach((k) => ($(`[data-n="${k}"]`).textContent = String(checks.filter((c) => c.status === k).length)));
   }
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const raw = input.value.trim();
     if (!raw) { showError('Enter your store address, like yourbrand.com.'); input.focus(); return; }
-    err.hidden = true; go.disabled = true; go.textContent = 'Scanning…';
+    const me = ++run;
+    err.hidden = true; go.disabled = true; go.textContent = 'Scanning\u2026';
     $('[data-domain]').textContent = raw.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
     $('[data-kicker]').textContent = 'Scanning';
     rows.replaceChildren(); sum.hidden = true; loading.hidden = false;
     $('[data-idle]').hidden = true; report.hidden = false;
     report.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    let d: any;
     try {
       const res = await fetch(`/api/scan?url=${encodeURIComponent(raw)}`);
-      const d = await res.json().catch(() => null);
-      if (!res.ok || !d?.ok) return showError(d?.message ?? 'The scan didn’t finish. Try again in a minute.');
-      $('[data-domain]').textContent = d.domain;
-      $('[data-kicker]').textContent = d.platform ? `Scan report · ${d.platform} store` : 'Scan report';
-      (['ok', 'warn', 'bad'] as const).forEach((k) => ($(`[data-n="${k}"]`).textContent = String(d.summary[k])));
-      rows.replaceChildren(...(d.checks as Check[]).map(row));
-      loading.hidden = true; sum.hidden = false; reset();
+      d = await res.json().catch(() => null);
+      if (me !== run) return;
+      if (!res.ok || !d?.ok) return showError(d?.message ?? 'The scan didn\u2019t finish. Try again in a minute.');
     } catch {
-      showError('The scan didn’t finish. Check your connection and try again.');
+      if (me === run) showError('The scan didn\u2019t finish. Check your connection and try again.');
+      return;
     }
+    checks = d.checks;
+    $('[data-domain]').textContent = d.domain;
+    $('[data-kicker]').textContent = d.platform ? `Scan report \u00b7 ${d.platform} store` : 'Scan report';
+    rows.replaceChildren(...checks.map(row), pendingSpeedRow());
+    loading.hidden = true; sum.hidden = false; updateSummary(); reset();
+
+    // Mobile speed runs separately: Google can take close to a minute on heavy stores.
+    let speed: Check = { id: 'speed', name: 'Mobile page speed', status: 'info', note: 'Google couldn\u2019t measure this page right now. Try again in a minute.' };
+    try {
+      const res = await fetch(`/api/speed?url=${encodeURIComponent(d.finalUrl)}`);
+      const s = await res.json().catch(() => null);
+      if (s?.ok && s.check) speed = s.check;
+    } catch { /* keep the honest fallback */ }
+    if (me !== run) return;
+    checks = [...checks, speed];
+    rows.querySelector('[data-id="speed"]')?.replaceWith(row(speed));
+    updateSummary();
   });
 </script>
 <style>
@@ -116,11 +144,11 @@ const checks = [
   .report__sum b { font-family: var(--serif); font-size: 40px; font-weight: 400; }
   .loading { display: flex; align-items: center; gap: 18px; padding: 40px 0 16px; color: rgba(250, 248, 244, 0.7); font-size: 15px; }
   .loading p { margin: 0; }
-  .dots { display: inline-flex; gap: 6px; }
-  .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--paper); opacity: 0.3; animation: pulse 1.2s infinite ease-in-out; }
-  .dots i:nth-child(2) { animation-delay: 0.2s; } .dots i:nth-child(3) { animation-delay: 0.4s; }
+  :global(.dots) { display: inline-flex; gap: 6px; }
+  :global(.dots i) { width: 8px; height: 8px; border-radius: 50%; background: var(--paper); opacity: 0.3; animation: pulse 1.2s infinite ease-in-out; }
+  :global(.dots i:nth-child(2)) { animation-delay: 0.2s; } :global(.dots i:nth-child(3)) { animation-delay: 0.4s; }
   @keyframes pulse { 50% { opacity: 1; } }
-  @media (prefers-reduced-motion: reduce) { .dots i { animation: none; opacity: 0.7; } }
+  @media (prefers-reduced-motion: reduce) { :global(.dots i) { animation: none; opacity: 0.7; } }
   .report__rows { list-style: none; margin: 0; padding: 0; }
   .report__rows :global(li) { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr) minmax(140px, 2fr); gap: 16px 32px; align-items: center; padding: 24px 0; border-bottom: 1px solid rgba(250, 248, 244, 0.1); }
   .report__rows :global(.serif) { font-size: 24px; }
@@ -129,6 +157,8 @@ const checks = [
   .report__rows :global(.chip.ok) { border: 1px solid rgba(250, 248, 244, 0.3); }
   .report__rows :global(.chip.warn) { background: var(--sand); color: var(--ink); }
   .report__rows :global(.chip.bad) { border: 1.5px solid var(--coral); }
+  .report__rows :global(.chip.pending) { gap: 10px; border: 1px solid rgba(250, 248, 244, 0.2); color: rgba(250, 248, 244, 0.8); }
+  .report__rows :global(.chip.pending .dots i) { width: 5px; height: 5px; }
   .report__rows :global(.chip.info) { border: 1px dashed rgba(250, 248, 244, 0.35); color: rgba(250, 248, 244, 0.7); }
   @media (max-width: 700px) { .report__rows :global(li) { grid-template-columns: 1fr auto; } .report__rows :global(.note) { grid-column: 1 / -1; grid-row: 2; } .report__rows :global(.chip) { grid-row: 1; grid-column: 2; } }
 </style>

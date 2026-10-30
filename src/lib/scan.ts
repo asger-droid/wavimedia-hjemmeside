@@ -36,7 +36,7 @@ export function detectPlatform(html: string): string {
 
 export const gtmIds = (html: string) => all(/\b(GTM-[A-Z0-9]{4,9})\b/g, html).slice(0, 3);
 
-export function analyze(html: string, gtmCode = '', speed: Speed | null = null): Check[] {
+export function analyze(html: string, gtmCode = ''): Check[] {
   const hay = html + '\n' + gtmCode;
   const inGtmOnly = (re: RegExp) => !re.test(html) && re.test(gtmCode);
   const checks: Check[] = [];
@@ -87,15 +87,15 @@ export function analyze(html: string, gtmCode = '', speed: Speed | null = null):
   if (tt.length || /analytics\.tiktok\.com/.test(hay)) checks.push({ id: 'tiktok', name: 'TikTok Pixel', status: 'ok', note: tt.length ? `Pixel ${tt.join(', ')} found.` : 'TikTok Pixel script found.' });
   else checks.push({ id: 'tiktok', name: 'TikTok Pixel', status: 'info', note: 'Not detected. Fine if you don\u2019t advertise on TikTok.' });
 
-  // Mobile speed (Google PageSpeed Insights, mobile, lab data)
-  if (speed) {
-    const lcp = speed.lcpMs / 1000;
-    const status: Status = lcp <= 2.5 ? 'ok' : lcp <= 4 ? 'warn' : 'bad';
-    checks.push({ id: 'speed', name: 'Mobile page speed', status, note: `Largest content appears after ${lcp.toFixed(1)} s on mobile. PageSpeed score ${speed.score}/100.` });
-  } else {
-    checks.push({ id: 'speed', name: 'Mobile page speed', status: 'info', note: 'Couldn\u2019t measure speed right now. Try again in a minute.' });
-  }
   return checks;
+}
+
+// Mobile speed (Google PageSpeed Insights, mobile, lab data). Measured separately because Google can take up to a minute.
+export function speedCheck(speed: Speed | null): Check {
+  if (!speed) return { id: 'speed', name: 'Mobile page speed', status: 'info', note: 'Google couldn\u2019t measure this page right now. Try again in a minute.' };
+  const lcp = speed.lcpMs / 1000;
+  const status: Status = lcp <= 2.5 ? 'ok' : lcp <= 4 ? 'warn' : 'bad';
+  return { id: 'speed', name: 'Mobile page speed', status, note: `Largest content appears after ${lcp.toFixed(1)} s on mobile. PageSpeed score ${speed.score}/100.` };
 }
 
 /* ---------- network safety: only public http(s) hosts may be fetched ---------- */
