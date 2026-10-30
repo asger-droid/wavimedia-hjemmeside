@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import { site } from '../data/site';
+// Copy from the Framer site (/tech-stack).
+const layers = [
+  { num: '01', step: 'Acquire', title: 'Paid media', tools: ['Meta Ads', 'Google Ads', 'TikTok Ads', 'Pinterest Ads', 'Snapchat Ads'] },
+  { num: '02', step: 'Retain', title: 'Lifecycle & CRM', tools: ['Klaviyo', 'Meta Conversions API', 'Shopify Flow', 'SMS & email automation', 'Subscription & loyalty'] },
+  { num: '03', step: 'Measure', title: 'Analytics & profit', tools: ['ProfitMetrics', 'Triple Whale', 'GA4', 'Server-side GTM', 'Looker Studio'] },
+  { num: '04', step: 'Build', title: 'Creative, feeds & commerce', tools: ['Shopify', 'Centra', 'DataFeedWatch', 'Confect', 'Figma & Mak, N8N'] }
+];
+---
+<Base title="Tech stack: the tools behind the system" description="The stack we run to take a brand from ad account to P&L, one connected system, not a drawer of disconnected tools.">
+  <Hero crumbs={[{ href: '/studio', label: 'Studio' }, { label: 'Tech stack' }]} eyebrow="Tech stack">
+    <h1 class="h1" style="max-width:1100px">The tools behind the <em class="accent">system.</em></h1>
+    <p class="lead" style="margin-top:40px">We’re platform-agnostic but deeply opinionated. This is the stack we run to take a brand from ad account to P&amp;L, one connected system, not a drawer of disconnected tools.</p>
+    <a href="/contact" class="btn btn--light" style="margin-top:48px">Book a growth session</a>
+  </Hero>
+
+  <section class="s-paper section">
+    <div class="container">
+      <p class="eyebrow">How it fits together</p>
+      <h2 class="h2" style="max-width:900px">One connected stack, wired to the <em class="accent">P&amp;L.</em></h2>
+      <ol class="layers">
+        {layers.map((l) => (
+          <li>
+            <p class="label">{l.num} · {l.step}</p>
+            <h3 class="serif">{l.title}</h3>
+            <ul class="tools">{l.tools.map((t) => <li>{t}</li>)}</ul>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="s-sand section--tight">
+    <div class="container">
+      <div class="row-between"><div><p class="eyebrow">Partners &amp; certifications</p><h2 class="h2">Certified where it counts.</h2></div></div>
+      <ul class="pills">{site.partners.map((p) => <li>{p}</li>)}</ul>
+    </div>
+  </section>
+</Base>
+<style>
+  .layers { list-style: none; margin: 64px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .layers > li { padding: 36px; background: var(--paper); }
+  .layers h3 { margin: 20px 0 0; font-size: 30px; font-weight: 500; line-height: 1.1; }
+  .tools { list-style: none; margin: 28px 0 0; padding: 0; border-top: 1px solid var(--line); }
+  .tools li { padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 16px; }
+  .pills { list-style: none; margin: 48px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .pills li { padding: 12px 18px; border-radius: 999px; background: var(--paper); font-weight: 500; }
+</style>

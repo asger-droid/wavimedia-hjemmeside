@@ -53,7 +53,7 @@ src/
     api/scan.ts             # store scan (Vercel Function)
     services/[slug].astro   # track-sider OG ydelses-sider fra services.ts
     work/index.astro, work/[slug].astro
-    framework.astro, studio.astro, contact.astro, privacy.astro, 404.astro
+    framework.astro, studio.astro, tech-stack.astro, wavi-charity.astro, contact.astro, privacy.astro, 404.astro
     tools/profit-check.astro, store-scan.astro, growth-score.astro
   styles/global.css         # design tokens fra brandbogen
 ```
@@ -73,10 +73,12 @@ src/
 - [x] Kontaktformular sender mail (Resend) - mangler kun `RESEND_API_KEY` i Vercel.
 - [ ] Slack: sæt `SLACK_WEBHOOK_URL`, når kanalen er klar.
 - [x] Store scan live (`/api/scan`).
-- [ ] Bekræft "average partnership": 2+ eller 3+ år (`src/data/site.ts`).
+- [x] "Average partnership" sat til 3+ år, som i Framer (`src/data/site.ts`).
+- [x] Hele teamet fra Framer på Studio-siden.
 - [ ] Fotos fra Cyprus-optagelsen: founder, team (erstat monogram-tiles i `studio.astro`).
 - [ ] Kundelogoer som SVG.
-- [ ] Endelig privatlivspolitik (`src/pages/privacy.astro`) og sociale links (`Footer.astro`).
+- [x] Privatlivspolitik skrevet ud fra hvad sitet faktisk gør (`src/pages/privacy.astro`). Gennemlæses før lancering, og opdateres hvis analytics, pixels eller Slack-notifikationer tilføjes.
+- [x] Tech stack og Wavi Charity flyttet fra Framer (`/tech-stack`, `/wavi-charity`).
 - [ ] Commit `package-lock.json` efter første `npm install`.
 - [ ] Analytics/pixel: tilføjes med consent - opdatér cookie-teksten samtidig.
 - [ ] Sidste skridt: tilføj domænet wavimedia.com i Vercel.

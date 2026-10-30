@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Wave from '../components/Wave.astro';
+// Copy from the Framer site (/wavi-charity).
+const story = [
+  { year: '2021', title: 'Where it began.', text: 'While the world faced the challenges of COVID-19, our agency and eCommerce partners experienced a year of growth. However, we knew many were still deeply affected. Having been hospitalised as a child, Asger felt a personal connection to those spending Christmas in the hospital. After speaking with Rigshospitalet in Copenhagen, we learned that many children, due to weakened immune systems, had to spend the holidays away from their families. In collaboration with No1 and with support from Charlotte Blix, Project Manager at Rigshospitalet’s Children and Youth Program, we delivered over 60 Christmas gifts to these children, ensuring they felt remembered and cared for, along with extra gifts for the hospital departments.' },
+  { year: '2023', title: 'Christmas Aid.', text: 'With rising energy costs and financial uncertainty, we’ve heard more stories of families struggling to afford holiday essentials, both gifts and food. While Christmas may not be a life or death matter, the ability to uphold traditions and create special moments with loved ones is invaluable. The warmth of the season should be for everyone, regardless of financial circumstances. That’s why, in December 2023, we partnered with Roskilde Cathedral and Meny to provide Christmas aid, ensuring 100 individuals and families received essential food supplies, contributing €4,000 to bring comfort and joy during the holidays.' },
+  { year: '2023', title: 'Roskilde Hospital.', text: 'As part of our Christmas aid efforts, we learned that Roskilde Hospital was in need of gifts for older hospitalised children. To help brighten their holiday season, we partnered with LULU Copenhagen and Matinique to donate over 35 gifts, ensuring that these children also felt the warmth and joy of the holidays despite being in the hospital.' },
+  { year: '2023', title: 'Fjorden Psychiatry, Roskilde.', text: 'Fjorden Psychiatry wasn’t initially part of our plan, but when we learned that hospitalised individuals had nothing to open on Christmas Eve, we knew we had to step in. In collaboration with Roskilde Pharmacy, we delivered 15 Christmas gifts, ensuring that everyone, regardless of circumstance, felt remembered and valued during the holiday season.' }
+];
+---
+<Base title="Wavi Charity: small acts, real impact" description="Our annual initiative, born from a desire to create meaningful change and leave a lasting impact.">
+  <Hero crumbs={[{ href: '/studio', label: 'Studio' }, { label: 'Wavi Charity' }]} eyebrow="Wavi Charity">
+    <h1 class="h1" style="max-width:1100px">The story behind <em class="accent">Wavi Charity.</em></h1>
+    <p class="lead" style="margin-top:40px">Our annual initiative, born from a desire to create meaningful change and leave a lasting impact. We believe that small acts, done at the right time, can profoundly shape lives: a moment of encouragement, a mentor’s guidance, or a reminder that someone cares. We strive to be that moment of impact.</p>
+  </Hero>
+
+  <section class="s-paper section">
+    <div class="container split" style="align-items:flex-start">
+      <div class="narrow">
+        <p class="eyebrow">Giving back</p>
+        <h2 class="h2">Giving back, one step at a time.</h2>
+        <div class="rhythm" aria-hidden="true"><Wave width={56} height={22} weight={9} /><Wave width={56} height={22} weight={9} stroke="var(--stone)" /><Wave width={56} height={22} weight={9} stroke="var(--stone)" /></div>
+      </div>
+      <p class="wide lead" style="max-width:none">There are countless ways to make a difference. Each year, we dedicate ourselves to creating something meaningful for those in need, primarily in Denmark, but with a growing vision to extend our efforts internationally. None of this would be possible without our incredible partners, who enable us to leverage our skills, support impactful projects, and bring Wavi Charity to life. This is just the beginning.</p>
+    </div>
+  </section>
+
+  <section class="s-sand section">
+    <div class="container">
+      <ol class="rows story">
+        {story.map((s) => (
+          <li>
+            <p class="num story__year">{s.year}</p>
+            <div><h3 class="h3">{s.title}</h3><p class="body" style="margin-top:16px;max-width:760px">{s.text}</p></div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="s-ink section">
+    <div class="container row-between" style="align-items:center">
+      <div><p class="eyebrow">Get involved</p><h2 class="h2">Small acts, <em class="accent">real impact.</em></h2><p class="lead" style="margin-top:28px">Want to partner with us on the next Wavi Charity initiative? We’d love to hear from you.</p></div>
+      <a href="/contact" class="btn btn--light">Get in touch</a>
+    </div>
+  </section>
+</Base>
+<style>
+  .rhythm { display: flex; gap: 14px; margin-top: 40px; }
+  .story > li { display: grid; grid-template-columns: minmax(120px, 2fr) 10fr; gap: 24px 48px; padding: 48px 0; }
+  .story__year { margin: 0; font-size: clamp(48px, 5vw, 72px); }
+  @media (max-width: 700px) { .story > li { grid-template-columns: 1fr; } }
+</style>
