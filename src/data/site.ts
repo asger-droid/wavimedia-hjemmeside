@@ -2,11 +2,11 @@ export const site = {
   name: 'Wavi Media',
   email: 'hello@wavimedia.com',
   studio: 'Copenhagen · Nordics',
-  // TODO: confirm "average partnership" - the live site says 2+ yrs, internal notes say 3+.
+  // "Average partnership": 3+ yrs, as on the Framer site and the live About page.
   stats: [
     { value: '276+', label: 'Founders partnered with' },
     { value: '98%', label: 'Client satisfaction' },
-    { value: '2+ yrs', label: 'Average partnership' },
+    { value: '3+ yrs', label: 'Average partnership' },
     { value: '24+', label: 'Markets served' }
   ],
   clients: ['Herskind', 'LULU Copenhagen', 'MP Denmark', 'Build-A-Bear', 'Fashion By Strand', 'Uncommon', 'GoBabyGo', 'Blox Fruits'],

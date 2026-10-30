@@ -2,12 +2,20 @@
 import Base from '../layouts/Base.astro';
 import Cover from '../components/Cover.astro';
 import { site } from '../data/site';
-// TODO: replace monogram tiles with portraits from the Cyprus shoot; add Nathalie's surname.
+// Team as listed on the Framer site (/team). TODO: replace monogram tiles with portraits from the Cyprus shoot.
+const tones = ['ink', 'slate', 'paper', 'sand'] as const;
 const team = [
-  { name: 'Asger Olsson', role: 'Founder & CEO', letter: 'A', tone: 'ink' as const },
-  { name: 'Emil Tuxen', role: 'Performance Marketer', letter: 'E', tone: 'slate' as const },
-  { name: 'Nathalie', role: 'Content', letter: 'N', tone: 'paper' as const }
-];
+  ['Asger Olsson', 'CEO & Founder'],
+  ['Emil Tuxen', 'Marketing Consultant'],
+  ['Aske Munk', 'Marketing Consultant'],
+  ['Lucas Tran', 'Shopify Developer'],
+  ['Nathalie Berggreen', 'SOME Manager'],
+  ['Julian', 'Consultant'],
+  ['Anton', 'Videographer & Editor'],
+  ['Theodor', 'Editor & SOME Manager'],
+  ['Anna Marenza', 'Brand Designer'],
+  ['Asbjørn Munk', 'Editor & Influencer Strategist']
+].map(([name, role], i) => ({ name, role, letter: name[0], tone: tones[i % tones.length] }));
 const audience = [
   ['Scaling consumer brands', '€2-50M revenue, ready to professionalise growth.'],
   ['Founder-led teams', 'Operators who want a partner, not a vendor.'],
@@ -45,7 +53,7 @@ const audience = [
   <section class="s-sand section">
     <div class="container">
       <div class="row-between"><div><p class="eyebrow">The team</p><h2 class="h2">Senior hands.</h2></div><p class="body" style="max-width:420px">No account managers in between. You talk to the people doing the work.</p></div>
-      <div class="grid" style="--min:240px;--gap:20px;margin-top:56px">
+      <div class="grid" style="--min:200px;--gap:20px;margin-top:56px">
         {team.map((p) => <figure style="margin:0"><Cover brand="" cat="Portrait to come" motif="none" tone={p.tone} letter={p.letter} ratio="1/1" size="s" /><figcaption style="margin-top:16px"><span class="serif" style="display:block;font-size:24px">{p.name}</span><span class="label">{p.role}</span></figcaption></figure>)}
       </div>
     </div>
