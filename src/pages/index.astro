@@ -1,0 +1,180 @@
+---
+import Base from '../layouts/Base.astro';
+import Wave from '../components/Wave.astro';
+import ProfitInstrument from '../components/ProfitInstrument.astro';
+import TrackTabs from '../components/TrackTabs.astro';
+import Quotes from '../components/Quotes.astro';
+import { site } from '../data/site';
+import { cases } from '../data/cases';
+const framework = [
+  ['The cost of a first order', 'Most brands scale spend before the maths holds up, and quietly pay more for every order than the business can carry. We get the unit economics right first, then pour fuel on it.'],
+  ['What happens after the first sale', 'Acquisition cost never hits zero. What a customer is worth after the first order can always grow. We make the second and third purchase the default, not a happy accident.'],
+  ['Too much resting on one thing', 'One channel, or one person who understands how it all fits, and growth is one change away from breaking. We spread the load into a system that holds.']
+];
+const tools = [
+  { href: '/tools/profit-check', path: '/profit-check', name: 'Profit check', text: 'What each order really leaves after ads.', cta: 'Run it' },
+  { href: '/tools/store-scan', path: '/store-scan', name: 'Store scan', text: 'Tracking, pixels and speed, checked live.', cta: 'Scan' },
+  { href: '/tools/growth-score', path: '/growth-score', name: 'Growth score', text: 'How structured is your growth, really?', cta: 'Score' },
+  { href: '/contact', path: '/audit', name: 'Senior audit', text: 'A partner reviews your accounts, in writing.', cta: 'Request', dark: true }
+];
+---
+<Base title="Wavi Media | Marketing for brands that intend to last">
+  <section class="hero s-ink">
+    <svg class="hero__wave" viewBox="0 0 120 48" preserveAspectRatio="none" aria-hidden="true"><path pathLength="100" d="M8 34 C 20 10, 42 8, 64 30 C 78 44, 92 46, 112 16" fill="none" stroke="#24191A" stroke-width="6" stroke-linecap="round" /></svg>
+    <div class="container hero__inner">
+      <div class="hero__strip label"><span>Senior-led growth studio</span><span>{site.studio} · 24+ markets</span><span>Meta Business Partner · Google Partner</span></div>
+      <h1 class="display hero__h1">Marketing for brands<br />that <em class="accent">intend to last.</em></h1>
+      <div class="hero__row">
+        <p class="lead">Most agencies optimise the dashboard. We optimise the P&amp;L, and build the system that keeps it growing after we have stopped looking.</p>
+        <div>
+          <div class="hero__ctas"><a href="/contact" class="btn btn--light">Book a growth session</a><a href="#instrument" class="btn btn--ghost">Check your own maths <span aria-hidden="true">↓</span></a></div>
+          <a href="/work/fashion-by-strand" class="hero__meta"><span class="hero__pill">Meta</span>Our work for Fashion By Strand is an official Meta success story <span class="arrow">→</span></a>
+        </div>
+      </div>
+      <dl class="stats">
+        {site.stats.map((s) => <div><dt class="num">{s.value}</dt><dd class="label">{s.label}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <section class="marquee" aria-label="Brands we build with">
+    <div class="marquee__track">
+      {[0, 1].map((k) => site.clients.map((c) => <Fragment><span aria-hidden={k === 1 ? 'true' : undefined}>{c}</span><span aria-hidden="true">~</span></Fragment>))}
+    </div>
+  </section>
+
+  <ProfitInstrument />
+
+  <section class="s-paper section">
+    <div class="container">
+      <p class="display manifesto">Most brands don't have a media problem.<br />They have a <em class="accent">control problem.</em></p>
+      <div class="grid three" style="--min:280px;--gap:40px 64px">
+        <p class="body">Performance agencies optimise clicks. Strategists draw maps. Neither owns the outcome.</p>
+        <p class="body">We do both, and own the line from ad account to P&amp;L, so growth is a system you control, not a lever you rent.</p>
+        <p class="body" style="color:var(--ink);font-weight:500">The people who win the work do the work. No juniors hidden behind a senior pitch.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-ink section">
+    <div class="container">
+      <div class="row-between">
+        <div><p class="eyebrow">Statement of results</p><h2 class="h2">Proof, not <em class="accent">promises.</em></h2></div>
+        <a href="/work" class="link">Read the full cases <span class="arrow">→</span></a>
+      </div>
+      <div class="ledger">
+        <table>
+          <thead><tr class="label"><th scope="col">No.</th><th scope="col">Client</th><th scope="col">Sector</th><th scope="col">Line item</th><th scope="col">Result</th></tr></thead>
+          <tbody>
+            {cases.map((c, i) => (
+              <tr>
+                <td class="label">0{i + 1}</td>
+                <td class="serif ledger__client"><a href={`/work/${c.slug}`} class="t-link">{c.brand}</a></td>
+                <td>{c.sector}</td><td>{c.label}</td>
+                <td class="num ledger__result">{c.metric === 'Meta' ? <a href={site.metaCase} class="btn btn--ghost ledger__pill">Meta success story ↗</a> : c.metric}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <TrackTabs />
+
+  <section class="s-sand section">
+    <div class="container split" style="align-items:flex-start">
+      <div class="narrow sticky">
+        <p class="eyebrow">The Structured Growth Framework</p>
+        <h2 class="h2">Growth rarely stalls because of the ads.</h2>
+        <p class="lead" style="margin-top:28px">It stalls because the system underneath was never built. We look in three places, always in this order.</p>
+        <div class="rhythm" aria-hidden="true"><Wave width={56} height={22} weight={9} /><Wave width={56} height={22} weight={9} stroke="var(--stone)" /><Wave width={56} height={22} weight={9} stroke="var(--stone)" /></div>
+        <a href="/framework" class="link">The full framework <span class="arrow">→</span></a>
+      </div>
+      <ol class="wide fw-list">
+        {framework.map(([t, d], i) => <li class="card card--paper"><p class="fw-num">0{i + 1}</p><h3 class="h3">{t}</h3><p class="body" style="margin-top:14px">{d}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <Quotes />
+
+  <section class="s-paper section">
+    <div class="container">
+      <div class="row-between">
+        <div><p class="eyebrow">Free diagnostics</p><h2 class="h2">Know your numbers before the call.</h2></div>
+        <p class="body" style="max-width:400px">Built on your real store and your own inputs. Nothing estimated, nothing invented.</p>
+      </div>
+      <div class="tools">
+        {tools.map((t) => (
+          <a href={t.href} class:list={['tools__item', { dark: t.dark }]}>
+            <span class="label" style="text-transform:none;letter-spacing:0">{t.path}</span>
+            <span><span class="h3" style="display:block">{t.name}</span><span class="body" style="display:block;margin-top:10px">{t.text}</span><span class="tools__cta">{t.cta}{' '}<span class="arrow">→</span></span></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="s-ink section">
+    <div class="container">
+      <p class="eyebrow">Not the biggest agency. The best one for the brands we take on.</p>
+      <h2 class="display" style="font-size:clamp(52px,7vw,120px)">Two ways in.</h2>
+      <div class="grid" style="--min:340px;--gap:20px;margin-top:72px">
+        <a href="/contact" class="card card--paper card--stack" style="--h:340px;color:var(--ink)">
+          <span class="row-between label" style="align-items:center">Talk to a partner<Wave width={40} height={16} /></span>
+          <span><span class="h2" style="display:block;font-size:clamp(40px,4vw,60px)">Book a growth session</span><span class="body" style="display:block;margin-top:16px">Non-binding. A reply within one business day.</span></span>
+        </a>
+        <a href="/tools/profit-check" class="card card--line card--stack on-ink" style="--h:340px">
+          <span class="label">Do it yourself first</span>
+          <span><span class="h2" style="display:block;font-size:clamp(40px,4vw,60px)">Run the profit check</span><span class="body" style="display:block;margin-top:16px">Your numbers, two minutes, nothing stored.</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { position: relative; overflow: hidden; }
+  .hero__wave { position: absolute; left: -4%; bottom: 40px; width: 108%; height: 420px; pointer-events: none; }
+  .hero__wave path { stroke-dasharray: 100; stroke-dashoffset: 100; animation: draw 2.6s cubic-bezier(.65, 0, .35, 1) .3s forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .hero__inner { position: relative; padding-top: 40px; }
+  .hero__strip { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; padding-bottom: 20px; border-bottom: 1px solid var(--line-inv); }
+  .hero__h1 { padding-top: clamp(72px, 9vw, 140px); }
+  .hero__row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 40px 80px; align-items: end; margin-top: 64px; }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+  .hero__meta { display: inline-flex; align-items: center; gap: 12px; margin-top: 20px; font-size: 15px; text-decoration: none; }
+  .hero__pill { display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border-radius: 999px; border: 1px solid rgba(250, 248, 244, 0.3); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin: 120px 0 0; border-top: 1px solid var(--line-inv); }
+  .stats > div { padding: 32px 32px 48px 0; }
+  .stats > div + div { padding-left: 32px; border-left: 1px solid var(--line-inv); }
+  .stats dt { font-size: 72px; }
+  .stats dd { margin: 14px 0 0; }
+  .marquee { overflow: hidden; border-bottom: 1px solid var(--line); }
+  .marquee__track { display: flex; gap: 72px; width: max-content; padding: 30px 0; font-family: var(--serif); font-size: 30px; color: var(--slate); white-space: nowrap; animation: marquee 70s linear infinite; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  .manifesto { font-size: clamp(44px, 6.4vw, 104px); line-height: 0.98; letter-spacing: -0.035em; }
+  .three { margin-top: 88px; padding-top: 40px; border-top: 1px solid var(--line); }
+  .ledger { overflow-x: auto; margin-top: 72px; }
+  .ledger table { width: 100%; min-width: 720px; border-collapse: collapse; }
+  .ledger th { padding: 0 0 16px; font-weight: 400; text-align: left; }
+  .ledger th:last-child, .ledger td:last-child { text-align: right; }
+  .ledger td { padding: 28px 0; border-top: 1px solid rgba(250, 248, 244, 0.16); color: var(--muted-inv); }
+  .ledger tr:last-child td { border-bottom: 1px solid rgba(250, 248, 244, 0.16); }
+  .ledger__client { font-size: 30px; color: var(--paper) !important; }
+  .ledger__client a { text-decoration: none; }
+  .ledger__result { font-size: 56px; color: var(--paper) !important; }
+  .ledger__pill { min-height: 44px; font-size: 15px; font-family: var(--sans); letter-spacing: 0; }
+  .sticky { position: sticky; top: 24px; }
+  .rhythm { display: flex; gap: 14px; margin: 40px 0; }
+  .fw-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+  .fw-num { margin: 0 0 28px; font-family: var(--serif); font-style: italic; font-size: 88px; line-height: 0.8; }
+  .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; margin-top: 64px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .tools__item { display: flex; flex-direction: column; justify-content: space-between; gap: 40px; min-height: 300px; padding: 36px; background: var(--paper); text-decoration: none; }
+  .tools__item:hover .h3 { color: var(--coral); }
+  .tools__item.dark { background: var(--ink); color: var(--paper); }
+  .tools__item.dark .body { color: var(--muted-inv); }
+  .tools__cta { display: block; margin-top: 24px; font-weight: 600; }
+  @media (max-width: 700px) { .stats > div + div { padding-left: 0; border-left: 0; } .sticky { position: static; } }
+</style>
