@@ -1,0 +1,190 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import Graphic from '../../components/Graphic.astro';
+import Fit from '../../components/Fit.astro';
+import { tracks, services, trackById, servicesFor, serviceBySlug, serviceHref, trackHref, type Track, type Service } from '../../data/services';
+import { caseBySlug } from '../../data/cases';
+import { site, testimonials } from '../../data/site';
+
+export function getStaticPaths() {
+  return [
+    ...tracks.map((t) => ({ params: { slug: t.id }, props: { kind: 'track' as const, id: t.id } })),
+    ...services.map((s) => ({ params: { slug: s.slug }, props: { kind: 'service' as const, id: s.slug } }))
+  ];
+}
+const { kind, id } = Astro.props;
+const track = kind === 'track' ? (tracks.find((t) => t.id === id) as Track) : null;
+const svc = kind === 'service' ? (serviceBySlug(id) as Service) : null;
+const parent = svc ? trackById(svc.track) : null;
+const otherTracks = track ? tracks.filter((t) => t.id !== track.id) : [];
+const quote = svc && 'quote' in svc.proof ? testimonials[svc.proof.quote] : track?.quote ? testimonials[track.quote] : null;
+---
+{track && (
+<Base title={`${track.name}: ${track.line}`} description={track.sub}>
+  <Hero crumbs={[{ href: '/', label: 'Home' }, { label: 'Services' }, { label: track.name }]} eyebrow={`Track ${track.num} of 03`} pad="0">
+    <h1 class="h1" style="max-width:1120px">{track.h1a}{' '}<em class="accent">{track.h1b}</em></h1>
+    <p class="lead" style="margin-top:40px">{track.sub}</p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:40px"><a href="/contact" class="btn btn--light">Book a growth session</a><a href="/tools/profit-check" class="btn btn--ghost">Run the profit check</a></div>
+    <nav aria-label="Service tracks" class="tswitch">
+      {tracks.map((t) => <a href={trackHref(t.id)} aria-current={t.id === track.id ? 'page' : undefined}>{t.num}{' '}{t.name}</a>)}
+    </nav>
+  </Hero>
+  <section class="band" style="--band:120px"><div class="container overlap"><Graphic kind={track.graphic} /></div></section>
+
+  <section class="s-paper section">
+    <div class="container">
+      <p class="display" style="font-size:clamp(38px,4.8vw,72px);line-height:1.02;letter-spacing:-0.03em;max-width:1180px">{track.statementA}{' '}<em class="accent">{track.statementB}</em>{track.statementC && ` ${track.statementC}`}</p>
+      {track.statementBody && <p class="lead" style="margin-top:40px">{track.statementBody}</p>}
+    </div>
+  </section>
+
+  <section class="s-sand section">
+    <div class="container">
+      <p class="eyebrow">What's inside the track</p>
+      <h2 class="h2">Three disciplines, one P&amp;L.</h2>
+      <div class="grid" style="--min:320px;margin-top:64px">
+        {servicesFor(track.id).map((s, i) => (
+          <a href={serviceHref(s.slug)} class:list={['card card--stack', i === 2 ? 'card--ink on-ink' : 'card--paper']} style="--h:420px">
+            <span class="label">{s.num} · {s.platforms}</span>
+            <span>
+              <span class="h3" style="display:block">{s.name}</span>
+              <span class="body" style="display:block;margin-top:16px">{s.summary}</span>
+              <ul class="bul">{s.bullets.map((b) => <li>{b}</li>)}</ul>
+              <span style="display:block;margin-top:28px;font-weight:600">In detail <span class="arrow">→</span></span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="s-ink section">
+    <div class="container split">
+      <div class="narrow"><p class="eyebrow">{track.id === 'advisory' ? 'What the board sees' : 'What we report on'}</p><h2 class="h2">{track.reportA}{' '}<em class="accent">{track.reportB}</em></h2></div>
+      {track.id === 'advisory' ? (
+        <div class="wide card card--paper statement">
+          <div class="statement__head"><span class="serif">Monthly growth statement</span><span class="label">[Month YYYY]</span></div>
+          <dl>{track.report.map(([k, v], i) => <div class:list={[{ total: i === 3 }]}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+          <p class="label" style="margin-top:16px">Structure shown. Your figures go in it.</p>
+        </div>
+      ) : (
+        <dl class="wide grid report" style="--min:240px;--gap:0 40px">
+          {track.report.map(([k, v]) => <div><dt class="serif">{k}</dt><dd class="body">{v}</dd></div>)}
+        </dl>
+      )}
+    </div>
+  </section>
+
+  <section class="s-paper section">
+    <div class="container">
+      <div class="row-between"><div><p class="eyebrow">{track.name} in practice</p><h2 class="h2">The proof.</h2></div><a href="/work" class="link">All case studies <span class="arrow">→</span></a></div>
+      <div class="grid" style="--min:300px;margin-top:56px">
+        {track.proofCases.map((slug) => { const c = caseBySlug(slug)!; return (
+          <a href={`/work/${c.slug}`} class="card card--sand card--stack" style="--h:280px"><span class="label">{c.brand} · {c.sector}</span><span><span class="num" style="display:block;font-size:clamp(56px,6vw,88px)">{c.metric}</span><span class="body" style="display:block;margin-top:12px">{c.label}</span></span></a>
+        ); })}
+        {quote && <figure class="card card--ink on-ink" style="margin:0"><blockquote class="serif" style="margin:0;font-size:28px;line-height:1.25">“{quote.text}”</blockquote><figcaption class="label" style="margin-top:24px">{quote.name} · {quote.role}</figcaption></figure>}
+      </div>
+    </div>
+  </section>
+
+  {track.faq && (
+    <section class="s-paper section" style="padding-top:0">
+      <div class="container split">
+        <div class="narrow"><p class="eyebrow">Questions</p><h2 class="h2">Plain answers.</h2></div>
+        <div class="wide faq">{track.faq.map(([q, a], i) => <details open={i === 0}><summary>{q}<span aria-hidden="true">+</span></summary><p class="body">{a}</p></details>)}</div>
+      </div>
+    </section>
+  )}
+
+  <section class="s-sand section--tight">
+    <div class="container">
+      <p class="eyebrow">The other two tracks</p>
+      <div class="grid" style="--min:320px">
+        {otherTracks.map((t) => <a href={trackHref(t.id)} class="card card--paper card--stack" style="--h:220px"><span class="label">{t.num}</span><span><span class="h3" style="display:block">{t.name}</span><span class="body" style="display:block;margin-top:10px">{t.line}{' '}<span class="arrow">→</span></span></span></a>)}
+      </div>
+    </div>
+  </section>
+</Base>
+)}
+
+{svc && parent && (
+<Base title={`${svc.name}: ${svc.h1a} ${svc.h1b}`} description={svc.sub}>
+  <Hero crumbs={[{ href: '/', label: 'Home' }, { href: trackHref(parent.id), label: parent.name }, { label: svc.name }]} pad="220px">
+    <div class="split" style="align-items:flex-end;margin-top:64px">
+      <div class="wide"><p class="eyebrow">{parent.name}{' '}{svc.num} · {svc.platforms}</p><h1 class="h1">{svc.h1a}{' '}<em class="accent">{svc.h1b}</em></h1></div>
+      <div class="narrow" style="flex-basis:300px"><p class="lead">{svc.sub}</p><a href="/contact" class="btn btn--light" style="margin-top:28px">Book a growth session</a></div>
+    </div>
+  </Hero>
+  <section class="band"><div class="container overlap" style="margin-top:-160px"><Graphic kind={svc.graphic} /></div></section>
+
+  <section class="s-paper section">
+    <div class="container">
+      <p class="eyebrow">Where it usually leaks</p>
+      <h2 class="h2">Four quiet leaks we look for first.</h2>
+      <ol class="leaks">{svc.leaks.map(([t, d], i) => <li><p class="fw-num">0{i + 1}</p><h3 class="serif" style="margin:0;font-size:28px;line-height:1.15">{t}</h3><p class="body" style="margin-top:12px">{d}</p></li>)}</ol>
+    </div>
+  </section>
+
+  <section class="s-sand section">
+    <div class="container split">
+      <div class="narrow"><p class="eyebrow">How we run it</p><h2 class="h2">{svc.howA}{' '}<em class="accent">{svc.howB}</em></h2></div>
+      <ol class="wide rows how">{svc.how.map(([t, d], i) => <li><span class="label">{'ABCD'[i]}</span><div><h3 class="serif" style="margin:0;font-size:30px;font-weight:500">{t}</h3><p class="body" style="margin-top:10px">{d}</p></div></li>)}</ol>
+    </div>
+  </section>
+
+  <section class="s-ink section">
+    <div class="container split" style="align-items:center">
+      {'meta' in svc.proof ? (
+        <Fragment>
+          <div class="wide"><p class="eyebrow">Proof · Official Meta success story</p><p class="serif" style="margin:0;font-size:clamp(34px,4.4vw,64px);line-height:1.05;letter-spacing:-0.025em">“The increases in profit per conversion and profit after ad spend speak for themselves.”</p><p class="label" style="margin-top:28px">Meta · Fashion By Strand case story</p></div>
+          <a href="/work/fashion-by-strand" class="narrow card card--paper card--stack" style="--h:260px;color:var(--ink)"><span class="label">Case study</span><span><span class="h3" style="display:block">Scaled profitably, without losing the brand.</span><span style="display:block;margin-top:16px;font-weight:600">Read the case <span class="arrow">→</span></span></span></a>
+        </Fragment>
+      ) : quote && (
+        <Fragment>
+          <figure class="wide" style="margin:0"><p class="eyebrow">What partners say</p><blockquote class="serif" style="margin:0;font-size:clamp(32px,4.2vw,60px);line-height:1.08;letter-spacing:-0.02em">“{quote.text}”</blockquote><figcaption class="label" style="margin-top:28px">{quote.name} · {quote.role}</figcaption></figure>
+          <a href="/work" class="narrow card card--line card--stack" style="--h:220px"><span class="label">Statement of results</span><span><span class="h3" style="display:block">See the cases</span><span style="display:block;margin-top:12px;font-weight:600">Work <span class="arrow">→</span></span></span></a>
+        </Fragment>
+      )}
+    </div>
+  </section>
+
+  <Fit />
+
+  <section class="s-sand section--tight">
+    <div class="container">
+      <p class="eyebrow">Works best with</p>
+      <div class="grid" style="--min:260px">
+        {svc.related.map((slug) => { const r = serviceBySlug(slug)!; return <a href={serviceHref(r.slug)} class="card card--paper card--stack" style="--h:170px"><span class="label">{r.num}</span><span class="row-between" style="align-items:center"><span class="serif" style="font-size:32px">{r.name}</span><span class="arrow" aria-hidden="true">→</span></span></a>; })}
+      </div>
+    </div>
+  </section>
+</Base>
+)}
+
+<style>
+  .tswitch { display: flex; flex-wrap: wrap; margin-top: 96px; border-top: 1px solid var(--line-inv); }
+  .tswitch a { flex: 1 1 200px; padding: 24px 0; font-family: var(--serif); font-size: 24px; color: rgba(250, 248, 244, 0.6); text-decoration: none; }
+  .tswitch a[aria-current] { color: var(--paper); box-shadow: inset 0 2px 0 var(--paper); }
+  .tswitch a:hover { color: var(--paper); }
+  .bul { margin: 20px 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; }
+  .report > div { padding: 28px 0; border-top: 1px solid var(--line-inv); }
+  .report dt { font-size: 26px; }
+  .report dd { margin: 8px 0 0; }
+  .statement { color: var(--ink); }
+  .statement__head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-bottom: 20px; border-bottom: 2px solid var(--ink); font-size: 28px; }
+  .statement dl { margin: 0; font-size: 17px; }
+  .statement dl > div { display: flex; justify-content: space-between; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(20, 20, 20, 0.12); }
+  .statement dl > div.total { font-weight: 600; border-bottom: 2px solid var(--ink); }
+  .statement dd { margin: 0; font-family: var(--mono); color: var(--slate); }
+  .faq details { border-bottom: 1px solid var(--line); }
+  .faq { border-top: 1px solid var(--line); }
+  .faq summary { display: flex; justify-content: space-between; gap: 24px; padding: 28px 0; font-family: var(--serif); font-size: 26px; cursor: pointer; list-style: none; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq .body { margin: 0 0 28px; max-width: 600px; }
+  .leaks { list-style: none; margin: 72px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .leaks li { padding: 40px; background: var(--paper); }
+  .fw-num { margin: 0 0 28px; font-family: var(--serif); font-style: italic; font-size: 56px; line-height: 0.8; }
+  .how > li { display: flex; gap: 28px; padding: 32px 0; }
+  .how .label { padding-top: 8px; }
+</style>
