@@ -2,10 +2,10 @@
 import Base from '../../layouts/Base.astro';
 import ToolHero from '../../components/ToolHero.astro';
 const checks = [
-  ['Meta Pixel', 'Is the browser pixel on the store, directly, through Tag Manager or through Shopify\u2019s Meta app?'],
-  ['Meta Conversions API', 'Server-side events can\u2019t be seen from outside. We say so, rather than guess.'],
-  ['Google tag', 'GA4, Google Ads conversion tag and Tag Manager, including what loads inside the container.'],
-  ['Consent banner & Consent Mode', 'Is there a consent banner, and are Google\u2019s tags told what was consented to?'],
+  ['Meta Pixel', 'Is the browser pixel on the store, which pixel, and is more than one firing?'],
+  ['Meta Conversions API', 'Server events can\u2019t be seen from outside, but signs of a server-side setup can. We show those, rather than guess.'],
+  ['Google tag', 'GA4, Google Ads and Tag Manager, and whether several properties are counting the same purchase.'],
+  ['Consent banner & Consent Mode', 'One consent banner, not two, and are Google\u2019s tags told what was consented to?'],
   ['Klaviyo and TikTok', 'Onsite tracking for your flows, and the TikTok Pixel if you advertise there.']
 ];
 ---
@@ -52,7 +52,7 @@ const checks = [
   </section>
 </Base>
 <script>
-  type Check = { id: string; name: string; status: 'ok' | 'warn' | 'bad' | 'info'; note: string };
+  type Check = { id: string; name: string; status: 'ok' | 'warn' | 'bad' | 'info'; note: string; label?: string };
   const LABEL = { ok: 'Found', warn: 'Needs attention', bad: 'Missing', info: 'Not detected' } as const;
   const INFO_LABEL: Record<string, string> = { 'meta-capi': 'Not visible' };
   const $ = <T extends HTMLElement>(s: string) => document.querySelector<T>(s)!;
@@ -68,7 +68,7 @@ const checks = [
     const li = document.createElement('li'); li.dataset.id = c.id;
     const n = document.createElement('span'); n.className = 'serif'; n.textContent = c.name;
     const note = document.createElement('span'); note.className = 'note'; note.textContent = c.note;
-    const chip = document.createElement('span'); chip.className = `chip ${c.status}`; chip.textContent = c.status === 'info' ? (INFO_LABEL[c.id] ?? LABEL.info) : LABEL[c.status];
+    const chip = document.createElement('span'); chip.className = `chip ${c.status}`; chip.textContent = c.label ?? (c.status === 'info' ? (INFO_LABEL[c.id] ?? LABEL.info) : LABEL[c.status]);
     li.append(n, note, chip); return li;
   }
   function updateSummary() {
