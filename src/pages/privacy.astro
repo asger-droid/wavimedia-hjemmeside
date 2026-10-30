@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+<Base title="Privacy and cookies">
+  <section class="s-ink"><div class="container" style="padding-block:112px 96px"><p class="eyebrow">Legal</p><h1 class="h1">Privacy &amp; cookies</h1></div></section>
+  <section class="s-paper section">
+    <div class="container" style="max-width:820px">
+      <!-- TODO: replace with the approved privacy policy text before launch. -->
+      <p class="lead">Our full privacy policy is being finalised. Until then, questions about how we handle your data go to <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+      <h2 id="cookies" class="h3" style="margin-top:56px">Cookies</h2>
+      <p class="body" style="margin-top:16px">This site uses no tracking cookies. The free tools run in your browser and nothing you enter is stored.</p>
+    </div>
+  </section>
+</Base>

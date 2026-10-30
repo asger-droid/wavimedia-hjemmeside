@@ -1,0 +1,148 @@
+---
+import Base from '../layouts/Base.astro';
+import Graphic from '../components/Graphic.astro';
+import { trackHref } from '../data/services';
+const stalls = [
+  { id: 's1', num: '01', name: 'The cost of a first order', short: 'Unit economics', track: 'acquisition', trackName: 'Acquisition', graphic: 'finance' as const,
+    why: 'First, because scaling before the maths holds only scales the problem.',
+    text: 'New customers are always an investment. Most brands scale spend before the maths holds up, and quietly pay more for every order than the business can carry. We get the unit economics right first, then pour fuel on it.',
+    signs: ['ROAS fine, cash tight', 'No margin per order', 'Spend outgrowing profit'], build: ['Contribution margin model', 'Profit-based bidding', 'Rules for when to scale'],
+    items: ['Our ROAS looks fine, but cash feels tight.', 'We can’t say what one order earns after ads.', 'Ad spend is growing faster than profit.'],
+    title: 'Start with unit economics.', diag: 'Scaling before the maths holds only scales the problem. Fix what a first order costs, then add spend.' },
+  { id: 's2', num: '02', name: 'What happens after the first sale', short: 'Lifetime value', track: 'retention', trackName: 'Retention', graphic: 'flow' as const,
+    why: 'Second, because retention multiplies a healthy first order, and hides an unhealthy one.',
+    text: 'Acquisition cost never hits zero. What a customer is worth after the first order can always grow. We build the retention that makes the second and third purchase the default, not a happy accident.',
+    signs: ['Mostly first orders', 'Campaigns, no flows', 'Discounts doing the work'], build: ['Lifecycle flows', 'Behavioural segments', 'Margin-safe offers'],
+    items: ['Most of our revenue comes from first-time buyers.', 'Email means campaigns, not automated flows.', 'Discounts do most of our retention work.'],
+    title: 'Start after the first sale.', diag: 'Growth is leaning too hard on new customers. Make the second order the default and acquisition gets cheaper.' },
+  { id: 's3', num: '03', name: 'Too much resting on one thing', short: 'Resilience', track: 'advisory', trackName: 'Advisory', graphic: 'analytics' as const,
+    why: 'Third, because a system only compounds if it survives the next change.',
+    text: 'When growth leans on one channel, or one person who understands how it all fits, it is one change away from breaking. We spread the load into a system that holds when something moves.',
+    signs: ['One dominant channel', 'One person who knows it all', 'Truth in platform dashboards'], build: ['A spread channel mix', 'Written playbooks', 'One source of truth'],
+    items: ['One channel drives most of our revenue.', 'One person holds how it all fits together.', 'Our reporting lives in the ad platforms.'],
+    title: 'Start with resilience.', diag: 'Growth is one change away from breaking. Spread the load and write the system down.' }
+];
+const diagData = stalls.map((s) => ({ title: s.title, text: s.diag, href: trackHref(s.track as any), track: s.trackName }));
+---
+<Base title="The Structured Growth Framework" description="Growth rarely stalls because of the ads. It stalls because the system underneath was never built. Diagnose where yours is leaking.">
+  <section class="s-ink">
+    <div class="container" style="padding-block:128px 240px">
+      <p class="eyebrow">The Structured Growth Framework</p>
+      <h1 class="display" style="max-width:1240px;font-size:clamp(56px,9vw,152px);line-height:0.88">Growth rarely stalls because of the <em class="accent">ads.</em></h1>
+      <div class="row-between" style="margin-top:64px;align-items:center">
+        <p class="lead" style="max-width:540px">It stalls because the system underneath them was never built. We look in three places, always in the same order.</p>
+        <a href="#diagnose" class="btn btn--light">Diagnose your brand <span aria-hidden="true">↓</span></a>
+      </div>
+    </div>
+  </section>
+  <section class="band" style="--band:180px"><div class="container overlap" style="margin-top:-180px"><Graphic kind="framework" /></div></section>
+
+  <section class="s-paper section">
+    <div class="container">
+      <p class="eyebrow">Why the order matters</p>
+      <div class="order">
+        {stalls.map((s, i) => <a href={`#${s.id}`}><span class:list={['fwn', { accent: i === 0 }]}>{s.num}</span><span class="serif" style="display:block;margin-top:24px;font-size:30px;line-height:1.1">{s.name}</span><span class="body" style="display:block;margin-top:12px">{s.why}</span></a>)}
+      </div>
+    </div>
+  </section>
+
+  <section id="diagnose" class="s-sand section" data-diag={JSON.stringify(diagData)}>
+    <div class="container">
+      <p class="eyebrow">Two-minute diagnostic</p>
+      <h2 class="h2" style="max-width:1000px">Where is your growth leaking?</h2>
+      <p class="lead" style="margin-top:28px">Tick every line that sounds like your business. Your answers never leave this page.</p>
+      <div class="split" style="margin-top:72px;align-items:flex-start;gap:40px 64px">
+        <div class="wide" style="display:flex;flex-direction:column;gap:48px">
+          {stalls.map((s, g) => (
+            <div>
+              <p class="dgroup"><span class="label">{s.num}</span><span class="serif">{s.name}</span></p>
+              {s.items.map((t) => <button type="button" class="stmt" aria-pressed="false" data-group={g}><span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6" /></svg></span>{t}</button>)}
+            </div>
+          ))}
+        </div>
+        <div class="narrow sticky">
+          <div class="card card--ink on-ink" aria-live="polite">
+            <p class="label">Your read-out · <span data-count>0</span> of 9 ticked</p>
+            {stalls.map((s) => <div class="meter"><div class="row-between" style="font-size:15px"><span>{s.num}{' '}{s.short}</span><span class="label" data-score>0/3</span></div><div class="meter__track"><i data-bar></i></div></div>)}
+            <p class="serif" style="margin:36px 0 0;font-size:30px;line-height:1.15" data-title>Tick what sounds familiar.</p>
+            <p class="body" style="margin-top:12px" data-text>The read-out updates as you go.</p>
+            <a href="#" class="btn btn--light" style="margin-top:28px" data-link hidden></a>
+          </div>
+          <a href="/contact" class="card card--paper row-between" style="margin-top:12px;padding:22px 24px;align-items:center;font-weight:600">Talk it through with a partner <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {stalls.map((s, i) => (
+    <section id={s.id} class:list={['section', i === 1 ? 's-ink' : 's-paper']}>
+      <div class="container stall" style={i === 1 ? 'flex-direction:row-reverse' : ''}>
+        <div class="stall__text">
+          <p class:list={['fwn big', { accent: i === 0 }]}>{s.num}</p>
+          <h2 class="h2" style="margin-top:40px;font-size:clamp(40px,4.4vw,64px)">{s.name}</h2>
+          <p class="body" style="margin-top:24px;font-size:18px">{s.text}</p>
+          <div class="cols">
+            <div><p class="label">You'll recognise</p>{s.signs.map((x) => <p>{x}</p>)}</div>
+            <div><p class="label">We build</p>{s.build.map((x) => <p>{x}</p>)}</div>
+          </div>
+          <a href={trackHref(s.track as any)} class="link" style="display:inline-block;margin-top:32px">Solved in {s.trackName}{' '}<span class="arrow">→</span></a>
+        </div>
+        <div class="stall__fig"><Graphic kind={s.graphic} /></div>
+      </div>
+    </section>
+  ))}
+
+  <section class="s-ink section" style="border-top:1px solid var(--line-inv)">
+    <div class="container row-between">
+      <h2 class="display" style="max-width:900px;font-size:clamp(48px,6.4vw,104px);line-height:0.92">Less chaos. More control. <em class="accent">Built for growth.</em></h2>
+      <div style="display:flex;flex-wrap:wrap;gap:12px"><a href="/contact" class="btn btn--light">Book a growth session</a><a href="/tools/growth-score" class="btn btn--ghost">Get your growth score</a></div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-diag]')!;
+  const D = JSON.parse(root.dataset.diag!);
+  const q = (s: string) => root.querySelector<HTMLElement>(s)!;
+  const update = () => {
+    const sc = [0, 0, 0];
+    root.querySelectorAll<HTMLElement>('.stmt[aria-pressed=true]').forEach((b) => sc[Number(b.dataset.group)]++);
+    const total = sc.reduce((a, b) => a + b, 0), max = Math.max(...sc), top = max > 0 ? sc.indexOf(max) : -1;
+    q('[data-count]').textContent = String(total);
+    root.querySelectorAll<HTMLElement>('[data-bar]').forEach((bar, i) => { bar.style.width = Math.round(sc[i] / 3 * 100) + '%'; bar.style.background = i === top ? 'var(--coral)' : 'var(--paper)'; });
+    root.querySelectorAll<HTMLElement>('[data-score]').forEach((el, i) => { el.textContent = sc[i] + '/3'; });
+    const link = q('[data-link]') as HTMLAnchorElement;
+    if (top < 0) { q('[data-title]').textContent = 'Tick what sounds familiar.'; q('[data-text]').textContent = 'The read-out updates as you go.'; link.hidden = true; return; }
+    q('[data-title]').textContent = D[top].title; q('[data-text]').textContent = D[top].text;
+    link.href = D[top].href; link.textContent = 'See ' + D[top].track + ' →'; link.hidden = false;
+  };
+  root.querySelectorAll<HTMLButtonElement>('.stmt').forEach((b) => b.addEventListener('click', () => { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); update(); }));
+</script>
+
+<style>
+  .order { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); border-top: 2px solid var(--ink); }
+  .order a { display: block; padding: 36px 36px 40px 0; text-decoration: none; }
+  .order a + a { padding-left: 36px; border-left: 1px solid var(--line); }
+  .fwn { font-family: var(--serif); font-style: italic; font-size: 96px; line-height: 0.8; margin: 0; }
+  .fwn.big { font-size: clamp(120px, 14vw, 200px); letter-spacing: -0.04em; line-height: 0.75; }
+  .dgroup { display: flex; align-items: baseline; gap: 14px; margin: 0 0 16px; font-size: 26px; }
+  .stmt { display: flex; align-items: center; gap: 18px; width: 100%; min-height: 68px; margin-bottom: 10px; padding: 16px 22px; border-radius: 8px; border: 1px solid rgba(20, 20, 20, 0.18); background: var(--paper); color: var(--ink); text-align: left; font-size: 18px; line-height: 1.4; cursor: pointer; transition: background .2s, border-color .2s; }
+  .stmt:hover { border-color: var(--ink); }
+  .tick { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 999px; border: 1.5px solid rgba(20, 20, 20, 0.35); }
+  .tick svg { width: 14px; height: 14px; fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+  .stmt[aria-pressed='true'] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .stmt[aria-pressed='true'] .tick { background: var(--paper); border-color: var(--paper); }
+  .stmt[aria-pressed='true'] .tick svg { opacity: 1; }
+  .sticky { position: sticky; top: 24px; }
+  .meter { margin-top: 22px; }
+  .meter__track { margin-top: 10px; height: 10px; border-radius: 5px; background: rgba(250, 248, 244, 0.1); overflow: hidden; }
+  .meter__track i { display: block; height: 10px; width: 0; border-radius: 5px; background: var(--paper); transition: width .45s cubic-bezier(.2, .7, .2, 1); }
+  .stall { display: flex; flex-wrap: wrap; gap: 56px 80px; align-items: center; }
+  .stall__text { flex: 1 1 400px; }
+  .stall__fig { flex: 1.2 1 480px; min-width: 0; }
+  .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--line); font-size: 15px; line-height: 1.5; }
+  .s-ink .cols { border-color: var(--line-inv); }
+  .cols p { margin: 0 0 8px; }
+  .cols .label { margin-bottom: 12px; }
+  @media (max-width: 760px) { .order a + a { padding-left: 0; border-left: 0; } .sticky { position: static; } }
+</style>
