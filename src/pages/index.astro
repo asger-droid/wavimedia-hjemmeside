@@ -39,7 +39,7 @@ const tools = [
 
   <section class="marquee" aria-label="Brands we build with">
     <div class="marquee__track">
-      {[0, 1].map((k) => site.clients.map((c) => <Fragment><span aria-hidden={k === 1 ? 'true' : undefined}>{c}</span><span aria-hidden="true">~</span></Fragment>))}
+      {[0, 1].map((k) => site.logos.map((l) => <img src={l.src} width={l.w} height={l.h} alt={k === 0 ? l.name : ''} aria-hidden={k === 1 ? 'true' : undefined} decoding="async" />))}
     </div>
   </section>
 
@@ -152,7 +152,10 @@ const tools = [
   .stats dt { font-size: 72px; }
   .stats dd { margin: 14px 0 0; }
   .marquee { overflow: hidden; border-bottom: 1px solid var(--line); }
-  .marquee__track { display: flex; gap: 72px; width: max-content; padding: 30px 0; font-family: var(--serif); font-size: 30px; color: var(--slate); white-space: nowrap; animation: marquee 70s linear infinite; }
+  .marquee__track { display: flex; align-items: center; gap: 88px; width: max-content; padding: 36px 44px; animation: marquee 80s linear infinite; }
+  .marquee__track img { flex: none; opacity: 0.8; }
+  .marquee:hover .marquee__track { animation-play-state: paused; }
+  @media (prefers-reduced-motion: reduce) { .marquee__track { animation: none; flex-wrap: wrap; width: auto; justify-content: center; gap: 40px 64px; } .marquee__track img[aria-hidden] { display: none; } }
   @keyframes marquee { to { transform: translateX(-50%); } }
   .manifesto { font-size: clamp(44px, 6.4vw, 104px); line-height: 0.98; letter-spacing: -0.035em; }
   .three { margin-top: 88px; padding-top: 40px; border-top: 1px solid var(--line); }

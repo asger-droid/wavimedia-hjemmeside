@@ -9,7 +9,25 @@ export const site = {
     { value: '3+ yrs', label: 'Average partnership' },
     { value: '24+', label: 'Markets served' }
   ],
-  clients: ['Herskind', 'LULU Copenhagen', 'MP Denmark', 'Build-A-Bear', 'Fashion By Strand', 'Uncommon', 'GoBabyGo', 'Blox Fruits'],
+  // Client logos: single-colour ink versions of the logos from the old site (public/logos), sized to equal visual weight.
+  logos: [
+    { name: 'Herskind', src: '/logos/herskind.webp', w: 210, h: 27 },
+    { name: 'LULU Copenhagen', src: '/logos/lulu-copenhagen.webp', w: 128, h: 54 },
+    { name: 'MP Denmark', src: '/logos/mp-denmark.webp', w: 90, h: 56 },
+    { name: 'Build-A-Bear', src: '/logos/build-a-bear.webp', w: 56, h: 56 },
+    { name: 'GoBabyGo', src: '/logos/gobabygo.webp', w: 210, h: 28 },
+    { name: 'DBU', src: '/logos/dbu.webp', w: 56, h: 56 },
+    { name: 'SOS International', src: '/logos/sos-international.webp', w: 164, h: 42 },
+    { name: 'GF Forsikring', src: '/logos/gf-forsikring.webp', w: 81, h: 56 },
+    { name: 'Drømmeland', src: '/logos/drommeland.webp', w: 210, h: 29 },
+    { name: 'Karmamia Copenhagen', src: '/logos/karmamia.webp', w: 109, h: 56 },
+    { name: 'Unfold Copenhagen', src: '/logos/unfold.webp', w: 142, h: 49 },
+    { name: 'Børneloppen', src: '/logos/borneloppen.webp', w: 115, h: 56 },
+    { name: 'Stryhns Gruppen', src: '/logos/stryhns.webp', w: 83, h: 56 },
+    { name: 'Mashup', src: '/logos/mashup.webp', w: 41, h: 56 },
+    { name: 'PlusLED', src: '/logos/plusled.webp', w: 187, h: 37 },
+    { name: 'ProfitMetrics', src: '/logos/profitmetrics.webp', w: 208, h: 33 }
+  ],
   partners: ['Meta Business Partner', 'Google Partner', 'TikTok Marketing Partner', 'Klaviyo Partner', 'Shopify Partner', 'ProfitMetrics Partner'],
   metaCase: 'https://www.facebook.com/business/success/fashionbystrand'
 };

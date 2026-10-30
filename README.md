@@ -76,7 +76,7 @@ src/
 - [x] "Average partnership" sat til 3+ år, som i Framer (`src/data/site.ts`).
 - [x] Hele teamet fra Framer på Studio-siden.
 - [ ] Fotos fra Cyprus-optagelsen: founder, team (erstat monogram-tiles i `studio.astro`).
-- [ ] Kundelogoer som SVG.
+- [x] Kundelogoer (16) i én farve i `public/logos`, på forsiden og Studio.
 - [x] Privatlivspolitik skrevet ud fra hvad sitet faktisk gør (`src/pages/privacy.astro`). Gennemlæses før lancering, og opdateres hvis analytics, pixels eller Slack-notifikationer tilføjes.
 - [x] Tech stack og Wavi Charity flyttet fra Framer (`/tech-stack`, `/wavi-charity`).
 - [ ] Commit `package-lock.json` efter første `npm install`.
