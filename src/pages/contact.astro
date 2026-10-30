@@ -21,8 +21,8 @@ import { site } from '../data/site';
         </div>
       </div>
       <div class="wide" style="flex-basis:520px">
-        <!-- TODO: connect to the CRM / Klaviyo endpoint. Until then submissions are not sent anywhere. -->
         <form class="form" data-contact novalidate>
+          <div class="hp" aria-hidden="true"><label>Leave this empty<input name="company_site" type="text" tabindex="-1" autocomplete="off" /></label></div>
           <label>Full name *<input name="name" type="text" required autocomplete="name" /></label>
           <label>Work email *<input name="email" type="email" required autocomplete="email" /></label>
           <label>Website URL *<input name="website" type="text" inputmode="url" required placeholder="yourbrand.com" /></label>
@@ -33,8 +33,8 @@ import { site } from '../data/site';
             <div class="checks">{['Acquisition', 'Retention', 'Advisory', 'Not sure yet'].map((v) => <label class="check"><input type="checkbox" name="help" value={v} />{v}</label>)}</div>
           </fieldset>
           <label class="full">Where does growth stall?<textarea name="message" rows="5"></textarea></label>
-          <p class="full form__error" data-error hidden>Please fill in the required fields.</p>
-          <div class="full row-between" style="align-items:center"><button type="submit" class="btn btn--dark">Book a growth session</button><span class="body" style="font-size:14px">Built for consumer brands, roughly €2-50M revenue.</span></div>
+          <p class="full form__error" data-error hidden role="alert"></p>
+          <div class="full row-between" style="align-items:center"><button type="submit" class="btn btn--dark" data-submit>Book a growth session</button><span class="body" style="font-size:14px">Built for consumer brands, roughly €2-50M revenue.</span></div>
         </form>
         <div class="card card--ink on-ink sent" role="status" data-sent hidden>
           <Wave width={72} height={29} weight={10} />
@@ -48,24 +48,38 @@ import { site } from '../data/site';
 </Base>
 <script>
   const form = document.querySelector<HTMLFormElement>('[data-contact]')!;
-  form.addEventListener('submit', (e) => {
+  const err = form.querySelector<HTMLElement>('[data-error]')!;
+  const btn = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+  const fail = (msg: string) => { err.textContent = msg; err.hidden = false; };
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const err = form.querySelector<HTMLElement>('[data-error]')!;
-    if (!form.checkValidity()) { err.hidden = false; form.querySelector<HTMLElement>(':invalid')?.focus(); return; }
+    if (!form.checkValidity()) { fail('Please fill in the required fields.'); form.querySelector<HTMLElement>(':invalid')?.focus(); return; }
     err.hidden = true;
-    form.hidden = true;
-    document.querySelector<HTMLElement>('[data-sent]')!.hidden = false;
+    const fd = new FormData(form);
+    const body: Record<string, unknown> = Object.fromEntries(fd.entries());
+    body.help = fd.getAll('help');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    try {
+      const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      if (!res.ok) throw new Error(String(res.status));
+      form.hidden = true;
+      document.querySelector<HTMLElement>('[data-sent]')!.hidden = false;
+    } catch {
+      fail('Something went wrong on our side. Please email us at hello@wavimedia.com and we will reply within one business day.');
+      btn.disabled = false; btn.textContent = 'Book a growth session';
+    }
   });
 </script>
 <style>
   .steps { margin-top: 56px; }
   .steps li { display: flex; gap: 24px; padding: 22px 0; font-size: 17px; line-height: 1.5; }
   .steps .label { padding-top: 3px; }
-  .form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; padding: clamp(28px, 3vw, 44px); border-radius: 8px; background: var(--paper); }
+  .form { position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; padding: clamp(28px, 3vw, 44px); border-radius: 8px; background: var(--paper); }
   .form[hidden] { display: none; }
   .form > label, .form legend { display: flex; flex-direction: column; gap: 8px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--slate); }
   .form input:not([type=checkbox]), .form select, .form textarea { height: 50px; padding: 0 14px; border-radius: 6px; border: 1px solid rgba(20, 20, 20, 0.24); background: #fff; color: var(--ink); font-family: var(--sans); font-size: 16px; letter-spacing: 0; text-transform: none; }
   .form textarea { height: auto; padding: 14px; line-height: 1.5; resize: vertical; }
+  .form button[disabled] { opacity: 0.6; cursor: wait; }
   .full { grid-column: 1 / -1; }
   fieldset { margin: 0; padding: 0; border: 0; }
   .form legend { margin-bottom: 12px; }
@@ -75,4 +89,5 @@ import { site } from '../data/site';
   .form__error { margin: 0; color: #A8341A; font-weight: 600; }
   .sent { min-height: 520px; display: flex; flex-direction: column; justify-content: center; }
   .sent[hidden] { display: none; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 </style>
