@@ -1,0 +1,73 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import Cover from '../../components/Cover.astro';
+import { cases, nextCase, type Case } from '../../data/cases';
+import { tracks, trackHref } from '../../data/services';
+export function getStaticPaths() { return cases.map((c) => ({ params: { slug: c.slug }, props: { c } })); }
+const { c } = Astro.props as { c: Case };
+const n = nextCase(c.slug);
+---
+<Base title={`${c.brand}: ${c.metric === 'Meta' ? c.label : c.metric + ' ' + c.label.toLowerCase()}`} description={`${c.statement} ${c.context}`}>
+  <Hero crumbs={[{ href: '/', label: 'Home' }, { href: '/work', label: 'Work' }, { label: c.brand }]} pad="240px">
+    <div class="row-between" style="margin-top:72px;gap:40px 80px">
+      <div style="min-width:0"><p class="eyebrow">Case study · {c.sector}</p><h1 class="display" style="font-size:clamp(60px,9.6vw,156px)">{c.brand}</h1></div>
+      <div><p class="num accent" style="margin:0;font-size:clamp(88px,11vw,180px);font-weight:400;line-height:0.82">{c.metric}</p><p class="label" style="margin-top:18px">{c.label}</p></div>
+    </div>
+  </Hero>
+  <section class="band" style="--band:50%"><div class="container overlap" style="margin-top:-180px"><Cover brand={c.brand} cat={c.sector} {...c.cover} ratio="16/7" size="l" /></div></section>
+
+  <section class="s-paper section">
+    <div class="container split">
+      <p class="narrow eyebrow" style="flex-basis:220px">The result</p>
+      <div class="wide">
+        <p class="display" style="font-size:clamp(40px,5.4vw,84px);line-height:1;letter-spacing:-0.03em">{c.statement}</p>
+        <p class="lead" style="margin-top:32px">{c.context}</p>
+        <dl class="facts">
+          <div><dt class="label">Client</dt><dd class="serif">{c.brand}</dd></div>
+          <div><dt class="label">Sector</dt><dd class="serif">{c.sector}</dd></div>
+          <div><dt class="label">Result</dt><dd class="serif">{c.resultShort}</dd></div>
+        </dl>
+        {c.link && <a href={c.link.href} class="btn btn--dark" style="margin-top:40px">{c.link.label}</a>}
+      </div>
+    </div>
+  </section>
+
+  {c.quote && (
+    <section class="s-ink section">
+      <figure class="container" style="margin:0 auto">
+        <blockquote class="serif" style="margin:0;max-width:1120px;font-size:clamp(38px,5vw,76px);line-height:1.06;letter-spacing:-0.025em">“{c.quote.text}”</blockquote>
+        <figcaption class="label" style="margin-top:36px;padding-top:24px;border-top:1px solid var(--line-inv)">{c.quote.by}</figcaption>
+      </figure>
+    </section>
+  )}
+
+  <section class="s-sand section">
+    <div class="container">
+      <p class="eyebrow">How we work with brands like this</p>
+      <h2 class="h2" style="max-width:980px">Three tracks. One system. Measured on profit.</h2>
+      <div class="grid" style="--min:280px;margin-top:64px">
+        {tracks.map((t, i) => <a href={trackHref(t.id)} class:list={['card card--stack', i === 2 ? 'card--ink on-ink' : 'card--paper']}><span class="label">{t.num}</span><span><span class="h3" style="display:block">{t.name}</span><span class="body" style="display:block;margin-top:8px">{t.line}</span></span></a>)}
+      </div>
+      <div class="row-between story">
+        <p class="serif" style="margin:0;max-width:720px;font-size:26px;line-height:1.25">Want the full story? On a growth session we walk you through what changed, in what order, and why.</p>
+        <a href="/contact" class="btn btn--dark">Book a growth session</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-paper section--tight">
+    <div class="container">
+      <p class="eyebrow">Next case</p>
+      <a href={`/work/${n.slug}`} style="display:block;text-decoration:none">
+        <Cover brand={n.brand} cat={n.sector} {...n.cover} ratio="16/6" size="l" />
+        <span class="row-between" style="align-items:baseline;margin-top:22px"><span class="serif" style="font-size:36px">{n.brand}</span><span class="num" style="font-size:44px">{n.metric}{' '}<span class="arrow">→</span></span></span>
+      </a>
+    </div>
+  </section>
+</Base>
+<style>
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 24px; margin: 56px 0 0; padding-top: 28px; border-top: 1px solid var(--line); }
+  .facts dd { margin: 8px 0 0; font-size: 24px; }
+  .story { align-items: center; margin-top: 40px; padding: 32px 36px; border-radius: 8px; border: 1px solid rgba(20, 20, 20, 0.18); }
+</style>

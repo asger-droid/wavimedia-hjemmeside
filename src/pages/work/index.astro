@@ -1,0 +1,114 @@
+---
+import Base from '../../layouts/Base.astro';
+import Cover from '../../components/Cover.astro';
+import { cases, sectors } from '../../data/cases';
+// Bento rhythm: 7/5, then 4/4/4, then full width. Ratios keep every row the same height.
+const SPAN = [[7, '1416/1000', 'l'], [5, '1/1', 'm'], [4, '790/1000', 'm'], [4, '790/1000', 'm'], [4, '790/1000', 'm'], [12, '2460/1000', 'l']] as const;
+const count = (s: string) => (s === 'All' ? cases.length : cases.filter((c) => c.sector === s).length);
+---
+<Base title="Work: proof, not promises" description="Selected results from brands we build with: Herskind, MP Denmark, LULU Copenhagen, Build-A-Bear and more.">
+  <section class="s-ink" style="position:relative;overflow:hidden">
+    <span class="bigno" aria-hidden="true">0{cases.length}</span>
+    <div class="container" style="position:relative;padding-top:112px">
+      <p class="eyebrow">Work · Six selected cases</p>
+      <h1 class="display">Proof, not<br /><em class="accent">promises.</em></h1>
+      <div class="kpis">
+        {cases.filter((c) => c.metric !== 'Meta').slice(0, 3).map((c) => <a href={`/work/${c.slug}`}><span class="num">{c.metric}</span><span class="label">{c.brand} · {c.label}</span></a>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="s-paper" data-work>
+    <div class="container" style="padding-block:72px 144px">
+      <div class="controls">
+        <div role="group" aria-label="Filter by sector" class="chips">
+          {sectors.map((s, i) => <button type="button" aria-pressed={i === 0 ? 'true' : 'false'} data-filter={s}>{s}{' '}<span>{count(s)}</span></button>)}
+        </div>
+        <div role="group" aria-label="Layout" class="views">
+          <button type="button" aria-pressed="true" data-view="grid">Grid</button>
+          <button type="button" aria-pressed="false" data-view="index">Index</button>
+        </div>
+      </div>
+
+      <div class="bento" data-grid>
+        {cases.map((c, i) => { const [span, ratio, size] = SPAN[i % SPAN.length]; return (
+          <a href={`/work/${c.slug}`} class={`wcard s${span}`} data-sector={c.sector}>
+            <div class="wcard__media"><Cover brand={c.brand} cat={c.sector} {...c.cover} ratio={ratio} size={size} square /></div>
+            <div class="wcard__meta">
+              <div><span class="serif wcard__brand">{c.brand}</span><span class="body" style="display:block;margin-top:6px">{c.label}</span></div>
+              <div style="text-align:right"><span class="num" style="display:block;font-size:44px">{c.metric}</span><span style="font-weight:600">Read case <span class="arrow">→</span></span></div>
+            </div>
+          </a>
+        ); })}
+      </div>
+
+      <div class="index" data-index hidden>
+        <div class="irow head label"><span>No.</span><span>Client</span><span>Sector</span><span>Line item</span><span>Result</span></div>
+        {cases.map((c, i) => <a href={`/work/${c.slug}`} class="irow" data-sector={c.sector}><span class="label">0{i + 1}</span><span class="serif ibrand">{c.brand}</span><span class="hide">{c.sector}</span><span class="hide">{c.label}</span><span class="num hide ires">{c.metric}{' '}<span class="arrow">→</span></span></a>)}
+      </div>
+
+      <a href="/contact" class="wcard" style="display:block;margin-top:144px">
+        <div class="wcard__media"><Cover brand="Your brand, next." cat="Case 07 · not yet written" motif="mark" tone="ink" letter="?" ratio="2460/1000" size="l" square /></div>
+        <div class="row-between" style="align-items:center;margin-top:24px"><span class="serif" style="font-size:clamp(28px,3vw,40px)">Not the biggest agency. The best one for the brands we take on.</span><span class="btn btn--dark">Book a growth session <span class="arrow">→</span></span></div>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-work]')!;
+  const grid = root.querySelector<HTMLElement>('[data-grid]')!, index = root.querySelector<HTMLElement>('[data-index]')!;
+  const press = (sel: string, el: HTMLElement) => root.querySelectorAll<HTMLElement>(sel).forEach((b) => b.setAttribute('aria-pressed', String(b === el)));
+  root.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((b) => b.addEventListener('click', () => {
+    press('[data-filter]', b);
+    const f = b.dataset.filter;
+    root.querySelectorAll<HTMLElement>('[data-sector]').forEach((el) => { el.hidden = f !== 'All' && el.dataset.sector !== f; });
+    grid.classList.toggle('filtered', f !== 'All');
+  }));
+  root.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((b) => b.addEventListener('click', () => {
+    press('[data-view]', b);
+    const isIndex = b.dataset.view === 'index';
+    grid.hidden = isIndex; index.hidden = !isIndex;
+  }));
+</script>
+
+<style>
+  .bigno { position: absolute; right: -2vw; top: 40px; font-family: var(--serif); font-style: italic; font-size: clamp(240px, 34vw, 560px); line-height: 0.8; letter-spacing: -0.06em; color: rgba(250, 248, 244, 0.05); }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 112px; border-top: 1px solid var(--line-inv); }
+  .kpis a { display: block; padding: 32px 32px 48px 0; text-decoration: none; }
+  .kpis a + a { padding-left: 32px; border-left: 1px solid var(--line-inv); }
+  .kpis .num { display: block; font-size: 80px; }
+  .kpis .label { display: block; margin-top: 14px; }
+  .controls { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips button { height: 44px; padding: 0 20px; border-radius: 999px; border: 1px solid rgba(20, 20, 20, 0.2); background: none; cursor: pointer; font-weight: 500; font-size: 14px; }
+  .chips span { opacity: 0.55; margin-left: 4px; }
+  .chips [aria-pressed='true'] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .views { display: inline-flex; padding: 4px; border-radius: 999px; background: var(--sand); }
+  .views button { height: 40px; padding: 0 18px; border-radius: 999px; border: 0; background: none; cursor: pointer; font-weight: 500; font-size: 14px; }
+  .views [aria-pressed='true'] { background: var(--ink); color: var(--paper); }
+  .bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 56px 24px; margin-top: 56px; }
+  .bento.filtered .wcard { grid-column: span 6; }
+  .wcard { text-decoration: none; color: var(--ink); }
+  .wcard[hidden] { display: none; }
+  .s7 { grid-column: span 7; } .s5 { grid-column: span 5; } .s4 { grid-column: span 4; } .s12 { grid-column: span 12; }
+  .wcard__media { overflow: hidden; border-radius: 8px; }
+  .wcard__media > :global(*) { transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
+  .wcard:hover .wcard__media > :global(*) { transform: scale(1.015); }
+  .wcard__meta { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin-top: 22px; }
+  .wcard__brand { font-size: 30px; }
+  .index { margin-top: 40px; border-bottom: 1px solid var(--line); }
+  .irow { display: grid; grid-template-columns: 64px minmax(0, 2.2fr) minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px; align-items: center; padding: 28px 20px; margin: 0 -20px; border-top: 1px solid var(--line); text-decoration: none; color: var(--slate); transition: background .25s; }
+  .irow[hidden] { display: none; }
+  .irow:not(.head):hover { background: var(--sand); }
+  .irow.head { border-top: 0; padding-top: 0; }
+  .ibrand { font-size: clamp(32px, 3.6vw, 52px); color: var(--ink); line-height: 1; }
+  .ires { text-align: right; font-size: 44px; color: var(--ink); }
+  .irow.head span:last-child { text-align: right; }
+  @media (max-width: 900px) {
+    .bento .wcard, .bento.filtered .wcard { grid-column: span 12; }
+    .irow { grid-template-columns: 40px 1fr; row-gap: 8px; }
+    .hide, .irow.head { display: none; }
+    .kpis a + a { padding-left: 0; border-left: 0; }
+  }
+</style>
