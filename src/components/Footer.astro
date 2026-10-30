@@ -1,0 +1,46 @@
+---
+import Wave from './Wave.astro';
+import { site } from '../data/site';
+import { tracks, trackHref } from '../data/services';
+const year = new Date().getFullYear();
+const cols = [
+  { title: 'Services', links: [...tracks.map((t) => ({ href: trackHref(t.id), label: t.name })), { href: '/framework', label: 'The framework' }] },
+  { title: 'Work', links: [{ href: '/work', label: 'Case studies' }, { href: '/work/herskind', label: 'Herskind' }, { href: '/work/fashion-by-strand', label: 'Fashion By Strand' }] },
+  { title: 'Free tools', links: [{ href: '/tools/profit-check', label: 'Profit check' }, { href: '/tools/store-scan', label: 'Store scan' }, { href: '/tools/growth-score', label: 'Growth score' }, { href: '/contact', label: 'Senior audit' }] },
+  { title: 'Studio', links: [{ href: '/studio', label: 'About & team' }, { href: '/contact', label: 'Contact' }] },
+  // TODO: confirm social URLs
+  { title: 'Connect', links: [{ href: 'https://www.linkedin.com/company/wavimedia', label: 'LinkedIn' }, { href: `mailto:${site.email}`, label: site.email }] }
+];
+---
+<footer class="footer s-ink">
+  <Wave class="footer__wave" width="900" height="360" weight={7} stroke="#24191A" />
+  <div class="container footer__inner">
+    <p class="eyebrow">Now go build something that lasts</p>
+    <p class="footer__hook">Less chaos. More control.<br /><em class="accent">Built for growth.</em></p>
+    <div class="footer__cols">
+      {cols.map((c) => (
+        <nav aria-label={c.title}>
+          <p class="label">{c.title}</p>
+          <ul>{c.links.map((l) => <li><a href={l.href} class="t-link">{l.label}</a></li>)}</ul>
+        </nav>
+      ))}
+    </div>
+    <div class="footer__base label">
+      <span>© {year} Wavi Media · {site.studio}</span>
+      <span class="footer__legal"><a href="/privacy" class="t-link">Privacy</a><a href="/privacy#cookies" class="t-link">Cookies</a></span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { position: relative; overflow: hidden; border-top: 1px solid rgba(250, 248, 244, 0.1); }
+  :global(.footer__wave) { position: absolute; left: -200px; bottom: -160px; pointer-events: none; }
+  .footer__inner { position: relative; padding-block: 112px 40px; }
+  .footer__hook { margin: 0; font-family: var(--serif); font-weight: 500; font-size: clamp(44px, 6vw, 88px); line-height: 0.98; letter-spacing: -0.03em; }
+  .footer__cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 40px; margin-top: 96px; padding-top: 40px; border-top: 1px solid var(--line-inv); }
+  .footer__cols ul { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 15px; }
+  .footer__cols a { text-decoration: none; }
+  .footer__base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; margin-top: 80px; }
+  .footer__legal { display: flex; gap: 24px; }
+  .footer__legal a { text-decoration: none; }
+</style>

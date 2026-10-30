@@ -1,0 +1,20 @@
+---
+interface Props { current: 'profit-check' | 'store-scan' | 'growth-score'; eyebrow: string }
+const { current, eyebrow } = Astro.props;
+const tools = [['/tools/profit-check', 'Profit check', 'profit-check'], ['/tools/store-scan', 'Store scan', 'store-scan'], ['/tools/growth-score', 'Growth score', 'growth-score'], ['/contact', 'Senior audit', 'audit']];
+---
+<section class="s-ink">
+  <div class="container" style="padding-block:112px 96px">
+    <nav aria-label="Free tools" class="tsw">
+      {tools.map(([href, label, id]) => <a href={href} aria-current={id === current ? 'page' : undefined}>{label}</a>)}
+    </nav>
+    <p class="eyebrow">{eyebrow}</p>
+    <slot />
+  </div>
+</section>
+<style>
+  .tsw { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 56px; }
+  .tsw a { display: inline-flex; align-items: center; height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid rgba(250, 248, 244, 0.24); color: rgba(250, 248, 244, 0.74); text-decoration: none; font-size: 14px; }
+  .tsw a:hover { color: var(--paper); border-color: var(--paper); }
+  .tsw a[aria-current] { background: var(--paper); color: var(--ink); border-color: var(--paper); font-weight: 600; }
+</style>

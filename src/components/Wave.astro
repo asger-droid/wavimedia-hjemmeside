@@ -1,0 +1,6 @@
+---
+/* The Wavi mark. One stroke, coral unless the context demands otherwise. */
+interface Props { width?: number | string; height?: number | string; stroke?: string; weight?: number; class?: string; style?: string }
+const { width = 36, height = 15, stroke = 'var(--coral)', weight = 11, class: cls, style } = Astro.props;
+---
+<svg viewBox="0 0 120 48" width={width} height={height} class={cls} style={style} aria-hidden="true"><path d="M8 34 C 20 10, 42 8, 64 30 C 78 44, 92 46, 112 16" fill="none" stroke={stroke} stroke-width={weight} stroke-linecap="round" /></svg>

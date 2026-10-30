@@ -1,0 +1,21 @@
+---
+/* Shared dark page hero with breadcrumb. Pass `pad` to leave room for an overlapping graphic below. */
+interface Props { crumbs?: { href?: string; label: string }[]; eyebrow?: string; pad?: string }
+const { crumbs = [], eyebrow, pad = '112px' } = Astro.props;
+---
+<section class="s-ink phero">
+  <div class="container" style={`padding-block:96px ${pad}`}>
+    {crumbs.length > 0 && (
+      <nav aria-label="Breadcrumb" class="label crumbs">
+        {crumbs.map((c, i) => <Fragment>{i > 0 && ' / '}{c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</Fragment>)}
+      </nav>
+    )}
+    {eyebrow && <p class="eyebrow" style="margin-top:64px">{eyebrow}</p>}
+    <slot />
+  </div>
+</section>
+<style>
+  .crumbs a { color: var(--stone); text-decoration: none; }
+  .crumbs a:hover { color: var(--paper); }
+  .crumbs span { color: var(--paper); }
+</style>
