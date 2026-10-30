@@ -3,7 +3,6 @@ import { analyze, detectPlatform, gtmIds, normalizeUrl, type Check } from '../..
 import { safeFetch } from '../../lib/fetch';
 
 // Runs on Vercel as a function. GET /api/scan?url=yourbrand.com
-// Tracking checks only (a few seconds). Mobile speed is measured separately by /api/speed.
 export const prerender = false;
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36 WaviStoreScan/1.0 (+https://wavimedia.com/tools/store-scan)';

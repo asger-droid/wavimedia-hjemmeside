@@ -1,6 +1,6 @@
 # wavimedia.com
 
-Wavi Medias hjemmeside. Astro, hostet på Vercel. Alle sider er statiske; kun `/api/contact` (kontaktformular), `/api/scan` og `/api/speed` (store scan) kører som Vercel Functions. Ingen tracking-cookies, ingen eksterne fonte (selvhostet via Fontsource).
+Wavi Medias hjemmeside. Astro, hostet på Vercel. Alle sider er statiske; kun `/api/contact` (kontaktformular) og `/api/scan` (store scan) kører som Vercel Functions. Ingen tracking-cookies, ingen eksterne fonte (selvhostet via Fontsource).
 
 ## Kom i gang
 
@@ -31,13 +31,9 @@ Er ingen nøgle sat, viser formularen en fejl med hello@wavimedia.com som altern
 
 ## Store scan
 
-`/tools/store-scan` kalder først `src/pages/api/scan.ts`, som henter butikkens forside og læser de Google Tag Manager-containere den indlæser (få sekunder). Rapporten vises med det samme, og `src/pages/api/speed.ts` måler derefter mobilhastighed via Google PageSpeed Insights (op til ca. et minut på tunge butikker). Analysen ligger i `src/lib/scan.ts` og rapporterer kun det, der kan ses udefra: Meta Pixel, Google-tags (GA4, Ads, GTM), consent-banner og Consent Mode, Klaviyo, TikTok og mobil-LCP. Conversions API kan ikke ses udefra, og rapporten siger det i stedet for at gætte.
+`/tools/store-scan` kalder `src/pages/api/scan.ts`, som henter butikkens forside og læser de Google Tag Manager-containere den indlæser (få sekunder). Analysen ligger i `src/lib/scan.ts` og rapporterer kun det, der kan ses udefra: Meta Pixel, Google-tags (GA4, Ads, GTM), consent-banner og Consent Mode, Klaviyo og TikTok. Mobilhastighed blev fravalgt: Googles PageSpeed-måling tog over 100 sekunder eller svarede ikke på tunge butikker. Conversions API kan ikke ses udefra, og rapporten siger det i stedet for at gætte.
 
 Sikkerhed: kun offentlige http(s)-adresser kan scannes (private IP'er og interne navne afvises ved hvert redirect), med timeout og størrelsesgrænse. Intet gemmes.
-
-| Variabel | Krævet | Beskrivelse |
-|---|---|---|
-| `PAGESPEED_API_KEY` | anbefalet | Gratis nøgle fra Google Cloud (PageSpeed Insights API). Uden den bruges Googles delte kvote, som kan løbe tør; så viser rapporten "Not measured" i stedet for et tal. |
 
 ## Struktur
 
@@ -54,8 +50,7 @@ src/
   pages/
     index.astro
     api/contact.ts          # kontaktformularens endpoint (Vercel Function)
-    api/scan.ts             # store scan: tracking-tjek (Vercel Function)
-    api/speed.ts            # store scan: mobilhastighed via PageSpeed (Vercel Function)
+    api/scan.ts             # store scan (Vercel Function)
     services/[slug].astro   # track-sider OG ydelses-sider fra services.ts
     work/index.astro, work/[slug].astro
     framework.astro, studio.astro, contact.astro, privacy.astro, 404.astro
@@ -77,7 +72,7 @@ src/
 
 - [x] Kontaktformular sender mail (Resend) - mangler kun `RESEND_API_KEY` i Vercel.
 - [ ] Slack: sæt `SLACK_WEBHOOK_URL`, når kanalen er klar.
-- [x] Store scan live (`/api/scan`). Sæt `PAGESPEED_API_KEY` for stabil hastighedsmåling.
+- [x] Store scan live (`/api/scan`).
 - [ ] Bekræft "average partnership": 2+ eller 3+ år (`src/data/site.ts`).
 - [ ] Fotos fra Cyprus-optagelsen: founder, team (erstat monogram-tiles i `studio.astro`).
 - [ ] Kundelogoer som SVG.

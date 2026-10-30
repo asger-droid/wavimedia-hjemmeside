@@ -6,5 +6,5 @@ export default defineConfig({
   site: 'https://wavimedia.com',
   trailingSlash: 'never',
   build: { format: 'file' },
-  adapter: vercel({ maxDuration: 120 })
+  adapter: vercel({ maxDuration: 60 })
 });

@@ -6,14 +6,13 @@ const checks = [
   ['Meta Conversions API', 'Server-side events can\u2019t be seen from outside. We say so, rather than guess.'],
   ['Google tag', 'GA4, Google Ads conversion tag and Tag Manager, including what loads inside the container.'],
   ['Consent banner & Consent Mode', 'Is there a consent banner, and are Google\u2019s tags told what was consented to?'],
-  ['Klaviyo and TikTok', 'Onsite tracking for your flows, and the TikTok Pixel if you advertise there.'],
-  ['Mobile page speed', 'Google\u2019s own mobile measurement. Every second of load time is a tax on your ad spend.']
+  ['Klaviyo and TikTok', 'Onsite tracking for your flows, and the TikTok Pixel if you advertise there.']
 ];
 ---
-<Base title="Store scan: is your store leaking data?" description="Tracking, pixels, consent and speed, checked on your live store.">
+<Base title="Store scan: is your store leaking data?" description="Tracking, pixels and consent, checked on your live store in seconds.">
   <ToolHero current="store-scan" eyebrow="Free tool · Store scan">
     <h1 class="h1" style="max-width:1100px">Is your store leaking data before it leaks <em class="accent">money?</em></h1>
-    <p class="lead" style="margin-top:36px">Tracking, pixels, consent and speed, checked on your live store. If the data is wrong, every decision built on it is too.</p>
+    <p class="lead" style="margin-top:36px">Tracking, pixels and consent, checked on your live store in seconds. If the data is wrong, every decision built on it is too.</p>
     <form class="scan" data-scan novalidate>
       <label>Your store URL<input name="url" type="text" inputmode="url" placeholder="yourbrand.com" autocomplete="url" required /></label>
       <button type="submit" class="btn btn--light" data-go>Scan store</button>
@@ -24,9 +23,9 @@ const checks = [
   <section class="s-paper section" data-idle>
     <div class="container">
       <p class="eyebrow">What the scan checks</p>
-      <h2 class="h2" style="max-width:900px">Six things that quietly break reporting.</h2>
+      <h2 class="h2" style="max-width:900px">Five things that quietly break reporting.</h2>
       <ol class="checks">{checks.map(([n, w], i) => <li><p class="label">0{i + 1}</p><h3 class="serif">{n}</h3><p class="body">{w}</p></li>)}</ol>
-      <p class="body" style="margin-top:28px;font-size:14px">The scan reads your homepage, the Tag Manager containers it loads, and Google PageSpeed Insights. It reports only what it can see. Nothing is stored.</p>
+      <p class="body" style="margin-top:28px;font-size:14px">The scan reads your homepage and the Tag Manager containers it loads. It reports only what it can see. Nothing is stored.</p>
     </div>
   </section>
 
@@ -55,7 +54,7 @@ const checks = [
 <script>
   type Check = { id: string; name: string; status: 'ok' | 'warn' | 'bad' | 'info'; note: string };
   const LABEL = { ok: 'Found', warn: 'Needs attention', bad: 'Missing', info: 'Not detected' } as const;
-  const INFO_LABEL: Record<string, string> = { 'meta-capi': 'Not visible', speed: 'Not measured' };
+  const INFO_LABEL: Record<string, string> = { 'meta-capi': 'Not visible' };
   const $ = <T extends HTMLElement>(s: string) => document.querySelector<T>(s)!;
   const form = $<HTMLFormElement>('[data-scan]'), input = form.querySelector('input')!, go = $<HTMLButtonElement>('[data-go]');
   const err = $('[data-error]'), report = $('[data-report]'), rows = $('[data-rows]'), loading = $('[data-loading]'), sum = $('[data-sum]');
@@ -70,13 +69,6 @@ const checks = [
     const n = document.createElement('span'); n.className = 'serif'; n.textContent = c.name;
     const note = document.createElement('span'); note.className = 'note'; note.textContent = c.note;
     const chip = document.createElement('span'); chip.className = `chip ${c.status}`; chip.textContent = c.status === 'info' ? (INFO_LABEL[c.id] ?? LABEL.info) : LABEL[c.status];
-    li.append(n, note, chip); return li;
-  }
-  function pendingSpeedRow() {
-    const li = document.createElement('li'); li.dataset.id = 'speed';
-    const n = document.createElement('span'); n.className = 'serif'; n.textContent = 'Mobile page speed';
-    const note = document.createElement('span'); note.className = 'note'; note.textContent = 'Google is loading your homepage on a simulated phone. This can take up to a minute.';
-    const chip = document.createElement('span'); chip.className = 'chip pending'; chip.innerHTML = '<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>Measuring';
     li.append(n, note, chip); return li;
   }
   function updateSummary() {
@@ -107,20 +99,8 @@ const checks = [
     checks = d.checks;
     $('[data-domain]').textContent = d.domain;
     $('[data-kicker]').textContent = d.platform ? `Scan report \u00b7 ${d.platform} store` : 'Scan report';
-    rows.replaceChildren(...checks.map(row), pendingSpeedRow());
+    rows.replaceChildren(...checks.map(row));
     loading.hidden = true; sum.hidden = false; updateSummary(); reset();
-
-    // Mobile speed runs separately: Google can take close to a minute on heavy stores.
-    let speed: Check = { id: 'speed', name: 'Mobile page speed', status: 'info', note: 'Google couldn\u2019t measure this page right now. Try again in a minute.' };
-    try {
-      const res = await fetch(`/api/speed?url=${encodeURIComponent(d.finalUrl)}`);
-      const s = await res.json().catch(() => null);
-      if (s?.ok && s.check) speed = s.check;
-    } catch { /* keep the honest fallback */ }
-    if (me !== run) return;
-    checks = [...checks, speed];
-    rows.querySelector('[data-id="speed"]')?.replaceWith(row(speed));
-    updateSummary();
   });
 </script>
 <style>
@@ -157,8 +137,6 @@ const checks = [
   .report__rows :global(.chip.ok) { border: 1px solid rgba(250, 248, 244, 0.3); }
   .report__rows :global(.chip.warn) { background: var(--sand); color: var(--ink); }
   .report__rows :global(.chip.bad) { border: 1.5px solid var(--coral); }
-  .report__rows :global(.chip.pending) { gap: 10px; border: 1px solid rgba(250, 248, 244, 0.2); color: rgba(250, 248, 244, 0.8); }
-  .report__rows :global(.chip.pending .dots i) { width: 5px; height: 5px; }
   .report__rows :global(.chip.info) { border: 1px dashed rgba(250, 248, 244, 0.35); color: rgba(250, 248, 244, 0.7); }
   @media (max-width: 700px) { .report__rows :global(li) { grid-template-columns: 1fr auto; } .report__rows :global(.note) { grid-column: 1 / -1; grid-row: 2; } .report__rows :global(.chip) { grid-row: 1; grid-column: 2; } }
 </style>

@@ -5,7 +5,6 @@
 
 export type Status = 'ok' | 'warn' | 'bad' | 'info';
 export interface Check { id: string; name: string; status: Status; note: string }
-export interface Speed { score: number; lcpMs: number }
 
 const uniq = (a: string[]) => Array.from(new Set(a));
 const all = (re: RegExp, s: string, group = 1) => uniq(Array.from(s.matchAll(re), (m) => m[group]).filter(Boolean));
@@ -88,14 +87,6 @@ export function analyze(html: string, gtmCode = ''): Check[] {
   else checks.push({ id: 'tiktok', name: 'TikTok Pixel', status: 'info', note: 'Not detected. Fine if you don\u2019t advertise on TikTok.' });
 
   return checks;
-}
-
-// Mobile speed (Google PageSpeed Insights, mobile, lab data). Measured separately because Google can take up to a minute.
-export function speedCheck(speed: Speed | null): Check {
-  if (!speed) return { id: 'speed', name: 'Mobile page speed', status: 'info', note: 'Google couldn\u2019t measure this page right now. Try again in a minute.' };
-  const lcp = speed.lcpMs / 1000;
-  const status: Status = lcp <= 2.5 ? 'ok' : lcp <= 4 ? 'warn' : 'bad';
-  return { id: 'speed', name: 'Mobile page speed', status, note: `Largest content appears after ${lcp.toFixed(1)} s on mobile. PageSpeed score ${speed.score}/100.` };
 }
 
 /* ---------- network safety: only public http(s) hosts may be fetched ---------- */
