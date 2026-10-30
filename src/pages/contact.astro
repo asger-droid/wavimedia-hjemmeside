@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import Wave from '../components/Wave.astro';
+import { site } from '../data/site';
+---
+<Base title="Book a growth session" description="Tell us where growth stalls. A clear read on where the profit is, within one business day.">
+  <section class="s-sand">
+    <div class="container split" style="padding-block:112px 136px;gap:64px 96px">
+      <div class="narrow" style="flex-basis:400px">
+        <p class="eyebrow">Start a conversation</p>
+        <h1 class="h1" style="font-size:clamp(52px,6.4vw,96px)">Tell us where growth <em class="accent">stalls.</em></h1>
+        <p class="lead" style="margin-top:32px">A few details is enough. We come back with a clear read on where the profit is. No pitch.</p>
+        <ol class="rows steps">
+          <li><span class="label">01</span>You send the details.</li>
+          <li><span class="label">02</span>We reply within one business day.</li>
+          <li><span class="label">03</span>A non-binding growth session with a senior partner.</li>
+        </ol>
+        <div class="grid" style="--min:180px;--gap:24px;margin-top:48px">
+          <div><p class="label">Email</p><a href={`mailto:${site.email}`} class="serif t-link" style="display:block;margin-top:8px;font-size:22px;text-decoration:none">{site.email}</a></div>
+          <div><p class="label">Studio</p><p class="serif" style="margin:8px 0 0;font-size:22px">{site.studio}</p></div>
+        </div>
+      </div>
+      <div class="wide" style="flex-basis:520px">
+        <!-- TODO: connect to the CRM / Klaviyo endpoint. Until then submissions are not sent anywhere. -->
+        <form class="form" data-contact novalidate>
+          <label>Full name *<input name="name" type="text" required autocomplete="name" /></label>
+          <label>Work email *<input name="email" type="email" required autocomplete="email" /></label>
+          <label>Website URL *<input name="website" type="text" inputmode="url" required placeholder="yourbrand.com" /></label>
+          <label>Phone *<input name="phone" type="tel" required autocomplete="tel" /></label>
+          <label>Where is the business based? *<select name="region" required><option value="">Choose</option><option>Denmark</option><option>Sweden</option><option>Norway</option><option>Rest of Europe</option><option>Outside Europe</option></select></label>
+          <label>Avg. monthly revenue<select name="revenue"><option value="">Choose a range</option><option>Under €150k</option><option>€150k - €500k</option><option>€500k - €2M</option><option>€2M+</option></select></label>
+          <fieldset class="full"><legend>Where do you need help?</legend>
+            <div class="checks">{['Acquisition', 'Retention', 'Advisory', 'Not sure yet'].map((v) => <label class="check"><input type="checkbox" name="help" value={v} />{v}</label>)}</div>
+          </fieldset>
+          <label class="full">Where does growth stall?<textarea name="message" rows="5"></textarea></label>
+          <p class="full form__error" data-error hidden>Please fill in the required fields.</p>
+          <div class="full row-between" style="align-items:center"><button type="submit" class="btn btn--dark">Book a growth session</button><span class="body" style="font-size:14px">Built for consumer brands, roughly €2-50M revenue.</span></div>
+        </form>
+        <div class="card card--ink on-ink sent" role="status" data-sent hidden>
+          <Wave width={72} height={29} weight={10} />
+          <h2 class="h2" style="margin-top:32px;font-size:48px;line-height:1.05">Thank you. We'll be in touch within one business day.</h2>
+          <p class="body" style="margin-top:20px">In the meantime, run the profit check. It makes the first call sharper.</p>
+          <a href="/tools/profit-check" class="btn btn--light" style="margin-top:32px">Run the profit check <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact]')!;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const err = form.querySelector<HTMLElement>('[data-error]')!;
+    if (!form.checkValidity()) { err.hidden = false; form.querySelector<HTMLElement>(':invalid')?.focus(); return; }
+    err.hidden = true;
+    form.hidden = true;
+    document.querySelector<HTMLElement>('[data-sent]')!.hidden = false;
+  });
+</script>
+<style>
+  .steps { margin-top: 56px; }
+  .steps li { display: flex; gap: 24px; padding: 22px 0; font-size: 17px; line-height: 1.5; }
+  .steps .label { padding-top: 3px; }
+  .form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; padding: clamp(28px, 3vw, 44px); border-radius: 8px; background: var(--paper); }
+  .form[hidden] { display: none; }
+  .form > label, .form legend { display: flex; flex-direction: column; gap: 8px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--slate); }
+  .form input:not([type=checkbox]), .form select, .form textarea { height: 50px; padding: 0 14px; border-radius: 6px; border: 1px solid rgba(20, 20, 20, 0.24); background: #fff; color: var(--ink); font-family: var(--sans); font-size: 16px; letter-spacing: 0; text-transform: none; }
+  .form textarea { height: auto; padding: 14px; line-height: 1.5; resize: vertical; }
+  .full { grid-column: 1 / -1; }
+  fieldset { margin: 0; padding: 0; border: 0; }
+  .form legend { margin-bottom: 12px; }
+  .checks { display: flex; flex-wrap: wrap; gap: 10px; }
+  .check { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid rgba(20, 20, 20, 0.2); font-size: 15px; cursor: pointer; }
+  .check input { accent-color: var(--ink); width: 16px; height: 16px; }
+  .form__error { margin: 0; color: #A8341A; font-weight: 600; }
+  .sent { min-height: 520px; display: flex; flex-direction: column; justify-content: center; }
+  .sent[hidden] { display: none; }
+</style>

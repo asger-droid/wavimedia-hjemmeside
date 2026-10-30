@@ -1,0 +1,98 @@
+---
+import Base from '../../layouts/Base.astro';
+import ToolHero from '../../components/ToolHero.astro';
+const checks = [
+  ['Meta Pixel', 'Is the browser pixel firing the right events on the right pages?'],
+  ['Meta Conversions API', 'Server-side events that survive ad blockers and consent banners.'],
+  ['Google tag and enhanced conversions', 'Is Google seeing the purchases, with the data it needs to match them?'],
+  ['Consent Mode', 'Are tags waiting for consent, and modelling what they cannot see?'],
+  ['Klaviyo onsite tracking', 'Viewed product and added to cart events for your flows.'],
+  ['Mobile page speed', 'Every second of load time is a tax on your ad spend.']
+];
+// TODO: replace EXAMPLE with a call to the scanner API on Vercel (store-scan backend). Keep the same row shape.
+const EXAMPLE = [
+  ['Meta Pixel', 'Firing on product, cart and purchase.', 'Found', 'ok'],
+  ['Meta Conversions API', 'No server-side events detected.', 'Missing', 'bad'],
+  ['Google tag and enhanced conversions', 'Tag present, enhanced conversions not set up.', 'Needs attention', 'warn'],
+  ['Consent Mode', 'Consent Mode active.', 'Found', 'ok'],
+  ['Klaviyo onsite tracking', 'Viewed product and added to cart events found.', 'Found', 'ok'],
+  ['Mobile page speed', 'Largest content takes about 3.8 seconds to appear.', 'Needs attention', 'warn']
+];
+---
+<Base title="Store scan: is your store leaking data?" description="Tracking, pixels, consent and speed, checked on your live store.">
+  <ToolHero current="store-scan" eyebrow="Free tool · Store scan">
+    <h1 class="h1" style="max-width:1100px">Is your store leaking data before it leaks <em class="accent">money?</em></h1>
+    <p class="lead" style="margin-top:36px">Tracking, pixels, consent and speed, checked on your live store. If the data is wrong, every decision built on it is too.</p>
+    <form class="scan" data-scan>
+      <label>Your store URL<input name="url" type="text" inputmode="url" placeholder="yourbrand.com" autocomplete="url" /></label>
+      <button type="submit" class="btn btn--light">Scan store</button>
+    </form>
+  </ToolHero>
+
+  <section class="s-paper section" data-idle>
+    <div class="container">
+      <p class="eyebrow">What the scan checks</p>
+      <h2 class="h2" style="max-width:900px">Six things that quietly break reporting.</h2>
+      <ol class="checks">{checks.map(([n, w], i) => <li><p class="label">0{i + 1}</p><h3 class="serif">{n}</h3><p class="body">{w}</p></li>)}</ol>
+    </div>
+  </section>
+
+  <section class="s-sand section" data-report hidden>
+    <div class="container">
+      <div role="note" class="proto"><span class="label" style="color:var(--ink)">Prototype</span>Example report to show the layout. The live scan reads your store in real time.</div>
+      <div class="report">
+        <div class="row-between report__head">
+          <div><p class="label">Scan report</p><p class="serif report__domain" data-domain>yourbrand.com</p></div>
+          <div class="report__sum"><span><b>3</b> found</span><span><b>2</b> need attention</span><span><b class="accent" style="font-style:normal">1</b> missing</span></div>
+        </div>
+        <ul class="report__rows">
+          {EXAMPLE.map(([n, note, status, k]) => <li><span class="serif">{n}</span><span class="note">{note}</span><span class={`chip ${k}`}>{status}</span></li>)}
+        </ul>
+      </div>
+      <div class="row-between card card--paper" style="margin-top:20px;align-items:center">
+        <p class="serif" style="margin:0;max-width:680px;font-size:26px;line-height:1.25">A scan shows what is broken. A partner tells you what it is costing, and what to fix first.</p>
+        <a href="/contact" class="btn btn--dark">Request a senior audit</a>
+      </div>
+    </div>
+  </section>
+</Base>
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-scan]')!;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const raw = String(new FormData(form).get('url') || '').trim();
+    const domain = raw.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0] || 'yourbrand.com';
+    document.querySelector('[data-domain]')!.textContent = domain;
+    document.querySelector<HTMLElement>('[data-idle]')!.hidden = true;
+    const report = document.querySelector<HTMLElement>('[data-report]')!;
+    report.hidden = false;
+    report.scrollIntoView({ behavior: 'smooth' });
+  });
+</script>
+<style>
+  .scan { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 48px; max-width: 760px; }
+  .scan label { flex: 1 1 320px; display: flex; flex-direction: column; gap: 8px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); }
+  .scan input { height: 60px; padding: 0 20px; border-radius: 999px; border: 1px solid rgba(250, 248, 244, 0.3); background: transparent; color: var(--paper); font-family: var(--sans); font-size: 18px; letter-spacing: 0; text-transform: none; }
+  .scan .btn { align-self: flex-end; min-height: 60px; }
+  section[hidden] { display: none; }
+  .checks { list-style: none; margin: 64px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .checks li { padding: 36px; background: var(--paper); }
+  .checks h3 { margin: 24px 0 0; font-size: 28px; font-weight: 500; }
+  .checks .body { margin-top: 10px; }
+  .proto { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 8px; border: 1px dashed rgba(20, 20, 20, 0.35); font-size: 14px; color: var(--slate); }
+  .report { margin-top: 28px; padding: clamp(28px, 4vw, 48px); border-radius: 10px; background: var(--ink); color: var(--paper); }
+  .report .label { color: var(--stone); }
+  .report__head { padding-bottom: 28px; border-bottom: 1px solid var(--line-inv); }
+  .report__domain { margin: 12px 0 0; font-size: clamp(36px, 4vw, 56px); font-weight: 500; letter-spacing: -0.02em; line-height: 1; }
+  .report__sum { display: flex; flex-wrap: wrap; gap: 28px; font-size: 15px; }
+  .report__sum b { font-family: var(--serif); font-size: 40px; font-weight: 400; }
+  .report__rows { list-style: none; margin: 0; padding: 0; }
+  .report__rows li { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr) minmax(130px, 2fr); gap: 16px 32px; align-items: center; padding: 24px 0; border-bottom: 1px solid rgba(250, 248, 244, 0.1); }
+  .report__rows .serif { font-size: 24px; }
+  .note { font-size: 15px; line-height: 1.5; color: rgba(250, 248, 244, 0.7); }
+  .chip { justify-self: end; display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border-radius: 999px; font-size: 13px; white-space: nowrap; }
+  .chip.ok { border: 1px solid rgba(250, 248, 244, 0.3); }
+  .chip.warn { background: var(--sand); color: var(--ink); }
+  .chip.bad { border: 1.5px solid var(--coral); }
+  @media (max-width: 700px) { .report__rows li { grid-template-columns: 1fr auto; } .note { grid-column: 1 / -1; grid-row: 2; } .chip { grid-row: 1; grid-column: 2; } }
+</style>

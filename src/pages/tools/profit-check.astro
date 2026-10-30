@@ -1,0 +1,81 @@
+---
+import Base from '../../layouts/Base.astro';
+import ToolHero from '../../components/ToolHero.astro';
+const fields = [
+  { k: 'aov', label: 'Average order value', min: 20, max: 400, step: 1, v: 80, fmt: 'eur', hint: 'What a customer pays per order, incl. shipping charged.' },
+  { k: 'cogs', label: 'Product cost', min: 5, max: 80, step: 1, v: 35, fmt: 'pct', hint: 'Cost of goods as a share of the price.' },
+  { k: 'ship', label: 'Shipping & fulfilment', min: 0, max: 40, step: 0.5, v: 8, fmt: 'eur', hint: 'What you pay per order to pick, pack and ship.' },
+  { k: 'ret', label: 'Return rate', min: 0, max: 60, step: 1, v: 15, fmt: 'pct', hint: 'Share of revenue that comes back.' },
+  { k: 'cpa', label: 'Ad cost per order', min: 1, max: 150, step: 1, v: 25, fmt: 'eur', hint: 'Ad spend divided by orders.' }
+];
+const lines = ['Order value', 'Returns', 'Product cost', 'Shipping & fulfilment', 'Ad cost'];
+---
+<Base title="Profit check: what each order really leaves behind" description="A free calculator: five numbers you already know show what each order leaves after product, shipping, returns and ads.">
+  <ToolHero current="profit-check" eyebrow="Free tool · Profit check">
+    <h1 class="h1" style="max-width:1000px">What does each order <em class="accent">really</em> leave behind?</h1>
+    <p class="lead" style="margin-top:36px">Five numbers you already know. Move the sliders. Nothing is stored and nothing is estimated for you.</p>
+  </ToolHero>
+  <section class="s-paper" data-calc>
+    <div class="container split" style="padding-block:96px 128px;gap:40px">
+      <div class="wide" style="flex-basis:480px">
+        {fields.map((f) => (
+          <label class="field">
+            <span class="field__top"><span>{f.label}</span><output data-out={f.k}>{f.fmt === 'eur' ? '€' + f.v.toFixed(2) : f.v + '%'}</output></span>
+            <input type="range" min={f.min} max={f.max} step={f.step} value={f.v} data-in={f.k} data-fmt={f.fmt} />
+            <span class="field__hint">{f.hint}</span>
+          </label>
+        ))}
+      </div>
+      <div class="narrow" style="flex-basis:440px">
+        <div class="card card--ink on-ink" aria-live="polite">
+          <p class="label">Contribution per order</p>
+          <p class="num accent" style="margin:16px 0 0;font-size:clamp(72px,8vw,112px);font-style:normal" data-o="contrib">€11.20</p>
+          <p class="body" style="margin-top:16px" data-o="margin">14.0% of order value, after ads</p>
+          <dl class="lines">{lines.map((l, i) => <div><dt>{l}</dt><dd data-o={'l' + i}>-</dd></div>)}</dl>
+          <div class="grid" style="--min:140px;margin-top:32px">
+            <div class="mini"><p class="label">Your ROAS</p><p class="serif" data-o="roas">3.20</p></div>
+            <div class="mini"><p class="label">Break-even ROAS</p><p class="serif" data-o="be">2.21</p></div>
+          </div>
+          <p style="margin:28px 0 0;font-size:17px;line-height:1.55" data-o="verdict"></p>
+        </div>
+        <div class="card card--sand" style="margin-top:20px">
+          <p class="serif" style="margin:0;font-size:28px;line-height:1.2">This is one average order. The real picture is per product, per channel, new vs returning.</p>
+          <a href="/contact" class="btn btn--dark" style="margin-top:24px">Get the full read in a growth session <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+<script>
+  const root = document.querySelector<HTMLElement>('[data-calc]')!;
+  const eur = (n: number) => (n < 0 ? '-€' : '€') + Math.abs(n).toFixed(2);
+  const v = (k: string) => Number(root.querySelector<HTMLInputElement>(`[data-in="${k}"]`)!.value);
+  const o = (k: string, t: string) => { root.querySelector<HTMLElement>(`[data-o="${k}"]`)!.textContent = t; };
+  const update = () => {
+    root.querySelectorAll<HTMLInputElement>('[data-in]').forEach((i) => { root.querySelector(`[data-out="${i.dataset.in}"]`)!.textContent = i.dataset.fmt === 'eur' ? eur(+i.value) : i.value + '%'; });
+    const aov = v('aov'), cogs = v('cogs'), ship = v('ship'), ret = v('ret'), cpa = v('cpa');
+    const kept = aov * (1 - ret / 100), product = kept * (cogs / 100), contrib = kept - product - ship - cpa, beCpa = kept - product - ship;
+    const margin = aov > 0 ? contrib / aov * 100 : 0;
+    o('contrib', eur(contrib)); o('margin', margin.toFixed(1) + '% of order value, after ads');
+    [eur(aov), eur(-(aov - kept)), eur(-product), eur(-ship), eur(-cpa)].forEach((t, i) => o('l' + i, t));
+    o('roas', (aov / cpa).toFixed(2)); o('be', beCpa > 0 ? (aov / beCpa).toFixed(2) : 'n/a');
+    o('verdict', contrib < 0 ? 'At this ad cost, every first order loses money. Scaling spend scales the loss.'
+      : margin < 10 ? 'Thin. A bad month or a price change can erase it. Fix the maths before adding spend.'
+      : 'There is room here. The question is how far spend can scale before the cost per order climbs.');
+  };
+  root.addEventListener('input', update);
+  update();
+</script>
+<style>
+  .field { display: flex; flex-direction: column; gap: 14px; padding: 28px 0; border-top: 1px solid var(--line); }
+  .field__top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; font-size: 17px; font-weight: 500; }
+  .field__top output { font-family: var(--serif); font-size: 32px; }
+  .field input { width: 100%; height: 28px; margin: 0; accent-color: var(--ink); }
+  .field__hint { font-size: 14px; color: var(--slate); }
+  .lines { margin: 40px 0 0; }
+  .lines > div { display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-top: 1px solid rgba(250, 248, 244, 0.12); }
+  .lines dt { color: var(--muted-inv); }
+  .lines dd { margin: 0; font-family: var(--mono); font-size: 15px; }
+  .mini { padding: 20px; border-radius: 6px; background: #1F1F1F; }
+  .mini .serif { margin: 10px 0 0; font-size: 40px; }
+</style>

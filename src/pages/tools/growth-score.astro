@@ -1,0 +1,99 @@
+---
+import Base from '../../layouts/Base.astro';
+import ToolHero from '../../components/ToolHero.astro';
+const groups = [
+  { num: '01', name: 'Unit economics', track: 'Acquisition', href: '/services/acquisition', qs: [
+    ['Do you know your contribution margin per order?', ['No idea', 'Roughly, overall', 'Yes, overall', 'Yes, per product']],
+    ['What do you bid and budget towards?', ['Revenue', 'A ROAS target', 'Blended ROAS or MER', 'Profit or contribution']],
+    ['Can you see what a new customer costs, separately from returning ones?', ['No', 'Platform numbers only', 'Monthly, roughly', 'Yes, every week']] ] },
+  { num: '02', name: 'Lifetime value', track: 'Retention', href: '/services/retention', qs: [
+    ['How much of your revenue comes from returning customers?', ['Don’t know', 'Under 20%', '20-40%', 'Over 40%']],
+    ['What does your email and SMS setup look like?', ['Campaigns only', 'Welcome and cart flows', 'Most core flows', 'Full lifecycle, segmented']],
+    ['How often do discounts drive the month?', ['Most months', 'Every big season', 'Occasionally', 'Rarely, by design']] ] },
+  { num: '03', name: 'Resilience', track: 'Advisory', href: '/services/advisory', qs: [
+    ['How much revenue depends on your single biggest channel?', ['Over 80%', '60-80%', '40-60%', 'Under 40%']],
+    ['If your marketing lead left tomorrow, what happens?', ['We’d be stuck', 'Painful', 'Recoverable', 'Documented, no drama']],
+    ['Where does your reporting live?', ['In the ad platforms', 'Spreadsheets', 'One shared dashboard', 'One source of truth tied to the P&L']] ] }
+];
+const meta = groups.map((g) => ({ name: g.name.toLowerCase(), track: g.track, href: g.href }));
+---
+<Base title="Growth score: how structured is your growth?" description="Nine questions across unit economics, lifetime value and resilience. A live score out of 100.">
+  <ToolHero current="growth-score" eyebrow="Free tool · Growth score">
+    <h1 class="h1" style="max-width:1080px">How structured is your growth, <em class="accent">really?</em></h1>
+    <p class="lead" style="margin-top:36px">Nine questions across the three parts of the framework. Your score builds as you answer. Nothing is stored.</p>
+  </ToolHero>
+  <section class="s-paper" data-gs={JSON.stringify(meta)}>
+    <div class="container split" style="padding-block:96px 136px;gap:48px 64px;align-items:flex-start">
+      <div class="wide" style="display:flex;flex-direction:column;gap:64px">
+        {groups.map((g, gi) => (
+          <div>
+            <p class="ghead"><span class="label">{g.num}</span><span class="serif">{g.name}</span></p>
+            {g.qs.map(([text, opts], qi) => (
+              <fieldset class="q">
+                <legend>{text}</legend>
+                <div class="opts">{(opts as string[]).map((o, oi) => <button type="button" aria-pressed="false" data-q={gi * 3 + qi} data-v={oi}>{o}</button>)}</div>
+              </fieldset>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div class="narrow sticky">
+        <div class="card card--ink on-ink" aria-live="polite">
+          <p class="label">Your growth score · <span data-answered>0</span> of 9 answered</p>
+          <p class="score"><span class="num" data-score>0</span><span class="serif">/100</span></p>
+          <p class="band serif" data-band>Start answering</p>
+          <div class="dims">
+            {groups.map((g) => <div><div class="row-between" style="font-size:15px;align-items:center"><span>{g.num}{' '}{g.name}</span><span class="label" data-pct>0%</span></div><div class="track"><i data-bar></i></div></div>)}
+          </div>
+          <p class="body" style="margin-top:32px" data-advice>Your score updates with every answer. Answer all nine for the full picture.</p>
+          <a href="/framework" class="btn btn--light" style="margin-top:24px" data-cta>How the framework works <span class="arrow">→</span></a>
+        </div>
+        <a href="/contact" class="card card--sand row-between" style="margin-top:12px;padding:22px 24px;align-items:center;font-weight:600">Go through it with a partner <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </section>
+</Base>
+<script>
+  const root = document.querySelector<HTMLElement>('[data-gs]')!;
+  const G = JSON.parse(root.dataset.gs!);
+  const answers: Record<number, number> = {};
+  const $ = (s: string) => root.querySelector<HTMLElement>(s)!;
+  root.querySelectorAll<HTMLButtonElement>('[data-q]').forEach((b) => b.addEventListener('click', () => {
+    const q = Number(b.dataset.q);
+    answers[q] = Number(b.dataset.v);
+    root.querySelectorAll<HTMLButtonElement>(`[data-q="${q}"]`).forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    const keys = Object.keys(answers).map(Number);
+    const dim = [0, 0, 0];
+    let total = 0;
+    keys.forEach((k) => { total += answers[k]; dim[Math.floor(k / 3)] += answers[k]; });
+    const score = Math.round(total / 27 * 100);
+    $('[data-answered]').textContent = String(keys.length);
+    $('[data-score]').textContent = String(score);
+    $('[data-band]').textContent = score < 40 ? 'Fragile' : score < 70 ? 'Building' : 'Structured';
+    root.querySelectorAll<HTMLElement>('[data-bar]').forEach((bar, i) => { bar.style.width = Math.round(dim[i] / 9 * 100) + '%'; });
+    root.querySelectorAll<HTMLElement>('[data-pct]').forEach((el, i) => { el.textContent = Math.round(dim[i] / 9 * 100) + '%'; });
+    const cta = $('[data-cta]') as HTMLAnchorElement;
+    if (keys.length < 9) return;
+    let w = 0; dim.forEach((d, i) => { if (d < dim[w]) w = i; });
+    $('[data-advice]').textContent = `Your weakest area is ${G[w].name}. That is where we would start, and where the ${G[w].track} track does its work.`;
+    cta.href = G[w].href; cta.innerHTML = `See ${G[w].track} <span class="arrow">→</span>`;
+  }));
+</script>
+<style>
+  .ghead { display: flex; align-items: baseline; gap: 14px; margin: 0 0 8px; font-size: 32px; }
+  .q { margin: 24px 0 0; padding: 28px 0 0; border: 0; border-top: 1px solid var(--line); }
+  .q legend { float: left; width: 100%; padding: 0; margin-bottom: 16px; font-size: 19px; font-weight: 500; line-height: 1.4; }
+  .opts { clear: both; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+  .opts button { min-height: 56px; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(20, 20, 20, 0.18); background: #fff; color: var(--ink); text-align: left; font-size: 15px; line-height: 1.35; cursor: pointer; transition: background .2s, border-color .2s; }
+  .opts button:hover { border-color: var(--ink); }
+  .opts [aria-pressed='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .sticky { position: sticky; top: 24px; }
+  .score { display: flex; align-items: baseline; gap: 10px; margin: 20px 0 0; }
+  .score .num { font-size: clamp(88px, 9vw, 128px); }
+  .score .serif { font-size: 32px; color: var(--stone); }
+  .band { margin: 14px 0 0; font-style: italic; font-size: 28px; color: var(--coral); }
+  .dims { display: flex; flex-direction: column; gap: 20px; margin-top: 32px; padding-top: 28px; border-top: 1px solid var(--line-inv); }
+  .track { margin-top: 10px; height: 10px; border-radius: 5px; background: rgba(250, 248, 244, 0.1); overflow: hidden; }
+  .track i { display: block; height: 10px; width: 0; border-radius: 5px; background: var(--paper); transition: width .45s cubic-bezier(.2, .7, .2, 1); }
+  @media (max-width: 760px) { .sticky { position: static; } }
+</style>
