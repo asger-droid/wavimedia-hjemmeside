@@ -153,7 +153,7 @@ const tools = [
   .stats dd { margin: 14px 0 0; }
   .marquee { overflow: hidden; border-bottom: 1px solid var(--line); }
   .marquee__track { display: flex; align-items: center; gap: 88px; width: max-content; padding: 36px 44px; animation: marquee 80s linear infinite; }
-  .marquee__track img { flex: none; opacity: 0.8; }
+  .marquee__track img { flex: none; }
   .marquee:hover .marquee__track { animation-play-state: paused; }
   @media (prefers-reduced-motion: reduce) { .marquee__track { animation: none; flex-wrap: wrap; width: auto; justify-content: center; gap: 40px 64px; } .marquee__track img[aria-hidden] { display: none; } }
   @keyframes marquee { to { transform: translateX(-50%); } }

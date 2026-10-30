@@ -9,24 +9,24 @@ export const site = {
     { value: '3+ yrs', label: 'Average partnership' },
     { value: '24+', label: 'Markets served' }
   ],
-  // Client logos: single-colour ink versions of the logos from the old site (public/logos), sized to equal visual weight.
+  // Client logos in their original colours (public/logos): white backgrounds removed, brand-coloured backgrounds kept as a badge, sized to equal visual weight.
   logos: [
-    { name: 'Herskind', src: '/logos/herskind.webp', w: 210, h: 27 },
+    { name: 'Herskind', src: '/logos/herskind.webp', w: 210, h: 26 },
     { name: 'LULU Copenhagen', src: '/logos/lulu-copenhagen.webp', w: 128, h: 54 },
-    { name: 'MP Denmark', src: '/logos/mp-denmark.webp', w: 90, h: 56 },
+    { name: 'MP Denmark', src: '/logos/mp-denmark.webp', w: 57, h: 56 },
     { name: 'Build-A-Bear', src: '/logos/build-a-bear.webp', w: 56, h: 56 },
-    { name: 'GoBabyGo', src: '/logos/gobabygo.webp', w: 210, h: 28 },
+    { name: 'GoBabyGo', src: '/logos/gobabygo.webp', w: 167, h: 41 },
     { name: 'DBU', src: '/logos/dbu.webp', w: 56, h: 56 },
-    { name: 'SOS International', src: '/logos/sos-international.webp', w: 164, h: 42 },
+    { name: 'SOS International', src: '/logos/sos-international.webp', w: 163, h: 42 },
     { name: 'GF Forsikring', src: '/logos/gf-forsikring.webp', w: 81, h: 56 },
-    { name: 'Drømmeland', src: '/logos/drommeland.webp', w: 210, h: 29 },
+    { name: 'Drømmeland', src: '/logos/drommeland.webp', w: 166, h: 42 },
     { name: 'Karmamia Copenhagen', src: '/logos/karmamia.webp', w: 109, h: 56 },
     { name: 'Unfold Copenhagen', src: '/logos/unfold.webp', w: 142, h: 49 },
     { name: 'Børneloppen', src: '/logos/borneloppen.webp', w: 115, h: 56 },
     { name: 'Stryhns Gruppen', src: '/logos/stryhns.webp', w: 83, h: 56 },
-    { name: 'Mashup', src: '/logos/mashup.webp', w: 41, h: 56 },
+    { name: 'Mashup', src: '/logos/mashup.webp', w: 56, h: 56 },
     { name: 'PlusLED', src: '/logos/plusled.webp', w: 187, h: 37 },
-    { name: 'ProfitMetrics', src: '/logos/profitmetrics.webp', w: 208, h: 33 }
+    { name: 'ProfitMetrics', src: '/logos/profitmetrics.webp', w: 156, h: 44 }
   ],
   partners: ['Meta Business Partner', 'Google Partner', 'TikTok Marketing Partner', 'Klaviyo Partner', 'Shopify Partner', 'ProfitMetrics Partner'],
   metaCase: 'https://www.facebook.com/business/success/fashionbystrand'
