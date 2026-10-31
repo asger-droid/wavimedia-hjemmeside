@@ -43,7 +43,7 @@ export const tracks: Track[] = [
     statementBody: 'Your acquisition cost will never hit zero. What a customer is worth after the first order can always grow. Retention is measured in contribution margin, not open rates.',
     reportA: 'Not open rates.', reportB: 'Second orders.',
     report: [['Repeat purchase rate', 'Share of customers who come back, by cohort.'], ['Customer value over time', 'Contribution per customer at 90, 180 and 365 days.'], ['Returning revenue share', 'How much of the month did not need paid media.'], ['Discount dependency', 'Orders that only happened because of a code.']],
-    proofCases: ['lulu-copenhagen'], quote: 'lulu' },
+    proofCases: ['lulu-copenhagen', 'gobabygo'], quote: 'lulu' },
   { id: 'advisory', num: '03', name: 'Advisory', graphic: 'dashboard',
     line: 'Senior counsel, from ad account to boardroom.',
     intro: 'The structure around the marketing: processes, measurement and the financial view that ties spend to the P&L.',
@@ -52,7 +52,7 @@ export const tracks: Track[] = [
     statementA: 'Most growth decisions are made on platform numbers nobody fully trusts, by the one person who knows how it all connects. That is a', statementB: 'risk,', statementC: 'not a process.',
     reportA: 'One page. Every number', reportB: 'earns its place.',
     report: [['Net revenue', '€ [ ]'], ['Product, shipping & returns', '- € [ ]'], ['Marketing spend', '- € [ ]'], ['Contribution after marketing', '€ [ ]'], ['New customers · cost each', '[ ] · € [ ]'], ['Payback period', '[ ] days']],
-    proofCases: ['fashion-by-strand'], quote: 'uncommon' }
+    proofCases: ['fashion-by-strand', 'plusled'], quote: 'uncommon' }
 ];
 
 const L = (a: Pair[]) => a;

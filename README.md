@@ -58,7 +58,7 @@ src/
   styles/global.css         # design tokens fra brandbogen
 ```
 
-**Ny case:** tilføj et objekt i `src/data/cases.ts`. Siden, Work-griddet og "next case" opdateres selv.
+**Ny case:** tilføj et objekt i `src/data/cases.ts`. Siden, Work-griddet og "next case" opdateres selv. Historien skrives som `sections` (afsnit, punktlister, mellemrubrikker; links som `[[tekst|url]]`), og `featured: true` viser casen på forsiden.
 **Ny ydelse:** tilføj i `src/data/services.ts` og vælg et `graphic`.
 
 ## Brandregler i koden
@@ -79,6 +79,8 @@ src/
 - [x] Kundelogoer (16) i originale farver i `public/logos`, på forsiden og Studio.
 - [x] Privatlivspolitik skrevet ud fra hvad sitet faktisk gør (`src/pages/privacy.astro`). Gennemlæses før lancering, og opdateres hvis analytics, pixels eller Slack-notifikationer tilføjes.
 - [x] Tech stack og Wavi Charity flyttet fra Framer (`/tech-stack`, `/wavi-charity`).
+- [x] 14 cases med fuld historie fra Framer-CMS'et (`src/data/cases.ts`), britisk stavning, og gamle Framer-URL'er omdirigeret (`astro.config.mjs`).
+- [ ] Herskind og Fashion By Strand: mangler fuld case-tekst.
 - [ ] Commit `package-lock.json` efter første `npm install`.
 - [ ] Analytics/pixel: tilføjes med consent - opdatér cookie-teksten samtidig.
 - [ ] Sidste skridt: tilføj domænet wavimedia.com i Vercel.
