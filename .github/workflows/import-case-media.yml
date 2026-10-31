@@ -1,0 +1,34 @@
+name: Import case media from Framer
+
+# Runs when the media list or the script changes, or by hand from the Actions tab.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/case-media.json'
+      - 'scripts/import-case-media.mjs'
+      - '.github/workflows/import-case-media.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install image tools
+        run: mkdir -p /tmp/media && cd /tmp/media && npm init -y >/dev/null && npm install sharp@0.33.5 && ln -s /tmp/media/node_modules "$GITHUB_WORKSPACE/node_modules"
+      - name: Download and optimise
+        run: node scripts/import-case-media.mjs
+      - name: Commit the files
+        run: |
+          rm -f node_modules
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add public/cases src/data/case-media.json
+          if git diff --cached --quiet; then echo "No changes"; else git commit -m "Import case media from Framer" && git push; fi
