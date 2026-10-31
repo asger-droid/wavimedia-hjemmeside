@@ -1,16 +1,17 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Cover from '../../components/Cover.astro';
-import { cases, sectors } from '../../data/cases';
+import { cases, groups } from '../../data/cases';
 // Bento rhythm: 7/5, then 4/4/4, then full width. Ratios keep every row the same height.
 const SPAN = [[7, '1416/1000', 'l'], [5, '1/1', 'm'], [4, '790/1000', 'm'], [4, '790/1000', 'm'], [4, '790/1000', 'm'], [12, '2460/1000', 'l']] as const;
-const count = (s: string) => (s === 'All' ? cases.length : cases.filter((c) => c.sector === s).length);
+const count = (g: string) => (g === 'All' ? cases.length : cases.filter((c) => c.group === g).length);
+const pad = (n: number) => String(n).padStart(2, '0');
 ---
-<Base title="Work: proof, not promises" description="Selected results from brands we build with: Herskind, MP Denmark, LULU Copenhagen, Build-A-Bear and more.">
+<Base title="Work: proof, not promises" description="Case studies from brands we build with: LULU Copenhagen, Herskind, MP Denmark, Build-A-Bear, DBU, Stryhns and more.">
   <section class="s-ink" style="position:relative;overflow:hidden">
-    <span class="bigno" aria-hidden="true">0{cases.length}</span>
+    <span class="bigno" aria-hidden="true">{pad(cases.length)}</span>
     <div class="container" style="position:relative;padding-top:112px">
-      <p class="eyebrow">Work · Six selected cases</p>
+      <p class="eyebrow">Work · {cases.length} case studies</p>
       <h1 class="display">Proof, not<br /><em class="accent">promises.</em></h1>
       <div class="kpis">
         {cases.filter((c) => c.metric !== 'Meta').slice(0, 3).map((c) => <a href={`/work/${c.slug}`}><span class="num">{c.metric}</span><span class="label">{c.brand} · {c.label}</span></a>)}
@@ -22,7 +23,7 @@ const count = (s: string) => (s === 'All' ? cases.length : cases.filter((c) => c
     <div class="container" style="padding-block:72px 144px">
       <div class="controls">
         <div role="group" aria-label="Filter by sector" class="chips">
-          {sectors.map((s, i) => <button type="button" aria-pressed={i === 0 ? 'true' : 'false'} data-filter={s}>{s}{' '}<span>{count(s)}</span></button>)}
+          {groups.map((g, i) => <button type="button" aria-pressed={i === 0 ? 'true' : 'false'} data-filter={g}>{g}{' '}<span>{count(g)}</span></button>)}
         </div>
         <div role="group" aria-label="Layout" class="views">
           <button type="button" aria-pressed="true" data-view="grid">Grid</button>
@@ -32,7 +33,7 @@ const count = (s: string) => (s === 'All' ? cases.length : cases.filter((c) => c
 
       <div class="bento" data-grid>
         {cases.map((c, i) => { const [span, ratio, size] = SPAN[i % SPAN.length]; return (
-          <a href={`/work/${c.slug}`} class={`wcard s${span}`} data-sector={c.sector}>
+          <a href={`/work/${c.slug}`} class={`wcard s${span}`} data-sector={c.group}>
             <div class="wcard__media"><Cover brand={c.brand} cat={c.sector} {...c.cover} ratio={ratio} size={size} square /></div>
             <div class="wcard__meta">
               <div><span class="serif wcard__brand">{c.brand}</span><span class="body" style="display:block;margin-top:6px">{c.label}</span></div>
@@ -44,11 +45,11 @@ const count = (s: string) => (s === 'All' ? cases.length : cases.filter((c) => c
 
       <div class="index" data-index hidden>
         <div class="irow head label"><span>No.</span><span>Client</span><span>Sector</span><span>Line item</span><span>Result</span></div>
-        {cases.map((c, i) => <a href={`/work/${c.slug}`} class="irow" data-sector={c.sector}><span class="label">0{i + 1}</span><span class="serif ibrand">{c.brand}</span><span class="hide">{c.sector}</span><span class="hide">{c.label}</span><span class="num hide ires">{c.metric}{' '}<span class="arrow">→</span></span></a>)}
+        {cases.map((c, i) => <a href={`/work/${c.slug}`} class="irow" data-sector={c.group}><span class="label">{pad(i + 1)}</span><span class="serif ibrand">{c.brand}</span><span class="hide">{c.sector}</span><span class="hide">{c.label}</span><span class="num hide ires">{c.metric}{' '}<span class="arrow">→</span></span></a>)}
       </div>
 
       <a href="/contact" class="wcard" style="display:block;margin-top:144px">
-        <div class="wcard__media"><Cover brand="Your brand, next." cat="Case 07 · not yet written" motif="mark" tone="ink" letter="?" ratio="2460/1000" size="l" square /></div>
+        <div class="wcard__media"><Cover brand="Your brand, next." cat={`Case ${pad(cases.length + 1)} · not yet written`} motif="mark" tone="ink" letter="?" ratio="2460/1000" size="l" square /></div>
         <div class="row-between" style="align-items:center;margin-top:24px"><span class="serif" style="font-size:clamp(28px,3vw,40px)">Not the biggest agency. The best one for the brands we take on.</span><span class="btn btn--dark">Book a growth session <span class="arrow">→</span></span></div>
       </a>
     </div>
