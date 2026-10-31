@@ -4,10 +4,17 @@ import Hero from '../../components/Hero.astro';
 import Cover from '../../components/Cover.astro';
 import { cases, nextCase, type Case } from '../../data/cases';
 import { tracks, trackHref } from '../../data/services';
+import caseMedia from '../../data/case-media.json';
 export function getStaticPaths() { return cases.map((c) => ({ params: { slug: c.slug }, props: { c } })); }
 const { c } = Astro.props as { c: Case };
 const n = nextCase(c.slug);
 const story = c.sections ?? [];
+// Images, portrait and video copied from the Framer CMS by .github/workflows/import-case-media.yml.
+type Img = { src: string; w: number; h: number; alt: string };
+const media = ((caseMedia as Record<string, { images?: Img[]; portrait?: { src: string; alt: string }; video?: { src: string } }>)[c.slug]) ?? {};
+// With a video: the video full width, then two images. Without: up to four images.
+const gallery = (media.images ?? []).slice(0, media.video ? 2 : 4);
+const galleryAfter = story.length >= 2 ? 1 : story.length - 1;
 // Inline links in story text are written as [[text|url]].
 const parts = (t: string) => t.split(/(\[\[[^\]]+\]\])/g).filter(Boolean).map((p) => {
   const m = p.match(/^\[\[([^|]+)\|([^\]]+)\]\]$/);
@@ -50,7 +57,7 @@ const headline = c.metric === 'Meta' ? c.label : `${c.metric} ${c.label.toLowerC
   {story.length > 0 && (
     <section class="s-paper chapters">
       <div class="container">
-        {story.map((s, i) => (
+        {story.map((s, i) => (<Fragment>
           <div class="chapter split">
             <div class="narrow chapter__head"><p class="label">{String(i + 1).padStart(2, '0')}</p><h2 class="h3">{s.title}</h2></div>
             <div class="wide prose">
@@ -61,7 +68,13 @@ const headline = c.metric === 'Meta' ? c.label : `${c.metric} ${c.label.toLowerC
               )}
             </div>
           </div>
-        ))}
+          {i === galleryAfter && (gallery.length > 0 || media.video) && (
+            <div class:list={['gallery', `n${gallery.length}`]}>
+              {media.video && <figure class="g-item g-video"><video src={media.video.src} poster={gallery[0]?.src} controls playsinline preload="metadata"></video></figure>}
+              {gallery.map((g, gi) => <figure class="g-item"><img src={g.src} width={g.w} height={g.h} alt={g.alt} loading={gi === 0 ? 'eager' : 'lazy'} decoding="async" /></figure>)}
+            </div>
+          )}
+        </Fragment>))}
       </div>
     </section>
   )}
@@ -79,7 +92,7 @@ const headline = c.metric === 'Meta' ? c.label : `${c.metric} ${c.label.toLowerC
     <section class="s-ink section">
       <figure class="container" style="margin:0 auto">
         <blockquote class="serif quote" class:list={[{ long: c.quote.text.length > 220 }]}>“{c.quote.text}”</blockquote>
-        <figcaption class="label" style="margin-top:36px;padding-top:24px;border-top:1px solid var(--line-inv)">{c.quote.by}</figcaption>
+        <figcaption class="label qby">{media.portrait && <img src={media.portrait.src} width="56" height="56" alt={media.portrait.alt} loading="lazy" decoding="async" />}<span>{c.quote.by}</span></figcaption>
       </figure>
     </section>
   )}
@@ -136,6 +149,15 @@ const headline = c.metric === 'Meta' ? c.label : `${c.metric} ${c.label.toLowerC
   .why { margin: 0; font-size: clamp(28px, 3vw, 44px); line-height: 1.2; letter-spacing: -0.015em; }
   .quote { margin: 0; max-width: 1120px; font-size: clamp(38px, 5vw, 76px); line-height: 1.06; letter-spacing: -0.025em; }
   .quote.long { font-size: clamp(26px, 3vw, 44px); line-height: 1.2; }
+  .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding-bottom: 56px; }
+  .g-item { margin: 0; overflow: hidden; border-radius: 8px; background: var(--sand); aspect-ratio: 3 / 2; }
+  .gallery.n1 .g-item, .gallery.n3 .g-item:first-child { grid-column: 1 / -1; aspect-ratio: 16 / 8; }
+  .g-item img, .g-item video { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .g-video { grid-column: 1 / -1; aspect-ratio: 16 / 9; background: var(--ink); }
+  .g-video video { object-fit: contain; }
+  .qby { display: flex; align-items: center; gap: 16px; margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--line-inv); }
+  .qby img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex: none; }
+  @media (max-width: 700px) { .gallery { grid-template-columns: 1fr; } .gallery .g-item { grid-column: auto; aspect-ratio: 4 / 3; } }
   .cta { align-items: center; margin-top: 40px; padding: 32px 36px; border-radius: 8px; border: 1px solid rgba(20, 20, 20, 0.18); }
   @media (max-width: 700px) { .kstats > div + div { padding-left: 0; border-left: 0; } }
 </style>
