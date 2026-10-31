@@ -7,8 +7,15 @@ import { tracks, trackHref } from '../../data/services';
 export function getStaticPaths() { return cases.map((c) => ({ params: { slug: c.slug }, props: { c } })); }
 const { c } = Astro.props as { c: Case };
 const n = nextCase(c.slug);
+const story = c.sections ?? [];
+// Inline links in story text are written as [[text|url]].
+const parts = (t: string) => t.split(/(\[\[[^\]]+\]\])/g).filter(Boolean).map((p) => {
+  const m = p.match(/^\[\[([^|]+)\|([^\]]+)\]\]$/);
+  return m ? { text: m[1], href: m[2] } : { text: p, href: '' };
+});
+const headline = c.metric === 'Meta' ? c.label : `${c.metric} ${c.label.toLowerCase()}`;
 ---
-<Base title={`${c.brand}: ${c.metric === 'Meta' ? c.label : c.metric + ' ' + c.label.toLowerCase()}`} description={`${c.statement} ${c.context}`}>
+<Base title={`${c.brand}: ${headline}`} description={`${c.statement} ${c.context}`}>
   <Hero crumbs={[{ href: '/', label: 'Home' }, { href: '/work', label: 'Work' }, { label: c.brand }]} pad="240px">
     <div class="row-between" style="margin-top:72px;gap:40px 80px">
       <div style="min-width:0"><p class="eyebrow">Case study · {c.sector}</p><h1 class="display" style="font-size:clamp(60px,9.6vw,156px)">{c.brand}</h1></div>
@@ -19,38 +26,73 @@ const n = nextCase(c.slug);
 
   <section class="s-paper section">
     <div class="container split">
-      <p class="narrow eyebrow" style="flex-basis:220px">The result</p>
+      <p class="narrow eyebrow" style="flex-basis:220px">{story.length ? 'At a glance' : 'The result'}</p>
       <div class="wide">
         <p class="display" style="font-size:clamp(40px,5.4vw,84px);line-height:1;letter-spacing:-0.03em">{c.statement}</p>
-        <p class="lead" style="margin-top:32px">{c.context}</p>
+        <p class="lead" style="margin-top:32px">{c.intro ?? c.context}</p>
+        {c.stats && (
+          <dl class="kstats">
+            {c.stats.map((s) => <div><dt class="num">{s.value}</dt><dd class="label">{s.label}</dd></div>)}
+          </dl>
+        )}
         <dl class="facts">
           <div><dt class="label">Client</dt><dd class="serif">{c.brand}</dd></div>
           <div><dt class="label">Sector</dt><dd class="serif">{c.sector}</dd></div>
-          <div><dt class="label">Result</dt><dd class="serif">{c.resultShort}</dd></div>
+          {c.year ? <div><dt class="label">Year</dt><dd class="serif">{c.year}</dd></div> : <div><dt class="label">Result</dt><dd class="serif">{c.resultShort}</dd></div>}
+          {c.markets && c.markets.length > 0 && <div class="wide-fact"><dt class="label">Markets</dt><dd>{c.markets.join(' · ')}</dd></div>}
+          {c.services && c.services.length > 0 && <div class="wide-fact"><dt class="label">Services</dt><dd>{c.services.join(' · ')}</dd></div>}
         </dl>
         {c.link && <a href={c.link.href} class="btn btn--dark" style="margin-top:40px">{c.link.label}</a>}
       </div>
     </div>
   </section>
 
+  {story.length > 0 && (
+    <section class="s-paper chapters">
+      <div class="container">
+        {story.map((s, i) => (
+          <div class="chapter split">
+            <div class="narrow chapter__head"><p class="label">{String(i + 1).padStart(2, '0')}</p><h2 class="h3">{s.title}</h2></div>
+            <div class="wide prose">
+              {s.blocks.map((b) =>
+                typeof b === 'string' ? <p>{parts(b).map((p) => (p.href ? <a href={p.href} target="_blank" rel="noopener">{p.text}</a> : p.text))}</p>
+                : Array.isArray(b) ? <ul class:list={[{ results: s.title === 'The results' }]}>{b.map((li) => <li>{li}</li>)}</ul>
+                : <h3 class="sub">{b.h}</h3>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {c.why && (
+    <section class="s-sand section">
+      <div class="container split">
+        <p class="narrow eyebrow" style="flex-basis:220px">Why it worked</p>
+        <p class="wide serif why">{c.why}</p>
+      </div>
+    </section>
+  )}
+
   {c.quote && (
     <section class="s-ink section">
       <figure class="container" style="margin:0 auto">
-        <blockquote class="serif" style="margin:0;max-width:1120px;font-size:clamp(38px,5vw,76px);line-height:1.06;letter-spacing:-0.025em">“{c.quote.text}”</blockquote>
+        <blockquote class="serif quote" class:list={[{ long: c.quote.text.length > 220 }]}>“{c.quote.text}”</blockquote>
         <figcaption class="label" style="margin-top:36px;padding-top:24px;border-top:1px solid var(--line-inv)">{c.quote.by}</figcaption>
       </figure>
     </section>
   )}
 
-  <section class="s-sand section">
+  <section class="s-sand section" style={c.why && !c.quote ? 'border-top:1px solid var(--line)' : undefined}>
     <div class="container">
       <p class="eyebrow">How we work with brands like this</p>
       <h2 class="h2" style="max-width:980px">Three tracks. One system. Measured on profit.</h2>
       <div class="grid" style="--min:280px;margin-top:64px">
         {tracks.map((t, i) => <a href={trackHref(t.id)} class:list={['card card--stack', i === 2 ? 'card--ink on-ink' : 'card--paper']}><span class="label">{t.num}</span><span><span class="h3" style="display:block">{t.name}</span><span class="body" style="display:block;margin-top:8px">{t.line}</span></span></a>)}
       </div>
-      <div class="row-between story">
-        <p class="serif" style="margin:0;max-width:720px;font-size:26px;line-height:1.25">Want the full story? On a growth session we walk you through what changed, in what order, and why.</p>
+      <div class="row-between cta">
+        <p class="serif" style="margin:0;max-width:720px;font-size:26px;line-height:1.25">{story.length ? 'Want the same for your brand? On a growth session we show you where the profit is, and what we would fix first.' : 'Want the full story? On a growth session we walk you through what changed, in what order, and why.'}</p>
         <a href="/contact" class="btn btn--dark">Book a growth session</a>
       </div>
     </div>
@@ -67,7 +109,33 @@ const n = nextCase(c.slug);
   </section>
 </Base>
 <style>
+  .kstats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 0; margin: 56px 0 0; border-top: 1px solid var(--line); }
+  .kstats > div { padding: 28px 24px 8px 0; }
+  .kstats > div + div { padding-left: 24px; border-left: 1px solid var(--line); }
+  .kstats dt { font-size: clamp(48px, 5vw, 72px); }
+  .kstats dd { margin: 14px 0 0; }
   .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 24px; margin: 56px 0 0; padding-top: 28px; border-top: 1px solid var(--line); }
   .facts dd { margin: 8px 0 0; font-size: 24px; }
-  .story { align-items: center; margin-top: 40px; padding: 32px 36px; border-radius: 8px; border: 1px solid rgba(20, 20, 20, 0.18); }
+  .facts .wide-fact { grid-column: 1 / -1; }
+  .facts .wide-fact dd { font-size: 17px; line-height: 1.6; color: var(--slate); }
+  .chapters { padding-bottom: clamp(72px, 8vw, 120px); }
+  .chapter { padding-block: 56px; border-top: 1px solid var(--line); }
+  .chapter__head .h3 { margin-top: 12px; }
+  @media (min-width: 900px) { .chapter__head { position: sticky; top: 24px; align-self: flex-start; } }
+  .prose { max-width: 760px; }
+  .prose p { margin: 0; font-size: 18px; line-height: 1.7; color: var(--slate); }
+  .prose p + p, .prose ul + p, .prose p + ul, .prose ul + ul { margin-top: 20px; }
+  .prose a { color: var(--ink); }
+  .prose .sub { margin: 36px 0 14px; font-family: var(--serif); font-weight: 500; font-size: 24px; }
+  .prose .sub:first-child { margin-top: 0; }
+  .prose ul { list-style: none; margin: 20px 0 0; padding: 0; border-top: 1px solid var(--line); }
+  .prose li { position: relative; padding: 14px 0 14px 28px; border-bottom: 1px solid var(--line); font-size: 17px; line-height: 1.55; color: var(--ink); }
+  .prose li::before { content: ''; position: absolute; left: 4px; top: 24px; width: 10px; height: 1.5px; background: var(--stone); }
+  .prose ul.results li { padding-block: 18px; font-family: var(--serif); font-size: clamp(22px, 2vw, 28px); line-height: 1.25; }
+  .prose ul.results li::before { top: 32px; background: var(--coral); }
+  .why { margin: 0; font-size: clamp(28px, 3vw, 44px); line-height: 1.2; letter-spacing: -0.015em; }
+  .quote { margin: 0; max-width: 1120px; font-size: clamp(38px, 5vw, 76px); line-height: 1.06; letter-spacing: -0.025em; }
+  .quote.long { font-size: clamp(26px, 3vw, 44px); line-height: 1.2; }
+  .cta { align-items: center; margin-top: 40px; padding: 32px 36px; border-radius: 8px; border: 1px solid rgba(20, 20, 20, 0.18); }
+  @media (max-width: 700px) { .kstats > div + div { padding-left: 0; border-left: 0; } }
 </style>
