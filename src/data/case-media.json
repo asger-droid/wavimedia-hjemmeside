@@ -1,1 +1,358 @@
-{}
+{
+ "build-a-bear": {
+  "images": [
+   {
+    "src": "/cases/build-a-bear/1.webp",
+    "w": 851,
+    "h": 315,
+    "alt": "Build-A-Bear campaign image"
+   },
+   {
+    "src": "/cases/build-a-bear/2.webp",
+    "w": 1080,
+    "h": 1080,
+    "alt": "Build-A-Bear campaign image"
+   },
+   {
+    "src": "/cases/build-a-bear/3.webp",
+    "w": 1080,
+    "h": 1080,
+    "alt": "Build-A-Bear campaign image"
+   },
+   {
+    "src": "/cases/build-a-bear/4.webp",
+    "w": 1080,
+    "h": 1080,
+    "alt": "Build-A-Bear campaign image"
+   }
+  ],
+  "portrait": {
+   "src": "/cases/build-a-bear/portrait.webp",
+   "alt": "Ole Martini Mortensen"
+  }
+ },
+ "lulu-copenhagen": {
+  "images": [
+   {
+    "src": "/cases/lulu-copenhagen/1.webp",
+    "w": 820,
+    "h": 312,
+    "alt": "LULU Copenhagen campaign image"
+   },
+   {
+    "src": "/cases/lulu-copenhagen/2.webp",
+    "w": 1440,
+    "h": 1800,
+    "alt": "LULU Copenhagen campaign image"
+   },
+   {
+    "src": "/cases/lulu-copenhagen/3.webp",
+    "w": 1440,
+    "h": 1799,
+    "alt": "LULU Copenhagen campaign image"
+   },
+   {
+    "src": "/cases/lulu-copenhagen/4.webp",
+    "w": 1080,
+    "h": 1350,
+    "alt": "LULU Copenhagen campaign image"
+   },
+   {
+    "src": "/cases/lulu-copenhagen/5.webp",
+    "w": 1080,
+    "h": 1350,
+    "alt": "LULU Copenhagen campaign image"
+   }
+  ],
+  "portrait": {
+   "src": "/cases/lulu-copenhagen/portrait.webp",
+   "alt": "Rasmus Gottliebsen"
+  }
+ },
+ "blox-fruits": {
+  "images": [
+   {
+    "src": "/cases/blox-fruits/1.webp",
+    "w": 1800,
+    "h": 963,
+    "alt": "Blox Fruits campaign image"
+   },
+   {
+    "src": "/cases/blox-fruits/2.webp",
+    "w": 1800,
+    "h": 962,
+    "alt": "Blox Fruits campaign image"
+   },
+   {
+    "src": "/cases/blox-fruits/3.webp",
+    "w": 1800,
+    "h": 957,
+    "alt": "Blox Fruits campaign image"
+   },
+   {
+    "src": "/cases/blox-fruits/4.webp",
+    "w": 1800,
+    "h": 961,
+    "alt": "Blox Fruits campaign image"
+   }
+  ]
+ },
+ "mp-denmark": {
+  "images": [
+   {
+    "src": "/cases/mp-denmark/1.webp",
+    "w": 1080,
+    "h": 1080,
+    "alt": "MP Denmark campaign image"
+   },
+   {
+    "src": "/cases/mp-denmark/2.webp",
+    "w": 820,
+    "h": 360,
+    "alt": "MP Denmark campaign image"
+   },
+   {
+    "src": "/cases/mp-denmark/3.webp",
+    "w": 800,
+    "h": 800,
+    "alt": "MP Denmark campaign image"
+   },
+   {
+    "src": "/cases/mp-denmark/4.webp",
+    "w": 800,
+    "h": 800,
+    "alt": "MP Denmark campaign image"
+   }
+  ]
+ },
+ "drommeland": {
+  "images": [
+   {
+    "src": "/cases/drommeland/1.webp",
+    "w": 1433,
+    "h": 769,
+    "alt": "Drømmeland campaign image"
+   },
+   {
+    "src": "/cases/drommeland/2.webp",
+    "w": 1439,
+    "h": 810,
+    "alt": "Drømmeland campaign image"
+   },
+   {
+    "src": "/cases/drommeland/3.webp",
+    "w": 1438,
+    "h": 765,
+    "alt": "Drømmeland campaign image"
+   }
+  ]
+ },
+ "drink-mashup": {
+  "images": [
+   {
+    "src": "/cases/drink-mashup/1.webp",
+    "w": 1080,
+    "h": 1080,
+    "alt": "Drink Mashup campaign image"
+   },
+   {
+    "src": "/cases/drink-mashup/2.webp",
+    "w": 1080,
+    "h": 1080,
+    "alt": "Drink Mashup campaign image"
+   },
+   {
+    "src": "/cases/drink-mashup/3.webp",
+    "w": 1080,
+    "h": 1080,
+    "alt": "Drink Mashup campaign image"
+   }
+  ],
+  "portrait": {
+   "src": "/cases/drink-mashup/portrait.webp",
+   "alt": "Katrine Kromann"
+  }
+ },
+ "dbu": {
+  "images": [
+   {
+    "src": "/cases/dbu/1.webp",
+    "w": 1423,
+    "h": 809,
+    "alt": "DBU campaign image"
+   },
+   {
+    "src": "/cases/dbu/2.webp",
+    "w": 962,
+    "h": 267,
+    "alt": "DBU campaign image"
+   },
+   {
+    "src": "/cases/dbu/3.webp",
+    "w": 928,
+    "h": 527,
+    "alt": "DBU campaign image"
+   }
+  ],
+  "portrait": {
+   "src": "/cases/dbu/portrait.webp",
+   "alt": "Katrine Kromann"
+  },
+  "video": {
+   "src": "/cases/dbu/video.mp4"
+  }
+ },
+ "sos-international": {
+  "images": [
+   {
+    "src": "/cases/sos-international/1.webp",
+    "w": 1800,
+    "h": 1013,
+    "alt": "SOS International campaign image"
+   },
+   {
+    "src": "/cases/sos-international/2.webp",
+    "w": 274,
+    "h": 222,
+    "alt": "SOS International campaign image"
+   },
+   {
+    "src": "/cases/sos-international/3.webp",
+    "w": 274,
+    "h": 189,
+    "alt": "SOS International campaign image"
+   },
+   {
+    "src": "/cases/sos-international/4.webp",
+    "w": 273,
+    "h": 151,
+    "alt": "SOS International campaign image"
+   },
+   {
+    "src": "/cases/sos-international/5.webp",
+    "w": 254,
+    "h": 179,
+    "alt": "SOS International campaign image"
+   }
+  ],
+  "portrait": {
+   "src": "/cases/sos-international/portrait.webp",
+   "alt": "Katrine Kromann"
+  }
+ },
+ "hjernesagen": {
+  "images": [
+   {
+    "src": "/cases/hjernesagen/1.webp",
+    "w": 1440,
+    "h": 600,
+    "alt": "Hjernesagen campaign image"
+   }
+  ],
+  "portrait": {
+   "src": "/cases/hjernesagen/portrait.webp",
+   "alt": "Louise Juhl"
+  }
+ },
+ "stryhns": {
+  "images": [
+   {
+    "src": "/cases/stryhns/1.webp",
+    "w": 960,
+    "h": 540,
+    "alt": "Stryhns Gruppen campaign image"
+   },
+   {
+    "src": "/cases/stryhns/2.webp",
+    "w": 1800,
+    "h": 1800,
+    "alt": "Stryhns Gruppen campaign image"
+   },
+   {
+    "src": "/cases/stryhns/3.webp",
+    "w": 1800,
+    "h": 750,
+    "alt": "Stryhns Gruppen campaign image"
+   },
+   {
+    "src": "/cases/stryhns/4.webp",
+    "w": 629,
+    "h": 628,
+    "alt": "Stryhns Gruppen campaign image"
+   }
+  ],
+  "portrait": {
+   "src": "/cases/stryhns/portrait.webp",
+   "alt": "Brian Schøler"
+  },
+  "video": {
+   "src": "/cases/stryhns/video.mp4"
+  }
+ },
+ "plusled": {
+  "images": [
+   {
+    "src": "/cases/plusled/1.webp",
+    "w": 1702,
+    "h": 630,
+    "alt": "PlusLED campaign image"
+   },
+   {
+    "src": "/cases/plusled/2.webp",
+    "w": 480,
+    "h": 360,
+    "alt": "PlusLED campaign image"
+   },
+   {
+    "src": "/cases/plusled/3.webp",
+    "w": 720,
+    "h": 480,
+    "alt": "PlusLED campaign image"
+   },
+   {
+    "src": "/cases/plusled/4.webp",
+    "w": 720,
+    "h": 540,
+    "alt": "PlusLED campaign image"
+   }
+  ]
+ },
+ "gobabygo": {
+  "images": [
+   {
+    "src": "/cases/gobabygo/1.webp",
+    "w": 1080,
+    "h": 1350,
+    "alt": "GoBabyGo campaign image"
+   },
+   {
+    "src": "/cases/gobabygo/2.webp",
+    "w": 1080,
+    "h": 1350,
+    "alt": "GoBabyGo campaign image"
+   },
+   {
+    "src": "/cases/gobabygo/3.webp",
+    "w": 1079,
+    "h": 1079,
+    "alt": "GoBabyGo campaign image"
+   },
+   {
+    "src": "/cases/gobabygo/4.webp",
+    "w": 1080,
+    "h": 1080,
+    "alt": "GoBabyGo campaign image"
+   },
+   {
+    "src": "/cases/gobabygo/5.webp",
+    "w": 820,
+    "h": 312,
+    "alt": "GoBabyGo campaign image"
+   }
+  ],
+  "portrait": {
+   "src": "/cases/gobabygo/portrait.webp",
+   "alt": "Fie Aspöck Jonsen"
+  }
+ }
+}
