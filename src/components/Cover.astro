@@ -2,8 +2,8 @@
 /* Case cover as a data portrait: drawn from the client's real, published number. */
 import type { CoverData } from '../data/cases';
 import Wave from './Wave.astro';
-interface Props extends CoverData { brand: string; cat: string; ratio?: string; size?: 's' | 'm' | 'l'; square?: boolean }
-const { brand, cat, motif, tone, letter, v1 = 100, v2 = 300, v1Label = '', v2Label = '', l1 = '', l2 = '', n = 1, ratio = '4/3', size = 'm', square = false } = Astro.props;
+interface Props extends CoverData { brand: string; cat: string; ratio?: string; size?: 's' | 'm' | 'l'; square?: boolean; photo?: { src: string; w: number; h: number; alt: string; pos: string }; eager?: boolean }
+const { brand, cat, motif, tone, letter, v1 = 100, v2 = 300, v1Label = '', v2Label = '', l1 = '', l2 = '', n = 1, ratio = '4/3', size = 'm', square = false, photo, eager = false } = Astro.props;
 const T = {
   ink: { bg: 'var(--ink)', fg: 'var(--paper)', ghost: 'rgba(250,248,244,0.06)', sub: 'var(--stone)', bar: 'rgba(250,248,244,0.22)', accent: 'var(--coral)', mark: 'var(--coral)', edge: 'none' },
   sand: { bg: 'var(--sand)', fg: 'var(--ink)', ghost: 'rgba(20,20,20,0.06)', sub: 'var(--slate)', bar: 'rgba(20,20,20,0.16)', accent: 'var(--ink)', mark: 'var(--coral)', edge: 'none' },
@@ -16,6 +16,12 @@ const h1 = Math.round((v1 / mx) * 70) + '%', h2 = Math.round((v2 / mx) * 70) + '
 const cols = n <= 3 ? n : n <= 6 ? 3 : 4;
 const vars = `--bg:${T.bg};--fg:${T.fg};--ghost:${T.ghost};--sub:${T.sub};--bar:${T.bar};--accent:${T.accent};--edge:${T.edge};--ratio:${ratio};--radius:${square ? '0' : '8px'};--letter:${S[0]};--brand:${S[1]}`;
 ---
+{photo ? (
+<div class="cover cover--photo" style={vars}>
+  <img src={photo.src} width={photo.w} height={photo.h} alt={photo.alt || brand} loading={eager ? 'eager' : 'lazy'} decoding="async" style={`object-position:${photo.pos}`} />
+  <div class="cover__meta"><span class="cover__cat cover__chip"><span>{cat}</span><Wave width={22} height={9} weight={12} stroke="var(--coral)" /></span></div>
+</div>
+) : (
 <div class="cover" style={vars} role="img" aria-label={`${brand}${l2 ? ', ' + l2 : ''}`}>
   <span class="cover__letter" aria-hidden="true">{letter}</span>
   {motif === 'bars' && (
@@ -42,8 +48,13 @@ const vars = `--bg:${T.bg};--fg:${T.fg};--ghost:${T.ghost};--sub:${T.sub};--bar:
     {brand && <span class="cover__brand">{brand}</span>}
   </div>
 </div>
+)}
 
 <style>
+  .cover--photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .cover--photo .cover__meta { justify-content: flex-start; }
+  .cover__chip { align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; padding: 7px 12px; border-radius: 999px; background: rgba(250, 248, 244, 0.92); }
+  .cover--photo .cover__chip span { color: var(--ink); }
   .cover { position: relative; overflow: hidden; width: 100%; aspect-ratio: var(--ratio); border-radius: var(--radius); background: var(--bg); color: var(--fg); box-shadow: var(--edge); font-family: var(--sans); }
   .cover__letter { position: absolute; left: -2%; bottom: -30%; font-family: var(--serif); font-style: italic; font-size: var(--letter); line-height: 1; letter-spacing: -0.05em; color: var(--ghost); pointer-events: none; }
   .cover__bars { position: absolute; right: 7%; bottom: 14%; top: 16%; width: 38%; display: flex; align-items: flex-end; gap: 10%; }

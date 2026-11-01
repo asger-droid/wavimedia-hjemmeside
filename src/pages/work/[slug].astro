@@ -5,7 +5,7 @@ import Cover from '../../components/Cover.astro';
 import { cases, nextCase, type Case } from '../../data/cases';
 import { tracks, trackHref } from '../../data/services';
 import caseMedia from '../../data/case-media.json';
-import { galleryPick } from '../../data/case-gallery';
+import { galleryPick, coverPick, coverPhoto } from '../../data/case-gallery';
 export function getStaticPaths() { return cases.map((c) => ({ params: { slug: c.slug }, props: { c } })); }
 const { c } = Astro.props as { c: Case };
 const n = nextCase(c.slug);
@@ -15,7 +15,10 @@ type Img = { src: string; w: number; h: number; alt: string };
 const media = ((caseMedia as Record<string, { images?: Img[]; portrait?: { src: string; alt: string }; video?: { src: string } }>)[c.slug]) ?? {};
 // Hand-picked images (src/data/case-gallery.ts), shown in one row at a shared height, uncropped.
 const all = media.images ?? [];
-const gallery = (galleryPick[c.slug] ? galleryPick[c.slug].map((n) => all[n - 1]).filter(Boolean) : all.slice(0, 3)) as Img[];
+// The cover photo already sits at the top of the page, so the gallery leaves it out.
+const cover = coverPhoto(c.slug);
+const coverN = coverPick[c.slug]?.n;
+const gallery = (galleryPick[c.slug] ? galleryPick[c.slug].filter((k) => k !== coverN).map((k) => all[k - 1]).filter(Boolean) : all.filter((_, k) => k + 1 !== coverN).slice(0, 3)) as Img[];
 // With a video, the first pick becomes its poster and the rest sit below it.
 const poster = media.video ? gallery[0] : undefined;
 const row = media.video ? gallery.slice(1) : gallery;
@@ -34,7 +37,7 @@ const headline = c.metric === 'Meta' ? c.label : `${c.metric} ${c.label.toLowerC
       <div><p class="num accent" style="margin:0;font-size:clamp(88px,11vw,180px);font-weight:400;line-height:0.82">{c.metric}</p><p class="label" style="margin-top:18px">{c.label}</p></div>
     </div>
   </Hero>
-  <section class="band" style="--band:50%"><div class="container overlap" style="margin-top:-180px"><Cover brand={c.brand} cat={c.sector} {...c.cover} ratio="16/7" size="l" /></div></section>
+  <section class="band" style="--band:50%"><div class="container overlap" style="margin-top:-180px"><Cover brand={c.brand} cat={c.sector} {...c.cover} ratio="16/7" size="l" photo={cover} eager /></div></section>
 
   <section class="s-paper section">
     <div class="container split">
@@ -120,7 +123,7 @@ const headline = c.metric === 'Meta' ? c.label : `${c.metric} ${c.label.toLowerC
     <div class="container">
       <p class="eyebrow">Next case</p>
       <a href={`/work/${n.slug}`} style="display:block;text-decoration:none">
-        <Cover brand={n.brand} cat={n.sector} {...n.cover} ratio="16/6" size="l" />
+        <Cover brand={n.brand} cat={n.sector} {...n.cover} ratio="16/6" size="l" photo={coverPhoto(n.slug)} />
         <span class="row-between" style="align-items:baseline;margin-top:22px"><span class="serif" style="font-size:36px">{n.brand}</span><span class="num" style="font-size:44px">{n.metric}{' '}<span class="arrow">→</span></span></span>
       </a>
     </div>
