@@ -157,8 +157,10 @@ const tools = [
   @keyframes draw { to { stroke-dashoffset: 0; } }
   .hero__inner { position: relative; padding-top: 40px; }
   .hero__strip { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; padding-bottom: 20px; border-bottom: 1px solid var(--line-inv); }
-  .hero__h1 { padding-top: clamp(72px, 9vw, 140px); }
-  .hero__row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 40px 80px; align-items: end; margin-top: 64px; }
+  /* Sized to the screen's width AND height: "Marketing for brands" always fits on one line on desktop
+     (the line is ~8.9x the font size wide), and the lead text and buttons stay above the fold on laptops. */
+  .hero__h1 { padding-top: clamp(40px, 9vh, 140px); font-size: clamp(52px, min(calc((min(100vw, 1360px) - 80px) / 8.9), 17vh), 168px); }
+  .hero__row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 40px 80px; align-items: end; margin-top: clamp(32px, 6vh, 64px); }
   .hero__ctas { display: flex; flex-wrap: wrap; gap: 12px; }
   .hero__meta { display: inline-flex; align-items: center; gap: 12px; margin-top: 20px; font-size: 15px; text-decoration: none; }
   .hero__pill { display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border-radius: 999px; border: 1px solid rgba(250, 248, 244, 0.3); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
