@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Cover from '../../components/Cover.astro';
 import { cases, groups } from '../../data/cases';
+import { coverPhoto } from '../../data/case-gallery';
 // Bento rhythm: 7/5, then 4/4/4, then full width. Ratios keep every row the same height.
 const SPAN = [[7, '1416/1000', 'l'], [5, '1/1', 'm'], [4, '790/1000', 'm'], [4, '790/1000', 'm'], [4, '790/1000', 'm'], [12, '2460/1000', 'l']] as const;
 const count = (g: string) => (g === 'All' ? cases.length : cases.filter((c) => c.group === g).length);
@@ -34,7 +35,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
       <div class="bento" data-grid>
         {cases.map((c, i) => { const [span, ratio, size] = SPAN[i % SPAN.length]; return (
           <a href={`/work/${c.slug}`} class={`wcard s${span}`} data-sector={c.group}>
-            <div class="wcard__media"><Cover brand={c.brand} cat={c.sector} {...c.cover} ratio={ratio} size={size} square /></div>
+            <div class="wcard__media"><Cover brand={c.brand} cat={c.sector} {...c.cover} ratio={ratio} size={size} square photo={coverPhoto(c.slug)} eager={i < 2} /></div>
             <div class="wcard__meta">
               <div><span class="serif wcard__brand">{c.brand}</span><span class="body" style="display:block;margin-top:6px">{c.label}</span></div>
               <div style="text-align:right"><span class="num" style="display:block;font-size:44px">{c.metric}</span><span style="font-weight:600">Read case <span class="arrow">→</span></span></div>

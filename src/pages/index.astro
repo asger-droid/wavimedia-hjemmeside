@@ -6,6 +6,7 @@ import TrackTabs from '../components/TrackTabs.astro';
 import Quotes from '../components/Quotes.astro';
 import { site } from '../data/site';
 import { featuredCases } from '../data/cases';
+import { coverPhoto } from '../data/case-gallery';
 const framework = [
   ['The cost of a first order', 'Most brands scale spend before the maths holds up, and quietly pay more for every order than the business can carry. We get the unit economics right first, then pour fuel on it.'],
   ['What happens after the first sale', 'Acquisition cost never hits zero. What a customer is worth after the first order can always grow. We make the second and third purchase the default, not a happy accident.'],
@@ -67,7 +68,7 @@ const tools = [
           <thead><tr class="label"><th scope="col">No.</th><th scope="col">Client</th><th scope="col">Sector</th><th scope="col">Line item</th><th scope="col">Result</th></tr></thead>
           <tbody>
             {featuredCases.map((c, i) => (
-              <tr>
+              <tr data-preview={coverPhoto(c.slug)?.src}>
                 <td class="label">0{i + 1}</td>
                 <td class="serif ledger__client"><a href={`/work/${c.slug}`} class="t-link">{c.brand}</a></td>
                 <td>{c.sector}</td><td>{c.label}</td>
@@ -76,6 +77,7 @@ const tools = [
             ))}
           </tbody>
         </table>
+        <img class="ledger__preview" alt="" aria-hidden="true" data-ledger-preview />
       </div>
     </div>
   </section>
@@ -134,6 +136,20 @@ const tools = [
   </section>
 </Base>
 
+<script>
+  // A case photo follows the cursor while hovering a ledger row. Pointer devices only; the table stays as it is on touch.
+  const img = document.querySelector<HTMLImageElement>('[data-ledger-preview]');
+  if (img && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll<HTMLTableRowElement>('.ledger tr[data-preview]').forEach((row) => {
+      row.addEventListener('mouseenter', () => { img.src = row.dataset.preview!; img.classList.add('on'); });
+      row.addEventListener('mouseleave', () => img.classList.remove('on'));
+      row.addEventListener('click', (e) => { if (!(e.target as HTMLElement).closest('a')) row.querySelector<HTMLAnchorElement>('a')?.click(); });
+      row.addEventListener('mousemove', (e) => { img.style.transform = `translate(${e.clientX + 28}px, ${e.clientY - 120}px)${reduce ? '' : ' rotate(-2deg)'}`; });
+    });
+  }
+</script>
+
 <style>
   .hero { position: relative; overflow: hidden; }
   .hero__wave { position: absolute; left: -4%; bottom: 40px; width: 108%; height: 420px; pointer-events: none; }
@@ -168,6 +184,9 @@ const tools = [
   .ledger__client { font-size: 30px; color: var(--paper) !important; }
   .ledger__client a { text-decoration: none; }
   .ledger__result { font-size: 56px; color: var(--paper) !important; }
+  .ledger__preview { position: fixed; left: 0; top: 0; z-index: 30; width: 260px; height: 200px; object-fit: cover; border-radius: 8px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+  .ledger__preview.on { opacity: 1; }
+  .ledger tr[data-preview] { cursor: pointer; }
   .ledger__pill { min-height: 44px; font-size: 15px; font-family: var(--sans); letter-spacing: 0; }
   .sticky { position: sticky; top: 24px; }
   .rhythm { display: flex; gap: 14px; margin: 40px 0; }
