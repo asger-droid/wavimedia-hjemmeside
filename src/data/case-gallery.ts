@@ -20,7 +20,7 @@ export const galleryPick: Record<string, number[]> = {
 
 // Cover photo per case (1-based image number), used on the Work cards, the case page top and "Next case".
 // pos sets which part of the photo stays in frame when it is cropped. Cases not listed keep their data portrait
-// (DBU has no photo that works as a cover, Blox Fruits' logo art doesn't survive the crop; Herskind and Fashion By Strand have no images).
+// (DBU has no photo that works as a cover, Blox Fruits' logo art doesn't survive the crop, Fashion By Strand has no images).
 export const coverPick: Record<string, { n: number; pos?: string }> = {
   'lulu-copenhagen': { n: 2, pos: 'center 55%' },
   'mp-denmark': { n: 4, pos: 'center 60%' },
@@ -34,8 +34,15 @@ export const coverPick: Record<string, { n: number; pos?: string }> = {
   'hjernesagen': { n: 1, pos: 'center 50%' }
 };
 
+// Covers supplied by hand, not imported from Framer. They live outside public/cases/, so a re-run of the
+// import workflow (which rewrites public/cases/ and case-media.json) never touches them.
+export const manualCovers: Record<string, { src: string; w: number; h: number; alt: string; pos: string }> = {
+  herskind: { src: '/herskind.webp', w: 1054, h: 1317, alt: 'Herskind campaign: model wearing a Herskind earring', pos: 'center 32%' }
+};
+
 type Media = { images?: { src: string; w: number; h: number; alt: string }[] };
 export const coverPhoto = (slug: string) => {
+  if (manualCovers[slug]) return manualCovers[slug];
   const pick = coverPick[slug];
   const img = pick && (caseMedia as Record<string, Media>)[slug]?.images?.[pick.n - 1];
   return img ? { ...img, pos: pick.pos ?? 'center' } : undefined;
