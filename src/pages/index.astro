@@ -153,8 +153,10 @@ const tools = [
 <style>
   .hero { position: relative; overflow: hidden; }
   .hero__wave { position: absolute; left: -4%; bottom: 40px; width: 108%; height: 420px; pointer-events: none; }
-  .hero__wave path { stroke-dasharray: 100; stroke-dashoffset: 100; animation: draw 2.6s cubic-bezier(.65, 0, .35, 1) .3s forwards; }
-  @keyframes draw { to { stroke-dashoffset: 0; } }
+  /* The wave draws itself in. Hidden until it starts, and the dash pattern leaves no stray round end-caps behind. */
+  .hero__wave path { stroke-dasharray: 100 200; stroke-dashoffset: 100; opacity: 0; animation: draw 2.6s cubic-bezier(.65, 0, .35, 1) .3s forwards; }
+  @keyframes draw { from { opacity: 1; stroke-dashoffset: 100; } to { opacity: 1; stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce) { .hero__wave path { opacity: 1; stroke-dashoffset: 0; } }
   .hero__inner { position: relative; padding-top: 40px; }
   .hero__strip { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; padding-bottom: 20px; border-bottom: 1px solid var(--line-inv); }
   /* Sized to the screen's width AND height: "Marketing for brands" always fits on one line on desktop
@@ -169,6 +171,18 @@ const tools = [
   .stats > div + div { padding-left: 32px; border-left: 1px solid var(--line-inv); }
   .stats dt { font-size: 72px; }
   .stats dd { margin: 14px 0 0; }
+  /* Desktop: the hero fills exactly one screen below the nav (89px), with the key figures pinned to its bottom,
+     so they are always fully visible instead of being cut off by the edge of the screen. */
+  /* Narrower or very short screens skip this and flow naturally, which puts the figures fully below the fold. */
+  @media (min-width: 1100px) and (min-height: 640px) {
+    .hero__inner { display: flex; flex-direction: column; min-height: calc(100svh - 89px); padding-top: clamp(20px, 3.5vh, 40px); padding-bottom: clamp(16px, 3vh, 40px); }
+    /* Spare height on tall screens is shared above the headline and above the figures, so nothing floats. */
+    .hero__h1 { padding-top: clamp(32px, 7vh, 140px); margin-top: auto; }
+    .hero__row { margin-top: clamp(28px, 5vh, 64px); margin-bottom: clamp(32px, 5vh, 72px); }
+    .hero .stats { margin-top: auto; }
+    .hero .stats > div { padding-top: clamp(18px, 2.6vh, 32px); padding-bottom: clamp(8px, 1.6vh, 20px); }
+    .hero .stats dt { font-size: clamp(44px, 6.4vh, 72px); }
+  }
   .marquee { overflow: hidden; border-bottom: 1px solid var(--line); }
   .marquee__track { display: flex; align-items: center; gap: 88px; width: max-content; padding: 36px 44px; animation: marquee 80s linear infinite; }
   .marquee__track img { flex: none; }
