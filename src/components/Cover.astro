@@ -71,4 +71,6 @@ const vars = `--bg:${T.bg};--fg:${T.fg};--ghost:${T.ghost};--sub:${T.sub};--bar:
   .cover__meta { position: absolute; inset: 0; padding: clamp(18px, 2.4vw, 30px); display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; }
   .cover__cat { display: flex; justify-content: space-between; gap: 12px; text-transform: uppercase; letter-spacing: 0.16em !important; }
   .cover .cover__brand { max-width: 52%; font-family: var(--serif); font-weight: 500; font-size: var(--brand); line-height: 1; letter-spacing: -0.015em; color: var(--fg); }
+  /* Narrow screens: the small note would collide with the brand name, and the arrow needs room below the wave mark. */
+  @media (max-width: 600px) { .cover__note { display: none; } .cover__arrow { top: 34%; width: 36%; height: 42%; } .cover .cover__brand { font-size: min(var(--brand), 7.6vw); } }
 </style>

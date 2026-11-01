@@ -30,12 +30,15 @@ const parts = (t: string) => t.split(/(\[\[[^\]]+\]\])/g).filter(Boolean).map((p
   return m ? { text: m[1], href: m[2] } : { text: p, href: '' };
 });
 const headline = c.metric === 'Meta' ? c.label : `${c.metric} ${c.label.toLowerCase()}`;
+// Brand and number share one row on tablet and desktop, so both scale down as they get longer.
+const bsize = c.brand.length <= 10 ? 'clamp(56px, 8.4vw, 144px)' : c.brand.length <= 15 ? 'clamp(52px, 6.4vw, 112px)' : 'clamp(48px, 5.4vw, 96px)';
+const msize = c.metric.length <= 5 ? 'clamp(72px, 9vw, 160px)' : 'clamp(56px, 6.2vw, 112px)';
 ---
 <Base title={`${c.brand}: ${headline}`} description={`${c.statement} ${c.context}`}>
   <Hero crumbs={[{ href: '/', label: 'Home' }, { href: '/work', label: 'Work' }, { label: c.brand }]} pad="240px">
-    <div class="row-between" style="margin-top:72px;gap:40px 80px">
-      <div style="min-width:0"><p class="eyebrow">Case study · {c.sector}</p><h1 class="display" style="font-size:clamp(60px,9.6vw,156px)">{c.brand}</h1></div>
-      <div><p class="num accent" style="margin:0;font-size:clamp(88px,11vw,180px);font-weight:400;line-height:0.82">{c.metric}</p><p class="label" style="margin-top:18px">{c.label}</p></div>
+    <div class="chero" style={`--bsize:${bsize};--msize:${msize}`}>
+      <div style="min-width:0"><p class="eyebrow">Case study · {c.sector}</p><h1 class="display chero__brand">{c.brand}</h1></div>
+      <div class="chero__metric"><p class="num accent">{c.metric}</p><p class="label">{c.label}</p></div>
     </div>
   </Hero>
   <section class="band" style="--band:50%"><div class="container overlap" style="margin-top:-180px"><Cover brand={c.brand} cat={c.sector} {...c.cover} ratio="16/7" size="l" photo={cover} eager /></div></section>
@@ -131,6 +134,12 @@ const headline = c.metric === 'Meta' ? c.label : `${c.metric} ${c.label.toLowerC
   </section>
 </Base>
 <style>
+  .chero { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 24px 64px; margin-top: 72px; }
+  .chero__brand { font-size: var(--bsize); }
+  .chero__metric { text-align: right; }
+  .chero__metric .num { margin: 0; font-size: var(--msize); font-weight: 400; line-height: 0.82; }
+  .chero__metric .label { margin-top: 18px; }
+  @media (max-width: 700px) { .chero { grid-template-columns: 1fr; } .chero__metric { text-align: left; } }
   .kstats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 0; margin: 56px 0 0; border-top: 1px solid var(--line); }
   .kstats > div { padding: 28px 24px 8px 0; }
   .kstats > div + div { padding-left: 24px; border-left: 1px solid var(--line); }
