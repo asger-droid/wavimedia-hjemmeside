@@ -23,7 +23,7 @@ const quote = svc && 'quote' in svc.proof ? testimonials[svc.proof.quote] : trac
 {track && (
 <Base title={`${track.name}: ${track.line}`} description={track.sub}>
   <Hero crumbs={[{ href: '/', label: 'Home' }, { label: 'Services' }, { label: track.name }]} eyebrow={`Track ${track.num} of 03`} pad="0">
-    <h1 class="h1" style="max-width:1120px">{track.h1a}{' '}<em class="accent">{track.h1b}</em></h1>
+    <h1 class:list={['h1', { 'h1--long': (track.h1a + track.h1b).length > 46 }]} style="max-width:1120px">{track.h1a}{' '}<em class="accent">{track.h1b}</em></h1>
     <p class="lead" style="margin-top:40px">{track.sub}</p>
     <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:40px"><a href="/contact" class="btn btn--light">Book a growth session</a><a href="/tools/profit-check" class="btn btn--ghost">Run the profit check</a></div>
     <nav aria-label="Service tracks" class="tswitch">
@@ -112,7 +112,7 @@ const quote = svc && 'quote' in svc.proof ? testimonials[svc.proof.quote] : trac
 <Base title={`${svc.name}: ${svc.h1a} ${svc.h1b}`} description={svc.sub}>
   <Hero crumbs={[{ href: '/', label: 'Home' }, { href: trackHref(parent.id), label: parent.name }, { label: svc.name }]} pad="220px">
     <div class="split" style="align-items:flex-end;margin-top:64px">
-      <div class="wide"><p class="eyebrow">{parent.name}{' '}{svc.num} · {svc.platforms}</p><h1 class="h1">{svc.h1a}{' '}<em class="accent">{svc.h1b}</em></h1></div>
+      <div class="wide"><p class="eyebrow">{parent.name}{' '}{svc.num} · {svc.platforms}</p><h1 class:list={['h1', { 'h1--long': (svc.h1a + svc.h1b).length > 46 }]}>{svc.h1a}{' '}<em class="accent">{svc.h1b}</em></h1></div>
       <div class="narrow" style="flex-basis:300px"><p class="lead">{svc.sub}</p><a href="/contact" class="btn btn--light" style="margin-top:28px">Book a growth session</a></div>
     </div>
   </Hero>

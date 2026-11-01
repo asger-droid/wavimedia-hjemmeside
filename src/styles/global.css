@@ -48,7 +48,10 @@ button, input, select, textarea { font: inherit; }
 .s-ink .label, .on-ink .label { color: var(--stone); }
 .display, .h1, .h2, .h3, .serif { font-family: var(--serif); font-weight: 500; }
 .display { margin: 0; font-size: clamp(60px, 10vw, 176px); line-height: 0.9; letter-spacing: -0.04em; }
-.h1 { margin: 0; font-size: clamp(52px, 7.4vw, 120px); line-height: 0.94; letter-spacing: -0.035em; }
+.h1 { margin: 0; font-size: clamp(52px, min(7.4vw, 14vh), 120px); line-height: 0.94; letter-spacing: -0.035em; }
+.h1--long { font-size: clamp(44px, min(5.8vw, 11vh), 96px); }
+/* Headings spread their words evenly over the lines, so a single word never sits alone on the last line. */
+h1, h2, h3, .display, .h1, .h2, .h3 { text-wrap: balance; }
 .h2 { margin: 0; font-size: clamp(44px, 5.6vw, 88px); line-height: 0.98; letter-spacing: -0.03em; }
 .h3 { margin: 0; font-size: clamp(28px, 2.6vw, 40px); line-height: 1.1; letter-spacing: -0.015em; }
 .accent { font-style: italic; font-weight: 400; color: var(--coral); }
