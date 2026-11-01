@@ -11,10 +11,12 @@ import '@fontsource/ibm-plex-mono/500.css';
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-interface Props { title: string; description?: string }
-const { title, description = 'Wavi Media is a senior-led growth studio for consumer brands. We optimise the P&L, not the dashboard.' } = Astro.props;
+interface Props { title: string; description?: string; image?: string; imageAlt?: string }
+const { title, description = 'Wavi Media is a senior-led growth studio for consumer brands. We optimise the P&L, not the dashboard.', image = '/og/default.jpg', imageAlt = 'Wavi: Marketing for brands that intend to last.' } = Astro.props;
 const full = title.includes('Wavi') ? title : `${title} | Wavi Media`;
 const canonical = new URL(Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/'), Astro.site);
+// Share image for LinkedIn, Facebook, X and Slack. Absolute URL on wavimedia.com, as the platforms require.
+const ogImage = new URL(image, Astro.site);
 ---
 <!doctype html>
 <html lang="en">
@@ -25,9 +27,21 @@ const canonical = new URL(Astro.url.pathname.replace(/\.html$/, '').replace(/\/i
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <meta property="og:site_name" content="Wavi Media" />
     <meta property="og:title" content={full} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={full} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
     <meta name="theme-color" content="#141414" />
   </head>
   <body>

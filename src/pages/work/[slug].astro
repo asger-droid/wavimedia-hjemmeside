@@ -6,6 +6,7 @@ import { cases, nextCase, type Case } from '../../data/cases';
 import { tracks, trackHref } from '../../data/services';
 import caseMedia from '../../data/case-media.json';
 import { galleryPick, coverPhoto } from '../../data/case-gallery';
+import fs from 'node:fs';
 export function getStaticPaths() { return cases.map((c) => ({ params: { slug: c.slug }, props: { c } })); }
 const { c } = Astro.props as { c: Case };
 const n = nextCase(c.slug);
@@ -30,11 +31,13 @@ const parts = (t: string) => t.split(/(\[\[[^\]]+\]\])/g).filter(Boolean).map((p
   return m ? { text: m[1], href: m[2] } : { text: p, href: '' };
 });
 const headline = c.metric === 'Meta' ? c.label : `${c.metric} ${c.label.toLowerCase()}`;
+// Each case shares with its own image (public/og/<slug>.jpg) when there is one, otherwise the site default.
+const ogImage = fs.existsSync(`public/og/${c.slug}.jpg`) ? `/og/${c.slug}.jpg` : undefined;
 // Brand and number share one row on tablet and desktop, so both scale down as they get longer.
 const bsize = c.brand.length <= 10 ? 'clamp(56px, 8.4vw, 144px)' : c.brand.length <= 15 ? 'clamp(52px, 6.4vw, 112px)' : 'clamp(48px, 5.4vw, 96px)';
 const msize = c.metric.length <= 5 ? 'clamp(72px, 9vw, 160px)' : 'clamp(56px, 6.2vw, 112px)';
 ---
-<Base title={`${c.brand}: ${headline}`} description={`${c.statement} ${c.context}`}>
+<Base title={`${c.brand}: ${headline}`} description={`${c.statement} ${c.context}`} image={ogImage} imageAlt={`${c.brand} case study: ${headline}`}>
   <Hero crumbs={[{ href: '/', label: 'Home' }, { href: '/work', label: 'Work' }, { label: c.brand }]} pad="240px">
     <div class="chero" style={`--bsize:${bsize};--msize:${msize}`}>
       <div style="min-width:0"><p class="eyebrow">Case study · {c.sector}</p><h1 class="display chero__brand">{c.brand}</h1></div>
