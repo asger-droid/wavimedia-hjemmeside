@@ -14,7 +14,8 @@ export const prerender = false;
 
 const env = (key: string): string | undefined => process.env[key] ?? (import.meta.env as Record<string, string | undefined>)[key];
 
-const REQUIRED = ['name', 'email', 'website', 'phone', 'region'] as const;
+// Phone is optional: asking for it loses leads, and the reply goes out by email anyway.
+const REQUIRED = ['name', 'email', 'website', 'region'] as const;
 const LABELS: Record<string, string> = {
   name: 'Name', email: 'Email', website: 'Website', phone: 'Phone', region: 'Based in',
   revenue: 'Monthly revenue', help: 'Needs help with', message: 'Where growth stalls'
