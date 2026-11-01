@@ -5,7 +5,7 @@ import Cover from '../../components/Cover.astro';
 import { cases, nextCase, type Case } from '../../data/cases';
 import { tracks, trackHref } from '../../data/services';
 import caseMedia from '../../data/case-media.json';
-import { galleryPick, coverPick, coverPhoto } from '../../data/case-gallery';
+import { galleryPick, coverPhoto } from '../../data/case-gallery';
 export function getStaticPaths() { return cases.map((c) => ({ params: { slug: c.slug }, props: { c } })); }
 const { c } = Astro.props as { c: Case };
 const n = nextCase(c.slug);
@@ -16,9 +16,10 @@ const media = ((caseMedia as Record<string, { images?: Img[]; portrait?: { src: 
 // Hand-picked images (src/data/case-gallery.ts), shown in one row at a shared height, uncropped.
 const all = media.images ?? [];
 // The cover photo already sits at the top of the page, so the gallery leaves it out.
-const cover = coverPhoto(c.slug);
-const coverN = coverPick[c.slug]?.n;
-const gallery = (galleryPick[c.slug] ? galleryPick[c.slug].filter((k) => k !== coverN).map((k) => all[k - 1]).filter(Boolean) : all.filter((_, k) => k + 1 !== coverN).slice(0, 3)) as Img[];
+const cover = coverPhoto(c.slug, true);
+const shownAtTop = new Set([cover?.src, coverPhoto(c.slug)?.src].filter(Boolean));
+const picked = galleryPick[c.slug] ? galleryPick[c.slug].map((k) => all[k - 1]) : all.slice(0, 4);
+const gallery = picked.filter((g) => g && !shownAtTop.has(g.src)).slice(0, 3) as Img[];
 // With a video, the first pick becomes its poster and the rest sit below it.
 const poster = media.video ? gallery[0] : undefined;
 const row = media.video ? gallery.slice(1) : gallery;
@@ -123,7 +124,7 @@ const headline = c.metric === 'Meta' ? c.label : `${c.metric} ${c.label.toLowerC
     <div class="container">
       <p class="eyebrow">Next case</p>
       <a href={`/work/${n.slug}`} style="display:block;text-decoration:none">
-        <Cover brand={n.brand} cat={n.sector} {...n.cover} ratio="16/6" size="l" photo={coverPhoto(n.slug)} />
+        <Cover brand={n.brand} cat={n.sector} {...n.cover} ratio="16/6" size="l" photo={coverPhoto(n.slug, true)} />
         <span class="row-between" style="align-items:baseline;margin-top:22px"><span class="serif" style="font-size:36px">{n.brand}</span><span class="num" style="font-size:44px">{n.metric}{' '}<span class="arrow">→</span></span></span>
       </a>
     </div>
