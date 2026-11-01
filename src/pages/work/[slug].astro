@@ -31,8 +31,8 @@ const parts = (t: string) => t.split(/(\[\[[^\]]+\]\])/g).filter(Boolean).map((p
   return m ? { text: m[1], href: m[2] } : { text: p, href: '' };
 });
 const headline = c.metric === 'Meta' ? c.label : `${c.metric} ${c.label.toLowerCase()}`;
-// Each case shares with its own image (public/og/<slug>.jpg) when there is one, otherwise the site default.
-const ogImage = fs.existsSync(`public/og/${c.slug}.jpg`) ? `/og/${c.slug}.jpg` : undefined;
+// Each case shares with its own image (public/wavi-deling/og/<slug>.jpg) when there is one, otherwise the site default.
+const ogImage = fs.existsSync(`public/wavi-deling/og/${c.slug}.jpg`) ? `/wavi-deling/og/${c.slug}.jpg` : undefined;
 // Brand and number share one row on tablet and desktop, so both scale down as they get longer.
 const bsize = c.brand.length <= 10 ? 'clamp(56px, 8.4vw, 144px)' : c.brand.length <= 15 ? 'clamp(52px, 6.4vw, 112px)' : 'clamp(48px, 5.4vw, 96px)';
 const msize = c.metric.length <= 5 ? 'clamp(72px, 9vw, 160px)' : 'clamp(56px, 6.2vw, 112px)';
