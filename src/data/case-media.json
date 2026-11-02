@@ -11,19 +11,37 @@
     "src": "/cases/build-a-bear/2.webp",
     "w": 1080,
     "h": 1080,
-    "alt": "Build-A-Bear campaign image"
+    "alt": "Build-A-Bear campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/build-a-bear/2-800.webp"
+     }
+    ]
    },
    {
     "src": "/cases/build-a-bear/3.webp",
     "w": 1080,
     "h": 1080,
-    "alt": "Build-A-Bear campaign image"
+    "alt": "Build-A-Bear campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/build-a-bear/3-800.webp"
+     }
+    ]
    },
    {
     "src": "/cases/build-a-bear/4.webp",
     "w": 1080,
     "h": 1080,
-    "alt": "Build-A-Bear campaign image"
+    "alt": "Build-A-Bear campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/build-a-bear/4-800.webp"
+     }
+    ]
    }
   ],
   "portrait": {
@@ -43,25 +61,57 @@
     "src": "/cases/lulu-copenhagen/2.webp",
     "w": 1440,
     "h": 1800,
-    "alt": "LULU Copenhagen campaign image"
+    "alt": "LULU Copenhagen campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/lulu-copenhagen/2-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/lulu-copenhagen/2-1200.webp"
+     }
+    ]
    },
    {
     "src": "/cases/lulu-copenhagen/3.webp",
     "w": 1440,
     "h": 1799,
-    "alt": "LULU Copenhagen campaign image"
+    "alt": "LULU Copenhagen campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/lulu-copenhagen/3-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/lulu-copenhagen/3-1200.webp"
+     }
+    ]
    },
    {
     "src": "/cases/lulu-copenhagen/4.webp",
     "w": 1080,
     "h": 1350,
-    "alt": "LULU Copenhagen campaign image"
+    "alt": "LULU Copenhagen campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/lulu-copenhagen/4-800.webp"
+     }
+    ]
    },
    {
     "src": "/cases/lulu-copenhagen/5.webp",
     "w": 1080,
     "h": 1350,
-    "alt": "LULU Copenhagen campaign image"
+    "alt": "LULU Copenhagen campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/lulu-copenhagen/5-800.webp"
+     }
+    ]
    }
   ],
   "portrait": {
@@ -75,25 +125,65 @@
     "src": "/cases/blox-fruits/1.webp",
     "w": 1800,
     "h": 963,
-    "alt": "Blox Fruits campaign image"
+    "alt": "Blox Fruits campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/blox-fruits/1-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/blox-fruits/1-1200.webp"
+     }
+    ]
    },
    {
     "src": "/cases/blox-fruits/2.webp",
     "w": 1800,
     "h": 962,
-    "alt": "Blox Fruits campaign image"
+    "alt": "Blox Fruits campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/blox-fruits/2-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/blox-fruits/2-1200.webp"
+     }
+    ]
    },
    {
     "src": "/cases/blox-fruits/3.webp",
     "w": 1800,
     "h": 957,
-    "alt": "Blox Fruits campaign image"
+    "alt": "Blox Fruits campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/blox-fruits/3-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/blox-fruits/3-1200.webp"
+     }
+    ]
    },
    {
     "src": "/cases/blox-fruits/4.webp",
     "w": 1800,
     "h": 961,
-    "alt": "Blox Fruits campaign image"
+    "alt": "Blox Fruits campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/blox-fruits/4-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/blox-fruits/4-1200.webp"
+     }
+    ]
    }
   ]
  },
@@ -103,7 +193,13 @@
     "src": "/cases/mp-denmark/1.webp",
     "w": 1080,
     "h": 1080,
-    "alt": "MP Denmark campaign image"
+    "alt": "MP Denmark campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/mp-denmark/1-800.webp"
+     }
+    ]
    },
    {
     "src": "/cases/mp-denmark/2.webp",
@@ -131,19 +227,49 @@
     "src": "/cases/drommeland/1.webp",
     "w": 1433,
     "h": 769,
-    "alt": "Drømmeland campaign image"
+    "alt": "Drømmeland campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/drommeland/1-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/drommeland/1-1200.webp"
+     }
+    ]
    },
    {
     "src": "/cases/drommeland/2.webp",
     "w": 1439,
     "h": 810,
-    "alt": "Drømmeland campaign image"
+    "alt": "Drømmeland campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/drommeland/2-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/drommeland/2-1200.webp"
+     }
+    ]
    },
    {
     "src": "/cases/drommeland/3.webp",
     "w": 1438,
     "h": 765,
-    "alt": "Drømmeland campaign image"
+    "alt": "Drømmeland campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/drommeland/3-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/drommeland/3-1200.webp"
+     }
+    ]
    }
   ]
  },
@@ -153,19 +279,37 @@
     "src": "/cases/drink-mashup/1.webp",
     "w": 1080,
     "h": 1080,
-    "alt": "Drink Mashup campaign image"
+    "alt": "Drink Mashup campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/drink-mashup/1-800.webp"
+     }
+    ]
    },
    {
     "src": "/cases/drink-mashup/2.webp",
     "w": 1080,
     "h": 1080,
-    "alt": "Drink Mashup campaign image"
+    "alt": "Drink Mashup campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/drink-mashup/2-800.webp"
+     }
+    ]
    },
    {
     "src": "/cases/drink-mashup/3.webp",
     "w": 1080,
     "h": 1080,
-    "alt": "Drink Mashup campaign image"
+    "alt": "Drink Mashup campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/drink-mashup/3-800.webp"
+     }
+    ]
    }
   ],
   "portrait": {
@@ -179,19 +323,41 @@
     "src": "/cases/dbu/1.webp",
     "w": 1423,
     "h": 809,
-    "alt": "DBU campaign image"
+    "alt": "DBU campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/dbu/1-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/dbu/1-1200.webp"
+     }
+    ]
    },
    {
     "src": "/cases/dbu/2.webp",
     "w": 962,
     "h": 267,
-    "alt": "DBU campaign image"
+    "alt": "DBU campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/dbu/2-800.webp"
+     }
+    ]
    },
    {
     "src": "/cases/dbu/3.webp",
     "w": 928,
     "h": 527,
-    "alt": "DBU campaign image"
+    "alt": "DBU campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/dbu/3-800.webp"
+     }
+    ]
    }
   ],
   "portrait": {
@@ -208,7 +374,17 @@
     "src": "/cases/sos-international/1.webp",
     "w": 1800,
     "h": 1013,
-    "alt": "SOS International campaign image"
+    "alt": "SOS International campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/sos-international/1-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/sos-international/1-1200.webp"
+     }
+    ]
    },
    {
     "src": "/cases/sos-international/2.webp",
@@ -246,7 +422,17 @@
     "src": "/cases/hjernesagen/1.webp",
     "w": 1440,
     "h": 600,
-    "alt": "Hjernesagen campaign image"
+    "alt": "Hjernesagen campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/hjernesagen/1-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/hjernesagen/1-1200.webp"
+     }
+    ]
    }
   ],
   "portrait": {
@@ -260,19 +446,45 @@
     "src": "/cases/stryhns/1.webp",
     "w": 960,
     "h": 540,
-    "alt": "Stryhns Gruppen campaign image"
+    "alt": "Stryhns Gruppen campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/stryhns/1-800.webp"
+     }
+    ]
    },
    {
     "src": "/cases/stryhns/2.webp",
     "w": 1800,
     "h": 1800,
-    "alt": "Stryhns Gruppen campaign image"
+    "alt": "Stryhns Gruppen campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/stryhns/2-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/stryhns/2-1200.webp"
+     }
+    ]
    },
    {
     "src": "/cases/stryhns/3.webp",
     "w": 1800,
     "h": 750,
-    "alt": "Stryhns Gruppen campaign image"
+    "alt": "Stryhns Gruppen campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/stryhns/3-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/stryhns/3-1200.webp"
+     }
+    ]
    },
    {
     "src": "/cases/stryhns/4.webp",
@@ -295,7 +507,17 @@
     "src": "/cases/plusled/1.webp",
     "w": 1702,
     "h": 630,
-    "alt": "PlusLED campaign image"
+    "alt": "PlusLED campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/plusled/1-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/plusled/1-1200.webp"
+     }
+    ]
    },
    {
     "src": "/cases/plusled/2.webp",
@@ -323,25 +545,49 @@
     "src": "/cases/gobabygo/1.webp",
     "w": 1080,
     "h": 1350,
-    "alt": "GoBabyGo campaign image"
+    "alt": "GoBabyGo campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/gobabygo/1-800.webp"
+     }
+    ]
    },
    {
     "src": "/cases/gobabygo/2.webp",
     "w": 1080,
     "h": 1350,
-    "alt": "GoBabyGo campaign image"
+    "alt": "GoBabyGo campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/gobabygo/2-800.webp"
+     }
+    ]
    },
    {
     "src": "/cases/gobabygo/3.webp",
     "w": 1079,
     "h": 1079,
-    "alt": "GoBabyGo campaign image"
+    "alt": "GoBabyGo campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/gobabygo/3-800.webp"
+     }
+    ]
    },
    {
     "src": "/cases/gobabygo/4.webp",
     "w": 1080,
     "h": 1080,
-    "alt": "GoBabyGo campaign image"
+    "alt": "GoBabyGo campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/gobabygo/4-800.webp"
+     }
+    ]
    },
    {
     "src": "/cases/gobabygo/5.webp",
