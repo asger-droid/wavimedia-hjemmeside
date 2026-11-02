@@ -38,7 +38,7 @@ export const coverPick: Record<string, { n: number; pos?: string }> = {
 // import workflow (which rewrites public/cases/ and case-media.json) never touches them.
 // `wide` is an optional landscape version for the case page top, "Next case" and the homepage preview.
 // `fit: 'contain'` shows the whole image on `bg` instead of cropping it (for logo art that must not be cut).
-type Photo = { src: string; w: number; h: number; alt: string; pos: string; fit?: 'cover' | 'contain'; bg?: string };
+type Photo = { src: string; w: number; h: number; alt: string; pos: string; fit?: 'cover' | 'contain'; bg?: string; srcset?: string };
 export const manualCovers: Record<string, Photo & { wide?: Photo }> = {
   herskind: { src: '/herskind.webp', w: 1054, h: 1317, alt: 'Herskind campaign: model wearing a Herskind earring', pos: 'center 32%' },
   dbu: { src: '/dbu-card.webp', w: 640, h: 720, alt: 'DBU Women\u2019s World Cup campaign: a Danish fan in the red shirt', pos: 'center 35%',
@@ -47,11 +47,17 @@ export const manualCovers: Record<string, Photo & { wide?: Photo }> = {
     wide: { src: '/cases/blox-fruits/4.webp', w: 1800, h: 961, alt: 'Blox Fruits key art', pos: 'center', fit: 'contain', bg: 'linear-gradient(180deg, #03062e, #020425 50%, #000110)' } }
 };
 
-type Media = { images?: { src: string; w: number; h: number; alt: string }[] };
+type Variant = { w: number; src: string };
+type Media = { images?: { src: string; w: number; h: number; alt: string; variants?: Variant[] }[] };
+// Smaller copies (800/1200 px) made by scripts/import-case-media.mjs, so the browser picks the size the screen needs.
+export const srcsetOf = (img: { src: string; w: number; variants?: Variant[] }) =>
+  img.variants?.length ? [...img.variants.map((v) => `${v.src} ${v.w}w`), `${img.src} ${img.w}w`].join(', ') : undefined;
+// The smallest copy, for thumbnails such as the homepage hover preview.
+export const smallestOf = (img?: { src: string; variants?: Variant[] }) => img?.variants?.[0]?.src ?? img?.src;
 export const coverPhoto = (slug: string, wide = false): Photo | undefined => {
   const manual = manualCovers[slug];
   if (manual) return wide && manual.wide ? manual.wide : manual;
   const pick = coverPick[slug];
   const img = pick && (caseMedia as Record<string, Media>)[slug]?.images?.[pick.n - 1];
-  return img ? { ...img, pos: pick.pos ?? 'center' } : undefined;
+  return img ? { ...img, pos: pick.pos ?? 'center', srcset: srcsetOf(img) } : undefined;
 };

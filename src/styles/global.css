@@ -20,6 +20,8 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
+/* Anything marked hidden stays hidden, even when a class gives it a display value (buttons, cards). */
+[hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 24px; }
 body { margin: 0; font-family: var(--sans); color: var(--ink); background: var(--paper); -webkit-font-smoothing: antialiased; }
 img, svg { max-width: 100%; }
@@ -46,6 +48,8 @@ button, input, select, textarea { font: inherit; }
 .s-ink .eyebrow { color: var(--stone); }
 .label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--slate); }
 .s-ink .label, .on-ink .label { color: var(--stone); }
+/* Light cards inside dark sections keep the darker label colour, so small text stays readable (WCAG AA). */
+.card--paper .label, .card--sand .label { color: var(--slate); }
 .display, .h1, .h2, .h3, .serif { font-family: var(--serif); font-weight: 500; }
 .display { margin: 0; font-size: clamp(60px, 10vw, 176px); line-height: 0.9; letter-spacing: -0.04em; }
 .h1 { margin: 0; font-size: clamp(52px, min(7.4vw, 14vh), 120px); line-height: 0.94; letter-spacing: -0.035em; }

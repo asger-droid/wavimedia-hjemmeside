@@ -2,8 +2,8 @@
 /* Case cover as a data portrait: drawn from the client's real, published number. */
 import type { CoverData } from '../data/cases';
 import Wave from './Wave.astro';
-interface Props extends CoverData { brand: string; cat: string; ratio?: string; size?: 's' | 'm' | 'l'; square?: boolean; photo?: { src: string; w: number; h: number; alt: string; pos: string; fit?: 'cover' | 'contain'; bg?: string }; eager?: boolean }
-const { brand, cat, motif, tone, letter, v1 = 100, v2 = 300, v1Label = '', v2Label = '', l1 = '', l2 = '', n = 1, ratio = '4/3', size = 'm', square = false, photo, eager = false } = Astro.props;
+interface Props extends CoverData { brand: string; cat: string; ratio?: string; size?: 's' | 'm' | 'l'; square?: boolean; photo?: { src: string; w: number; h: number; alt: string; pos: string; fit?: 'cover' | 'contain'; bg?: string; srcset?: string; variants?: { w: number; src: string }[] }; eager?: boolean; sizes?: string }
+const { brand, cat, motif, tone, letter, v1 = 100, v2 = 300, v1Label = '', v2Label = '', l1 = '', l2 = '', n = 1, ratio = '4/3', size = 'm', square = false, photo, eager = false, sizes = '100vw' } = Astro.props;
 const T = {
   ink: { bg: 'var(--ink)', fg: 'var(--paper)', ghost: 'rgba(250,248,244,0.06)', sub: 'var(--stone)', bar: 'rgba(250,248,244,0.22)', accent: 'var(--coral)', mark: 'var(--coral)', edge: 'none' },
   sand: { bg: 'var(--sand)', fg: 'var(--ink)', ghost: 'rgba(20,20,20,0.06)', sub: 'var(--slate)', bar: 'rgba(20,20,20,0.16)', accent: 'var(--ink)', mark: 'var(--coral)', edge: 'none' },
@@ -18,7 +18,7 @@ const vars = `--bg:${T.bg};--fg:${T.fg};--ghost:${T.ghost};--sub:${T.sub};--bar:
 ---
 {photo ? (
 <div class="cover cover--photo" style={`${vars}${photo.bg ? `;background:${photo.bg}` : ''}`}>
-  <img src={photo.src} width={photo.w} height={photo.h} alt={photo.alt || brand} loading={eager ? 'eager' : 'lazy'} decoding="async" style={`object-position:${photo.pos}${photo.fit === 'contain' ? ';object-fit:contain;padding:0 4%' : ''}`} />
+  <img src={photo.src} srcset={photo.srcset} sizes={photo.srcset ? sizes : undefined} width={photo.w} height={photo.h} alt={photo.alt || brand} loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} decoding={eager ? 'sync' : 'async'} style={`object-position:${photo.pos}${photo.fit === 'contain' ? ';object-fit:contain;padding:0 4%' : ''}`} />
   <div class="cover__meta"><span class="cover__cat cover__chip"><span>{cat}</span><Wave width={22} height={9} weight={12} stroke="var(--coral)" /></span></div>
 </div>
 ) : (
