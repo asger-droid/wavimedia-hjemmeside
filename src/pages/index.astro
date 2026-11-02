@@ -6,7 +6,7 @@ import TrackTabs from '../components/TrackTabs.astro';
 import Quotes from '../components/Quotes.astro';
 import { site } from '../data/site';
 import { featuredCases } from '../data/cases';
-import { coverPhoto } from '../data/case-gallery';
+import { coverPhoto, smallestOf } from '../data/case-gallery';
 const framework = [
   ['The cost of a first order', 'Most brands scale spend before the maths holds up, and quietly pay more for every order than the business can carry. We get the unit economics right first, then pour fuel on it.'],
   ['What happens after the first sale', 'Acquisition cost never hits zero. What a customer is worth after the first order can always grow. We make the second and third purchase the default, not a happy accident.'],
@@ -68,7 +68,7 @@ const tools = [
           <thead><tr class="label"><th scope="col">No.</th><th scope="col">Client</th><th scope="col">Sector</th><th scope="col">Line item</th><th scope="col">Result</th></tr></thead>
           <tbody>
             {featuredCases.map((c, i) => (
-              <tr data-preview={coverPhoto(c.slug)?.src}>
+              <tr data-preview={smallestOf(coverPhoto(c.slug))}>
                 <td class="label">0{i + 1}</td>
                 <td class="serif ledger__client"><a href={`/work/${c.slug}`} class="t-link">{c.brand}</a></td>
                 <td>{c.sector}</td><td>{c.label}</td>
@@ -213,6 +213,7 @@ const tools = [
   .tools__item:hover .h3 { color: var(--coral); }
   .tools__item.dark { background: var(--ink); color: var(--paper); }
   .tools__item.dark .body { color: var(--muted-inv); }
+  .tools__item.dark .label { color: var(--stone); }
   .tools__cta { display: block; margin-top: 24px; font-weight: 600; }
   @media (max-width: 700px) { .stats > div + div { padding-left: 0; border-left: 0; } .sticky { position: static; } }
 </style>
