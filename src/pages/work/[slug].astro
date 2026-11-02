@@ -5,14 +5,14 @@ import Cover from '../../components/Cover.astro';
 import { cases, nextCase, type Case } from '../../data/cases';
 import { tracks, trackHref } from '../../data/services';
 import caseMedia from '../../data/case-media.json';
-import { galleryPick, coverPhoto } from '../../data/case-gallery';
+import { galleryPick, coverPhoto, srcsetOf } from '../../data/case-gallery';
 import fs from 'node:fs';
 export function getStaticPaths() { return cases.map((c) => ({ params: { slug: c.slug }, props: { c } })); }
 const { c } = Astro.props as { c: Case };
 const n = nextCase(c.slug);
 const story = c.sections ?? [];
 // Images, portrait and video copied from the Framer CMS by .github/workflows/import-case-media.yml.
-type Img = { src: string; w: number; h: number; alt: string };
+type Img = { src: string; w: number; h: number; alt: string; variants?: { w: number; src: string }[] };
 const media = ((caseMedia as Record<string, { images?: Img[]; portrait?: { src: string; alt: string }; video?: { src: string } }>)[c.slug]) ?? {};
 // Hand-picked images (src/data/case-gallery.ts), shown in one row at a shared height, uncropped.
 const all = media.images ?? [];
@@ -44,7 +44,7 @@ const msize = c.metric.length <= 5 ? 'clamp(72px, 9vw, 160px)' : 'clamp(56px, 6.
       <div class="chero__metric"><p class="num accent">{c.metric}</p><p class="label">{c.label}</p></div>
     </div>
   </Hero>
-  <section class="band" style="--band:50%"><div class="container overlap" style="margin-top:-180px"><Cover brand={c.brand} cat={c.sector} {...c.cover} ratio="16/7" size="l" photo={cover} eager /></div></section>
+  <section class="band" style="--band:50%"><div class="container overlap" style="margin-top:-180px"><Cover brand={c.brand} cat={c.sector} {...c.cover} ratio="16/7" size="l" photo={cover} eager sizes="(max-width: 1440px) 100vw, 1360px" /></div></section>
 
   <section class="s-paper section">
     <div class="container split">
@@ -86,7 +86,7 @@ const msize = c.metric.length <= 5 ? 'clamp(72px, 9vw, 160px)' : 'clamp(56px, 6.
           {i === galleryAfter && (gallery.length > 0 || media.video) && (
             <div class="gallery">
               {media.video && <figure class="g-video"><video src={media.video.src} poster={poster?.src} controls playsinline preload="metadata"></video></figure>}
-              {row.length > 0 && <div class="g-row">{row.map((g) => <figure class="g-item" style={`flex:${(g.w / g.h).toFixed(3)} 1 0%${row.length === 1 ? `;max-width:${g.w}px` : ''}`}><img src={g.src} width={g.w} height={g.h} alt={g.alt} loading="lazy" decoding="async" /></figure>)}</div>}
+              {row.length > 0 && <div class="g-row">{row.map((g) => <figure class="g-item" style={`flex:${(g.w / g.h).toFixed(3)} 1 0%${row.length === 1 ? `;max-width:${g.w}px` : ''}`}><img src={g.src} srcset={srcsetOf(g)} sizes={srcsetOf(g) ? `(max-width: 700px) 100vw, ${Math.round(100 / row.length)}vw` : undefined} width={g.w} height={g.h} alt={g.alt} loading="lazy" decoding="async" /></figure>)}</div>}
             </div>
           )}
         </Fragment>))}
@@ -130,7 +130,7 @@ const msize = c.metric.length <= 5 ? 'clamp(72px, 9vw, 160px)' : 'clamp(56px, 6.
     <div class="container">
       <p class="eyebrow">Next case</p>
       <a href={`/work/${n.slug}`} style="display:block;text-decoration:none">
-        <Cover brand={n.brand} cat={n.sector} {...n.cover} ratio="16/6" size="l" photo={coverPhoto(n.slug, true)} />
+        <Cover brand={n.brand} cat={n.sector} {...n.cover} ratio="16/6" size="l" photo={coverPhoto(n.slug, true)} sizes="(max-width: 1440px) 100vw, 1360px" />
         <span class="row-between" style="align-items:baseline;margin-top:22px"><span class="serif" style="font-size:36px">{n.brand}</span><span class="num" style="font-size:44px">{n.metric}{' '}<span class="arrow">→</span></span></span>
       </a>
     </div>

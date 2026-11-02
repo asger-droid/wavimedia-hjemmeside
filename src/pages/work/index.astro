@@ -10,7 +10,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 ---
 <Base title="Work: proof, not promises" description="Case studies from brands we build with: LULU Copenhagen, Herskind, MP Denmark, Build-A-Bear, DBU, Stryhns and more.">
   <section class="s-ink" style="position:relative;overflow:hidden">
-    <span class="bigno" aria-hidden="true">{pad(cases.length)}</span>
+    <svg class="bigno" viewBox="0 0 100 80" aria-hidden="true"><text x="100" y="70" text-anchor="end">{pad(cases.length)}</text></svg>
     <div class="container" style="position:relative;padding-top:112px">
       <p class="eyebrow">Work · {cases.length} case studies</p>
       <h1 class="display">Proof, not<br /><em class="accent">promises.</em></h1>
@@ -35,7 +35,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
       <div class="bento" data-grid>
         {cases.map((c, i) => { const [span, ratio, size] = SPAN[i % SPAN.length]; return (
           <a href={`/work/${c.slug}`} class={`wcard s${span}`} data-sector={c.group}>
-            <div class="wcard__media"><Cover brand={c.brand} cat={c.sector} {...c.cover} ratio={ratio} size={size} square photo={coverPhoto(c.slug)} eager={i < 2} /></div>
+            <div class="wcard__media"><Cover brand={c.brand} cat={c.sector} {...c.cover} ratio={ratio} size={size} square photo={coverPhoto(c.slug)} eager={i < 2} sizes={`(max-width: 900px) 100vw, ${Math.round((span / 12) * 100)}vw`} /></div>
             <div class="wcard__meta">
               <div><span class="serif wcard__brand">{c.brand}</span><span class="body" style="display:block;margin-top:6px">{c.label}</span></div>
               <div style="text-align:right"><span class="num" style="display:block;font-size:44px">{c.metric}</span><span style="font-weight:600">Read case <span class="arrow">→</span></span></div>
@@ -75,7 +75,9 @@ const pad = (n: number) => String(n).padStart(2, '0');
 </script>
 
 <style>
-  .bigno { position: absolute; right: -2vw; top: 40px; font-family: var(--serif); font-style: italic; font-size: clamp(240px, 34vw, 560px); line-height: 0.8; letter-spacing: -0.06em; color: rgba(250, 248, 244, 0.05); }
+  /* Decorative case count, drawn as SVG text so it is not mistaken for the page's main content while the font loads. */
+  .bigno { position: absolute; right: -2vw; top: 40px; width: clamp(300px, 42vw, 700px); height: auto; overflow: visible; pointer-events: none; }
+  .bigno text { font-family: var(--serif); font-style: italic; font-size: 80px; letter-spacing: -0.06em; fill: rgba(250, 248, 244, 0.05); }
   .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 112px; border-top: 1px solid var(--line-inv); }
   .kpis a { display: block; padding: 32px 32px 48px 0; text-decoration: none; }
   .kpis a + a { padding-left: 32px; border-left: 1px solid var(--line-inv); }
