@@ -2,9 +2,9 @@
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import { site } from '../data/site';
-// Draft written from what the site actually does (Oct 2026). Review before launch, and update if analytics,
-// pixels or Slack notifications for leads are added.
-const updated = '30 October 2026';
+// Written from what the site actually does (Nov 2026: Meta Pixel and Conversions API, no cookie banner).
+// Have it reviewed before launch, and update it if a banner, analytics or Slack notifications for leads are added.
+const updated = '3 November 2026';
 ---
 <Base title="Privacy and cookies" description="What personal data wavimedia.com collects, why, and your rights.">
   <Hero crumbs={[{ label: 'Privacy & cookies' }]} eyebrow="Legal" pad="96px">
@@ -25,14 +25,17 @@ const updated = '30 October 2026';
       <p>We keep enquiries for as long as they are relevant to our dialogue with you. If no collaboration comes of it, we delete them when they are no longer needed. You can ask us to delete them at any time.</p>
 
       <h3>When you use our free tools</h3>
-      <p>The profit check and growth score run entirely in your browser. Nothing you enter is sent to us or stored.</p>
+      <p>The profit check and growth score run entirely in your browser. The numbers and answers you enter are not sent to us or stored. Through the Meta Pixel described under Cookies, we register that a tool was used, but not what you entered or your result.</p>
       <p>The store scan sends the store address you enter to our server, which reads that store’s public homepage and returns the report. We don’t store the report. Our hosting logs record which address was scanned, for a short period, to keep the service running and to stop misuse.</p>
 
       <h3>When you visit the site</h3>
       <p>Like any website, our hosting provider processes technical data such as your IP address, browser type and the pages requested, in order to deliver the site and keep it secure. This is based on our legitimate interest in running a working, secure website. Our fonts are hosted on our own site, so visiting does not send your data to a font service.</p>
 
       <h2 id="cookies">Cookies</h2>
-      <p>This site uses no tracking or advertising cookies, and no analytics that identify you. That is why you don’t see a cookie banner. If that changes, we will ask for your consent first and update this page.</p>
+      <p>This site uses the Meta Pixel, a measurement and advertising tool from Meta Platforms Ireland Ltd. When you visit, it sets cookies in your browser (such as <code>_fbp</code>, which by default lasts 90 days) and sends Meta information about your visit: the pages you view, your browser and device, your IP address, and events such as using one of our free tools or sending the contact form.</p>
+      <p>When you send the contact form, our server also sends Meta that event together with your email address, and your name and phone number if you gave them, in hashed (scrambled) form, so Meta can match it to a Meta account.</p>
+      <p>We use this to measure which of our marketing works and to show our ads to people who have visited the site. Wavi Media and Meta are joint controllers for collecting and transmitting this data; what Meta does with it afterwards is covered by <a href="https://www.facebook.com/privacy/policy/">Meta’s privacy policy</a>. Our legal basis is our legitimate interest in measuring and marketing our services (GDPR Article 6(1)(f)).</p>
+      <p>You can block or delete cookies in your browser settings, turn on your browser’s tracking protection, or change how Meta uses your data under ad preferences in your Meta account.</p>
 
       <h2>Who processes data for us</h2>
       <p>We use a small number of providers who process data on our behalf and only on our instructions:</p>
@@ -41,6 +44,7 @@ const updated = '30 October 2026';
         <li><strong>Resend</strong> delivers the contact form to our inbox by email.</li>
         <li>Our email provider stores the enquiries we receive.</li>
       </ul>
+      <p>Meta receives data as described under Cookies, as a joint controller rather than on our instructions.</p>
       <p>Some of these providers are based in or process data in the United States. Where data leaves the EU/EEA, it is protected by the safeguards the GDPR requires, such as the EU Commission’s standard contractual clauses or the EU-US Data Privacy Framework.</p>
 
       <h2>Your rights</h2>
@@ -62,4 +66,5 @@ const updated = '30 October 2026';
   .legal li + li { margin-top: 8px; }
   .legal strong { color: var(--ink); font-weight: 600; }
   .legal a { color: var(--ink); }
+  .legal code { font-family: var(--mono); font-size: 15px; }
 </style>

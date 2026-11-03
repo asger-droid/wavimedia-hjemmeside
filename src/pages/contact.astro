@@ -110,10 +110,14 @@ const quote = testimonials.lulu;
     const fd = new FormData(form);
     const body: Record<string, unknown> = Object.fromEntries(fd.entries());
     body.help = fd.getAll('help');
+    // One id for the browser Lead and the server (Conversions API) Lead, so Meta counts it once.
+    const eventId = crypto.randomUUID();
+    body.event_id = eventId;
     btn.disabled = true; btn.textContent = 'Sending…';
     try {
       const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       if (!res.ok) throw new Error(String(res.status));
+      try { (window as unknown as { fbq?: (...a: unknown[]) => void }).fbq?.('track', 'Lead', { content_name: 'Growth session request' }, { eventID: eventId }); } catch { /* pixel blocked */ }
       form.hidden = true;
       const sent = document.querySelector<HTMLElement>('[data-sent]')!;
       sent.hidden = false; sent.scrollIntoView({ behavior: 'smooth', block: 'center' });
