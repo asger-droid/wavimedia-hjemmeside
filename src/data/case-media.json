@@ -600,5 +600,25 @@
    "src": "/cases/gobabygo/portrait.webp",
    "alt": "Fie Aspöck Jonsen"
   }
+ },
+ "fashion-by-strand": {
+  "images": [
+   {
+    "src": "/cases/fashion-by-strand/1.webp",
+    "w": 1485,
+    "h": 1485,
+    "alt": "Fashion By Strand campaign image",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/fashion-by-strand/1-800.webp"
+     },
+     {
+      "w": 1200,
+      "src": "/cases/fashion-by-strand/1-1200.webp"
+     }
+    ]
+   }
+  ]
  }
 }
