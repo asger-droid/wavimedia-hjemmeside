@@ -52,6 +52,7 @@ const checks = [
   </section>
 </Base>
 <script>
+  import { track } from '../../lib/track';
   type Check = { id: string; name: string; status: 'ok' | 'warn' | 'bad' | 'info'; note: string; label?: string };
   const LABEL = { ok: 'Found', warn: 'Needs attention', bad: 'Missing', info: 'Not detected' } as const;
   const INFO_LABEL: Record<string, string> = { 'meta-capi': 'Not visible' };
@@ -101,6 +102,7 @@ const checks = [
     $('[data-kicker]').textContent = d.platform ? `Scan report \u00b7 ${d.platform} store` : 'Scan report';
     rows.replaceChildren(...checks.map(row));
     loading.hidden = true; sum.hidden = false; updateSummary(); reset();
+    track('StoreScanCompleted', { platform: d.platform ?? 'unknown' });
   });
 </script>
 <style>
