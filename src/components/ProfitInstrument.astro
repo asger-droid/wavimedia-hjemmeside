@@ -32,6 +32,7 @@
 </section>
 
 <script>
+  import { track } from '../lib/track';
   const root = document.querySelector<HTMLElement>('[data-instrument]');
   if (root) {
     const eur = (n: number) => (n < 0 ? '-€' : '€') + Math.abs(n).toFixed(2);
@@ -52,6 +53,7 @@
       out('barLabel').setAttribute('aria-label', `Of ${eur(aov)}: ${eur(cost)} costs, ${eur(cpa)} ads, ${eur(profit)} profit`);
     };
     root.addEventListener('input', update);
+    root.addEventListener('input', () => track('ProfitCheckUsed', { tool: 'homepage' }), { once: true });
   }
 </script>
 

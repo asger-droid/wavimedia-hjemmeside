@@ -54,7 +54,9 @@ const meta = groups.map((g) => ({ name: g.name.toLowerCase(), track: g.track, hr
   </section>
 </Base>
 <script>
+  import { track } from '../../lib/track';
   const root = document.querySelector<HTMLElement>('[data-gs]')!;
+  let reported = false;
   const G = JSON.parse(root.dataset.gs!);
   const answers: Record<number, number> = {};
   const $ = (s: string) => root.querySelector<HTMLElement>(s)!;
@@ -74,6 +76,8 @@ const meta = groups.map((g) => ({ name: g.name.toLowerCase(), track: g.track, hr
     root.querySelectorAll<HTMLElement>('[data-pct]').forEach((el, i) => { el.textContent = Math.round(dim[i] / 9 * 100) + '%'; });
     const cta = $('[data-cta]') as HTMLAnchorElement;
     if (keys.length < 9) return;
+    // Only that the test was completed. The answers and the score stay in the browser, as the page promises.
+    if (!reported) { reported = true; track('GrowthScoreCompleted'); }
     let w = 0; dim.forEach((d, i) => { if (d < dim[w]) w = i; });
     $('[data-advice]').textContent = `Your weakest area is ${G[w].name}. That is where we would start, and where the ${G[w].track} track does its work.`;
     cta.href = G[w].href; cta.innerHTML = `See ${G[w].track} <span class="arrow">→</span>`;

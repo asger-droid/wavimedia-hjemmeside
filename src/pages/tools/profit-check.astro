@@ -47,6 +47,7 @@ const lines = ['Order value', 'Returns', 'Product cost', 'Shipping & fulfilment'
   </section>
 </Base>
 <script>
+  import { track } from '../../lib/track';
   const root = document.querySelector<HTMLElement>('[data-calc]')!;
   const eur = (n: number) => (n < 0 ? '-€' : '€') + Math.abs(n).toFixed(2);
   const v = (k: string) => Number(root.querySelector<HTMLInputElement>(`[data-in="${k}"]`)!.value);
@@ -64,6 +65,7 @@ const lines = ['Order value', 'Returns', 'Product cost', 'Shipping & fulfilment'
       : 'There is room here. The question is how far spend can scale before the cost per order climbs.');
   };
   root.addEventListener('input', update);
+  root.addEventListener('input', () => track('ProfitCheckUsed', { tool: 'profit-check' }), { once: true });
   update();
 </script>
 <style>
