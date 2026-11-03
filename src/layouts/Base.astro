@@ -14,6 +14,7 @@ import fSans400 from '@fontsource/schibsted-grotesk/files/schibsted-grotesk-lati
 import fSans500 from '@fontsource/schibsted-grotesk/files/schibsted-grotesk-latin-500-normal.woff2?url';
 import fSerif500 from '@fontsource/newsreader/files/newsreader-latin-500-normal.woff2?url';
 import fSerif400i from '@fontsource/newsreader/files/newsreader-latin-400-italic.woff2?url';
+import { META_PIXEL_ID, REQUIRE_CONSENT } from '../data/tracking';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 interface Props { title: string; description?: string; image?: string; imageAlt?: string }
@@ -49,8 +50,16 @@ const ogImage = new URL(image, Astro.site);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="theme-color" content="#141414" />
+    <!-- Meta Pixel: PageView on every page. Lead and custom events are sent from the contact form and the free tools. -->
+    <script is:inline define:vars={{ pixelId: META_PIXEL_ID, requireConsent: REQUIRE_CONSENT }}>
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      if (requireConsent) fbq('consent', 'revoke');
+      fbq('init', pixelId);
+      fbq('track', 'PageView');
+    </script>
   </head>
   <body>
+    <noscript><img height="1" width="1" style="display:none" alt="" src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`} /></noscript>
     <a href="#main" class="skip">Skip to content</a>
     <Nav />
     <main id="main"><slot /></main>
