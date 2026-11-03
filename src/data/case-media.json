@@ -618,6 +618,18 @@
       "src": "/cases/fashion-by-strand/1-1200.webp"
      }
     ]
+   },
+   {
+    "src": "/cases/fashion-by-strand/2.webp",
+    "w": 1262,
+    "h": 743,
+    "alt": "Fashion By Strand campaign: model in a patterned dress by a window",
+    "variants": [
+     {
+      "w": 800,
+      "src": "/cases/fashion-by-strand/2-800.webp"
+     }
+    ]
    }
   ]
  }
