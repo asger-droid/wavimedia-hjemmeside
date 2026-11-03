@@ -19,8 +19,7 @@ export const galleryPick: Record<string, number[]> = {
 };
 
 // Cover photo per case (1-based image number), used on the Work cards, the case page top and "Next case".
-// pos sets which part of the photo stays in frame when it is cropped. Herskind, DBU and Blox Fruits use manualCovers below;
-// Fashion By Strand has no images and keeps its data portrait.
+// pos sets which part of the photo stays in frame when it is cropped. Herskind, DBU and Blox Fruits use manualCovers below.
 export const coverPick: Record<string, { n: number; pos?: string }> = {
   'lulu-copenhagen': { n: 2, pos: 'center 55%' },
   'mp-denmark': { n: 4, pos: 'center 60%' },
@@ -31,7 +30,9 @@ export const coverPick: Record<string, { n: number; pos?: string }> = {
   'sos-international': { n: 1, pos: '15% 45%' },
   'drink-mashup': { n: 1, pos: 'center 50%' },
   'drommeland': { n: 1, pos: 'center 40%' },
-  'hjernesagen': { n: 1, pos: 'center 50%' }
+  'hjernesagen': { n: 1, pos: 'center 50%' },
+  // Image 2 is the photo cropped out of Meta's success-story screenshot (image 1), see scripts/case-media.json.
+  'fashion-by-strand': { n: 2, pos: '75% 30%' }
 };
 
 // Covers supplied by hand, not imported from Framer. They live outside public/cases/, so a re-run of the

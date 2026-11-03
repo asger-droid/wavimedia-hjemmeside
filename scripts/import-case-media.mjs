@@ -2,6 +2,7 @@
 // and makes smaller copies (800 and 1200 px wide) so phones and small cards download less.
 // Run by .github/workflows/import-case-media.yml. Output: public/cases/<slug>/ and src/data/case-media.json.
 // Files already in public/cases/ are reused, so a re-run only fetches what is missing.
+// An image entry can carry "crop": [left, top, width, height] to keep only part of the original.
 import fs from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import sharp from 'sharp';
@@ -30,7 +31,10 @@ for (const [slug, m] of Object.entries(manifest)) {
       if (existsSync(file)) reused++;
       else {
         const buf = Buffer.from(await (await get(img.url)).arrayBuffer());
-        await sharp(buf).rotate().resize({ width: 1800, height: 1800, fit: 'inside', withoutEnlargement: true }).webp({ quality: 80 }).toFile(file);
+        // Optional crop [left, top, width, height] in the original's pixels, e.g. to keep only the photo from a screenshot.
+        let pipe = sharp(buf).rotate();
+        if (img.crop) { const [left, top, width, height] = img.crop; pipe = sharp(await pipe.toBuffer()).extract({ left, top, width, height }); }
+        await pipe.resize({ width: 1800, height: 1800, fit: 'inside', withoutEnlargement: true }).webp({ quality: 80 }).toFile(file);
         fetched++;
       }
       const meta = await sharp(file).metadata();
