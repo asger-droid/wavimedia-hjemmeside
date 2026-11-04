@@ -17,8 +17,9 @@ import fSerif400i from '@fontsource/newsreader/files/newsreader-latin-400-italic
 import { META_PIXEL_ID, REQUIRE_CONSENT } from '../data/tracking';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-interface Props { title: string; description?: string; image?: string; imageAlt?: string }
-const { title, description = 'Wavi Media is a senior-led growth studio for consumer brands. We optimise the P&L, not the dashboard.', image = '/wavi-deling/og/default.jpg', imageAlt = 'Wavi: Marketing for brands that intend to last.' } = Astro.props;
+// preload: an image the first screen shows (the homepage hero photo), fetched before the stylesheet and fonts are parsed.
+interface Props { title: string; description?: string; image?: string; imageAlt?: string; preload?: { src: string; srcset?: string; sizes: string } }
+const { preload, title, description = 'Wavi Media is a senior-led growth studio for consumer brands. We optimise the P&L, not the dashboard.', image = '/wavi-deling/og/default.jpg', imageAlt = 'Wavi: Marketing for brands that intend to last.' } = Astro.props;
 const full = title.includes('Wavi') ? title : `${title} | Wavi Media`;
 const canonical = new URL(Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/'), Astro.site);
 // Share image for LinkedIn, Facebook, X and Slack (files in public/wavi-deling/). Absolute URL on wavimedia.com, as the platforms require.
@@ -32,6 +33,7 @@ const ogImage = new URL(image, Astro.site);
     <title>{full}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {preload && <link rel="preload" as="image" href={preload.src} imagesrcset={preload.srcset} imagesizes={preload.sizes} fetchpriority="high" />}
     {[fSans400, fSans500, fSerif500, fSerif400i].map((f) => <link rel="preload" href={f} as="font" type="font/woff2" crossorigin />)}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/wavi-deling/apple-touch-icon.png" />
